@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: ergonometapp-v2-0
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt && python database_init.py
+    startCommand: gunicorn app:app
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: SECRET_KEY
+        generateValue: true
+    branch: main

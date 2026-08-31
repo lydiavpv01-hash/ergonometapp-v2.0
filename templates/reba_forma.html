@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REBA - Kinovea Medidor - ErgonometApp</title>
+    <title>REBA Kinovea con Arco - ErgonometApp</title>
     <style>
         * {
             margin: 0;
@@ -227,7 +227,7 @@
         
         .angle-display strong {
             display: block;
-            font-size: 28px;
+            font-size: 36px;
             color: #667eea;
             margin: 10px 0;
         }
@@ -352,21 +352,6 @@
             padding-bottom: 10px;
             border-bottom: 2px solid #667eea;
         }
-        
-        .checkbox-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        
-        .checkbox-group label {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin: 0;
-            cursor: pointer;
-            font-weight: 400;
-        }
     </style>
 </head>
 <body>
@@ -377,7 +362,7 @@
     
     <div class="container">
         <div class="form-card">
-            <div class="form-title">🔍 REBA - Medidor Visual Kinovea</div>
+            <div class="form-title">🔍 REBA - Kinovea con Arco Visual</div>
             
             <div class="progress-bar">
                 <div class="progress-step active" onclick="showStep(1)"><strong>1</strong><br>Info</div>
@@ -421,9 +406,9 @@
                     </div>
                 </div>
                 
-                <!-- PASO 2: KINOVEA -->
+                <!-- PASO 2: KINOVEA CON ARCO -->
                 <div id="step2" class="step-content">
-                    <div class="info-box">ℹ️ Sube una foto y usa Kinovea para medir ángulos en tiempo real</div>
+                    <div class="info-box">ℹ️ Sube foto y mide ángulos - El arco visual te mostrará exactamente dónde se mide</div>
                     
                     <div class="form-group">
                         <label>Foto del Trabajador *</label>
@@ -441,7 +426,7 @@
                         <!-- PANEL DERECHO -->
                         <div>
                             <div class="angle-display">
-                                <small>Ángulo en Tiempo Real</small>
+                                <small>Ángulo Medido</small>
                                 <strong id="angleValue">0°</strong>
                                 <small id="angleInfo">Dibuja 3 puntos</small>
                             </div>
@@ -456,9 +441,8 @@
                             </div>
                             
                             <div class="points-list">
-                                <h4>📍 Puntos Dibujados</h4>
+                                <h4>📍 Puntos</h4>
                                 <div id="pointsList"></div>
-                                <small style="color: #999; display: block; margin-top: 10px;">Arrastra los puntos para editar</small>
                             </div>
                             
                             <div id="savedMeasurements" class="saved-measurement" style="display:none;">
@@ -475,30 +459,21 @@
                 <div id="step3" class="step-content">
                     <div class="info-box">ℹ️ Los ángulos medidos aparecerán aquí</div>
                     
-                    <div class="section-title">Tabla A: Cuello, Torso y Piernas</div>
+                    <div class="section-title">Tabla A: Ángulos Medidos</div>
                     
                     <div class="form-group">
-                        <label>1. Ángulo de Cuello (°)</label>
+                        <label>Cuello (°)</label>
                         <input type="number" id="cuello" placeholder="Medido con Kinovea" min="0" max="180">
                     </div>
                     
                     <div class="form-group">
-                        <label>2. Ángulo de Torso (°)</label>
+                        <label>Torso (°)</label>
                         <input type="number" id="torso" placeholder="Medido con Kinovea" min="0" max="180">
                     </div>
                     
                     <div class="form-group">
-                        <label>3. Ángulo de Brazo (°)</label>
+                        <label>Brazo (°)</label>
                         <input type="number" id="brazo" placeholder="Medido con Kinovea" min="0" max="180">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Posición de Piernas</label>
-                        <div class="checkbox-group">
-                            <label><input type="radio" name="piernas" value="0"> Ambas en el suelo (<30°)</label>
-                            <label><input type="radio" name="piernas" value="1"> Simétricas (>30°)</label>
-                            <label><input type="radio" name="piernas" value="2"> Asimétricas</label>
-                        </div>
                     </div>
                 </div>
                 
@@ -510,29 +485,26 @@
                     
                     <div class="form-group">
                         <label>Agarre</label>
-                        <div class="checkbox-group">
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
                             <label><input type="radio" name="agarre" value="0"> Bueno</label>
                             <label><input type="radio" name="agarre" value="1"> Aceptable</label>
                             <label><input type="radio" name="agarre" value="2"> Pobre</label>
-                            <label><input type="radio" name="agarre" value="3"> Inaceptable</label>
                         </div>
                     </div>
                     
                     <div class="form-group">
-                        <label>Peso de la carga (kg)</label>
+                        <label>Peso (kg)</label>
                         <input type="number" id="peso" placeholder="Ej: 5" min="0" max="100">
                     </div>
                 </div>
                 
                 <!-- PASO 5: RESULTADO -->
                 <div id="step5" class="step-content">
-                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px; border-radius: 10px; text-align: center; margin: 30px 0;">
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px; border-radius: 10px; text-align: center;">
                         <div>Puntuación REBA</div>
                         <div style="font-size: 64px; font-weight: 700; margin: 20px 0;" id="puntuacion_final">0</div>
                         <div style="font-size: 20px;" id="clasificacion">Resultado</div>
                     </div>
-                    
-                    <div id="recomendaciones"></div>
                 </div>
                 
                 <!-- BOTONES -->
@@ -577,7 +549,7 @@
             if (currentStep < 5) {
                 showStep(currentStep + 1);
             } else {
-                calcularResultado();
+                showStep(5);
             }
         }
         
@@ -657,9 +629,50 @@
                 ctx.moveTo(points[1].x, points[1].y);
                 ctx.lineTo(points[2].x, points[2].y);
                 ctx.stroke();
+                
+                // Dibujar ARCO visual del ángulo
+                drawAngleArc();
             }
             
             updatePointsList();
+        }
+        
+        function drawAngleArc() {
+            const p1 = points[0];
+            const p2 = points[1];
+            const p3 = points[2];
+            
+            // Calcular ángulos
+            const angle1 = Math.atan2(p1.y - p2.y, p1.x - p2.x);
+            const angle2 = Math.atan2(p3.y - p2.y, p3.x - p2.x);
+            
+            const arcRadius = 40; // Radio del arco
+            
+            // Dibujar arco
+            ctx.strokeStyle = '#ff9800';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(p2.x, p2.y, arcRadius, angle1, angle2, angle2 > angle1 ? false : true);
+            ctx.stroke();
+            
+            // Calcular ángulo para mostrar texto
+            const textAngle = (angle1 + angle2) / 2;
+            const textX = p2.x + Math.cos(textAngle) * (arcRadius + 25);
+            const textY = p2.y + Math.sin(textAngle) * (arcRadius + 25);
+            
+            // Dibujar valor del ángulo
+            const angle = parseInt(document.getElementById('angleValue').textContent);
+            ctx.fillStyle = '#ff9800';
+            ctx.font = 'bold 16px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(angle + '°', textX, textY);
+            
+            // Dibujar pequeño círculo en el centro (articulación)
+            ctx.fillStyle = '#ff6b6b';
+            ctx.beginPath();
+            ctx.arc(p2.x, p2.y, 5, 0, Math.PI * 2);
+            ctx.fill();
         }
         
         function selectTool(tool) {
@@ -688,7 +701,6 @@
                     calculateAngle();
                 }
             } else if (currentTool === 'edit') {
-                // Buscar si hizo clic en un punto
                 for (let i = 0; i < points.length; i++) {
                     const dx = x - points[i].x;
                     const dy = y - points[i].y;
@@ -710,7 +722,6 @@
                 redrawCanvas();
                 calculateAngle();
             } else if (currentTool === 'draw' && points.length === 2) {
-                // Preview del tercer punto mientras se mueve
                 redrawCanvas();
                 
                 ctx.strokeStyle = 'rgba(118, 75, 162, 0.5)';
@@ -767,7 +778,7 @@
                 const div = document.createElement('div');
                 div.className = 'point-item';
                 div.innerHTML = `
-                    <span>Punto ${idx + 1}: (${Math.round(point.x)}, ${Math.round(point.y)})</span>
+                    <span>P${idx + 1}: (${Math.round(point.x)}, ${Math.round(point.y)})</span>
                     <button type="button" onclick="deletePoint(${idx})">Eliminar</button>
                 `;
                 list.appendChild(div);
@@ -782,7 +793,7 @@
         
         function saveMeasurement() {
             if (points.length !== 3) {
-                alert('Debes completar los 3 puntos (Punto 1 → Punto 2 → Punto 3)');
+                alert('Completa los 3 puntos primero');
                 return;
             }
             
@@ -826,10 +837,6 @@
             document.getElementById(m.name).value = '';
             measurements.splice(idx, 1);
             displaySavedMeasurements();
-        }
-        
-        function calcularResultado() {
-            showStep(5);
         }
         
         document.getElementById('fecha').valueAsDate = new Date();

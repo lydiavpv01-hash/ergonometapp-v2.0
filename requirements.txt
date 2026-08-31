@@ -1,15 +1,15 @@
-# ErgonometApp v2.0 - Dependencias Python (Compatible con Render)
+# ErgonometApp v2.0 - Dependencias Python
 
 # Framework web
 Flask==2.3.3
 Flask-SQLAlchemy==3.0.3
 Flask-CORS==4.0.0
 
-# Server (necesario para Render)
+# Server
 gunicorn==21.2.0
 
-# Base de datos (versión compatible)
-SQLAlchemy==2.0.19
+# Base de datos
+SQLAlchemy==2.0.21
 
 # Generación de reportes
 python-docx==0.8.11
@@ -23,9 +23,5 @@ click==8.1.7
 Werkzeug==2.3.7
 Jinja2==3.1.2
 MarkupSafe==2.1.3
-
-# HTTP
 requests==2.31.0
-
-# Typing (para compatibilidad)
 typing-extensions==4.7.1

@@ -7,7 +7,7 @@ import os
 db = SQLAlchemy()
 
 # Crear app
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates')
 
 # Configuración
 if os.environ.get('FLASK_ENV') == 'production':
@@ -38,11 +38,31 @@ with app.app_context():
         app.register_blueprint(bp_apendice_i)
         app.register_blueprint(bp_apendice_ii)
         app.register_blueprint(bp_kuorinka)
+        
+        print("✅ Todos los blueprints registrados")
     except ImportError as e:
-        print(f"Advertencia: No se pudo cargar todos los blueprints: {e}")
+        print(f"⚠️ Error cargando blueprints: {e}")
     
     # Crear tablas
-    db.create_all()
+    try:
+        db.create_all()
+        print("✅ Base de datos inicializada")
+    except Exception as e:
+        print(f"⚠️ Error en BD: {e}")
+
+@app.errorhandler(404)
+def not_found(error):
+    """Manejo de 404"""
+    return render_template('error.html', 
+                          error='Página no encontrada', 
+                          codigo=404), 404
+
+@app.errorhandler(500)
+def server_error(error):
+    """Manejo de 500"""
+    return render_template('error.html',
+                          error='Error del servidor',
+                          codigo=500), 500
 
 if __name__ == '__main__':
     app.run(debug=True)

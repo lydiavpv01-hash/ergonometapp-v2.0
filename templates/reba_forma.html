@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REBA - ErgonometApp</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .breadcrumb {
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .breadcrumb a {
+            color: #667eea;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+        
+        .form-card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .form-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .form-subtitle {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+        
+        .progress-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .progress-step {
+            flex: 1;
+            min-width: 150px;
+            padding: 12px;
+            background: #f5f5f5;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid #ddd;
+        }
+        
+        .progress-step.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .progress-step.completed {
+            background: #4caf50;
+            color: white;
+            border-color: #4caf50;
+        }
+        
+        .progress-step:hover {
+            transform: translateY(-2px);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0;
+            cursor: pointer;
+            font-weight: 400;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            cursor: pointer;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            flex: 1;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+        
+        .btn-secondary:hover {
+            background: #efefef;
+        }
+        
+        .step-content {
+            display: none;
+        }
+        
+        .step-content.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #333;
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div style="font-size: 20px; font-weight: 600;">📊 ErgonometApp</div>
+        <button onclick="logout()" style="background: rgba(255,255,255,0.2); color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer;">Volver</button>
+    </div>
+    
+    <div class="container">
+        <div class="breadcrumb">
+            <a onclick="goBack()">← Dashboard</a> / REBA
+        </div>
+        
+        <div class="form-card">
+            <div class="form-title">🔍 Evaluación REBA</div>
+            <div class="form-subtitle">Rapid Entire Body Assessment - Evaluación Rápida de Todo el Cuerpo</div>
+            
+            <div class="progress-bar">
+                <div class="progress-step active" onclick="showStep(1)">
+                    <strong>Paso 1</strong><br>
+                    <small>Información</small>
+                </div>
+                <div class="progress-step" onclick="showStep(2)">
+                    <strong>Paso 2</strong><br>
+                    <small>Postura</small>
+                </div>
+                <div class="progress-step" onclick="showStep(3)">
+                    <strong>Paso 3</strong><br>
+                    <small>Extremidades</small>
+                </div>
+                <div class="progress-step" onclick="showStep(4)">
+                    <strong>Paso 4</strong><br>
+                    <small>Carga/Agarre</small>
+                </div>
+                <div class="progress-step" onclick="showStep(5)">
+                    <strong>Paso 5</strong><br>
+                    <small>Resultado</small>
+                </div>
+            </div>
+            
+            <form id="rebaForm">
+                <!-- PASO 1: INFORMACIÓN -->
+                <div id="step1" class="step-content active">
+                    <div class="info-box">
+                        ℹ️ Ingresa la información del trabajador y la evaluación
+                    </div>
+                    
+                    <div class="section-title">Información del Trabajador</div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nombre del Trabajador *</label>
+                            <input type="text" placeholder="Ej: Juan Pérez" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Puesto de Trabajo *</label>
+                            <input type="text" placeholder="Ej: Operario de línea" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Departamento *</label>
+                            <input type="text" placeholder="Ej: Producción" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha de Evaluación *</label>
+                            <input type="date" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Descripción de la Tarea *</label>
+                        <textarea placeholder="Describe la tarea que realiza el trabajador" rows="4" required></textarea>
+                    </div>
+                </div>
+                
+                <!-- PASO 2: POSTURA -->
+                <div id="step2" class="step-content">
+                    <div class="info-box">
+                        ℹ️ Evalúa las posturas principales del trabajador
+                    </div>
+                    
+                    <div class="section-title">Postura del Tronco</div>
+                    <div class="checkbox-group">
+                        <label><input type="radio" name="tronco"> Vertical</label>
+                        <label><input type="radio" name="tronco"> Flexión 0-20°</label>
+                        <label><input type="radio" name="tronco"> Flexión 20-60°</label>
+                        <label><input type="radio" name="tronco"> Flexión >60°</label>
+                    </div>
+                    
+                    <div class="section-title">Postura del Cuello</div>
+                    <div class="checkbox-group">
+                        <label><input type="radio" name="cuello"> Neutral (0-20°)</label>
+                        <label><input type="radio" name="cuello"> Flexión/Extensión 20°</label>
+                        <label><input type="radio" name="cuello"> Flexión/Extensión >20°</label>
+                    </div>
+                    
+                    <div class="section-title">Postura de Piernas</div>
+                    <div class="checkbox-group">
+                        <label><input type="radio" name="piernas"> Simétricas, flexión <30°</label>
+                        <label><input type="radio" name="piernas"> Simétricas, flexión >30°</label>
+                        <label><input type="radio" name="piernas"> Asimétricas</label>
+                    </div>
+                </div>
+                
+                <!-- PASO 3: EXTREMIDADES -->
+                <div id="step3" class="step-content">
+                    <div class="info-box">
+                        ℹ️ Evalúa la posición de brazos, antebrazos y muñecas
+                    </div>
+                    
+                    <div class="section-title">Postura de Brazos</div>
+                    <div class="checkbox-group">
+                        <label><input type="radio" name="brazos"> Abducción <20°</label>
+                        <label><input type="radio" name="brazos"> Abducción >20°</label>
+                        <label><input type="radio" name="brazos"> Elevación de hombros</label>
+                    </div>
+                    
+                    <div class="section-title">Postura de Antebrazos</div>
+                    <div class="checkbox-group">
+                        <label><input type="radio" name="antebrazos"> Flexión 60-100°</label>
+                        <label><input type="radio" name="antebrazos"> Flexión <60° o >100°</label>
+                    </div>
+                    
+                    <div class="section-title">Postura de Muñecas</div>
+                    <div class="checkbox-group">
+                        <label><input type="radio" name="munecas"> Neutral</label>
+                        <label><input type="radio" name="munecas"> Flexión/Extensión <15°</label>
+                        <label><input type="radio" name="munecas"> Flexión/Extensión >15°</label>
+                    </div>
+                </div>
+                
+                <!-- PASO 4: CARGA/AGARRE -->
+                <div id="step4" class="step-content">
+                    <div class="info-box">
+                        ℹ️ Evalúa la carga manipulada y la calidad del agarre
+                    </div>
+                    
+                    <div class="section-title">Carga/Fuerza</div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Peso de la carga (kg) *</label>
+                            <input type="number" placeholder="Ej: 5" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Frecuencia de movimientos (por minuto) *</label>
+                            <input type="number" placeholder="Ej: 10" min="0" required>
+                        </div>
+                    </div>
+                    
+                    <div class="section-title">Calidad del Agarre</div>
+                    <div class="checkbox-group">
+                        <label><input type="radio" name="agarre"> Bueno</label>
+                        <label><input type="radio" name="agarre"> Aceptable</label>
+                        <label><input type="radio" name="agarre"> Malo</label>
+                        <label><input type="radio" name="agarre"> Sin agarre/pinza</label>
+                    </div>
+                    
+                    <div class="section-title">Actividad</div>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="repetitividad"> Movimientos repetitivos</label>
+                        <label><input type="checkbox" name="cambios"> Cambios de postura rápidos</label>
+                        <label><input type="checkbox" name="inestabilidad"> Carga inestable</label>
+                    </div>
+                </div>
+                
+                <!-- PASO 5: RESULTADO -->
+                <div id="step5" class="step-content">
+                    <div class="info-box">
+                        ℹ️ Revisa el resultado de la evaluación REBA
+                    </div>
+                    
+                    <div class="section-title">Puntuación Final REBA</div>
+                    
+                    <div style="background: #f0f4ff; padding: 20px; border-radius: 5px; margin: 20px 0; text-align: center;">
+                        <div style="font-size: 12px; color: #666; margin-bottom: 10px;">PUNTUACIÓN TOTAL</div>
+                        <div style="font-size: 48px; font-weight: 700; color: #667eea; margin-bottom: 10px;">0</div>
+                        <div style="font-size: 14px; color: #333;">Calificación: En proceso...</div>
+                    </div>
+                    
+                    <div class="section-title">Interpretación del Resultado</div>
+                    <div style="background: #fffde7; border-left: 4px solid #fbc02d; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+                        <strong>⚠️ Riesgo Bajo:</strong> No es necesario intervención
+                    </div>
+                    
+                    <div class="section-title">Recomendaciones</div>
+                    <div class="form-group">
+                        <textarea placeholder="Las recomendaciones aparecerán aquí según el resultado" rows="4" readonly></textarea>
+                    </div>
+                </div>
+                
+                <!-- BOTONES -->
+                <div class="buttons">
+                    <button type="button" class="btn btn-secondary" onclick="previousStep()">← Anterior</button>
+                    <button type="button" class="btn btn-primary" onclick="nextStep()">Siguiente →</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        let currentStep = 1;
+        
+        function showStep(step) {
+            if (step < 1 || step > 5) return;
+            
+            // Ocultar todos los pasos
+            for (let i = 1; i <= 5; i++) {
+                document.getElementById(`step${i}`).classList.remove('active');
+                document.querySelectorAll('.progress-step')[i-1].classList.remove('active');
+            }
+            
+            // Mostrar paso actual
+            document.getElementById(`step${step}`).classList.add('active');
+            document.querySelectorAll('.progress-step')[step-1].classList.add('active');
+            
+            currentStep = step;
+            window.scrollTo(0, 0);
+        }
+        
+        function nextStep() {
+            if (currentStep < 5) {
+                showStep(currentStep + 1);
+            } else {
+                alert('Evaluación completada. Guardando datos...');
+                // Aquí iría el código para guardar
+            }
+        }
+        
+        function previousStep() {
+            if (currentStep > 1) {
+                showStep(currentStep - 1);
+            }
+        }
+        
+        function goBack() {
+            window.location.href = '/dashboard';
+        }
+        
+        function logout() {
+            if (confirm('¿Deseas cerrar sesión?')) {
+                window.location.href = '/logout';
+            }
+        }
+    </script>
+</body>
+</html>

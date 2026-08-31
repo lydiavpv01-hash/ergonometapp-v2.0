@@ -1,15 +1,15 @@
-# ErgonometApp v2.0 - Dependencias Python
+# ErgonometApp v2.0 - Dependencias Python (Versiones Estables)
 
 # Framework web
 Flask==2.3.3
-Flask-SQLAlchemy==3.0.3
+Flask-SQLAlchemy==3.0.5
 Flask-CORS==4.0.0
 
 # Server
 gunicorn==21.2.0
 
-# Base de datos
-SQLAlchemy==2.0.21
+# Base de datos (Versión 1.4 más estable)
+SQLAlchemy==1.4.46
 
 # Generación de reportes
 python-docx==0.8.11
@@ -24,4 +24,3 @@ Werkzeug==2.3.7
 Jinja2==3.1.2
 MarkupSafe==2.1.3
 requests==2.31.0
-typing-extensions==4.7.1

@@ -52,7 +52,7 @@
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 30px 20px;
         }
@@ -75,11 +75,109 @@
             font-size: 16px;
         }
         
+        .instructions {
+            background: #e8f4f8;
+            border-left: 4px solid #0288d1;
+            padding: 15px;
+            margin-bottom: 30px;
+            border-radius: 5px;
+            color: #333;
+            font-size: 15px;
+        }
+        
+        .matrix-section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            overflow-x: auto;
+        }
+        
+        .matrix-title {
+            background: #0288d1;
+            color: white;
+            padding: 12px 15px;
+            border-radius: 5px 5px 0 0;
+            margin: -20px -20px 20px -20px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        
+        th {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            vertical-align: middle;
+        }
+        
+        tr:nth-child(even) {
+            background: #fafafa;
+        }
+        
+        tr:hover {
+            background: #f0f0f0;
+        }
+        
+        .method-name {
+            font-weight: 600;
+            color: #0288d1;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        
+        .method-name:hover {
+            color: #667eea;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: #e3f2fd;
+            color: #0288d1;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            margin: 2px;
+        }
+        
+        .complexity {
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .complexity.low {
+            color: #4caf50;
+        }
+        
+        .complexity.medium {
+            color: #ff9800;
+        }
+        
+        .complexity.high {
+            color: #f44336;
+        }
+        
         .methods-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 20px;
-            margin-bottom: 30px;
+            margin-top: 30px;
         }
         
         .method-card {
@@ -88,7 +186,7 @@
             padding: 25px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
             transition: transform 0.3s, box-shadow 0.3s;
-            cursor: pointer;
+            border-top: 4px solid #667eea;
         }
         
         .method-card:hover {
@@ -121,38 +219,22 @@
             text-decoration: none;
             display: inline-block;
             transition: transform 0.2s;
-        }
-        
-        .method-card .btn:hover {
-            transform: scale(1.05);
-        }
-        
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
-        }
-        
-        .stat-card {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            width: 100%;
             text-align: center;
         }
         
-        .stat-number {
-            font-size: 32px;
-            font-weight: 700;
-            color: #667eea;
-            margin-bottom: 10px;
+        .method-card .btn:hover {
+            transform: scale(1.02);
         }
         
-        .stat-label {
-            color: #666;
+        .info-box {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 15px;
+            margin-top: 30px;
+            border-radius: 5px;
+            color: #333;
             font-size: 14px;
-            text-transform: uppercase;
         }
     </style>
 </head>
@@ -160,7 +242,7 @@
     <div class="navbar">
         <div class="navbar-title">📊 ErgonometApp</div>
         <div class="navbar-user">
-            <span>Bienvenido, Usuario</span>
+            <span>Bienvenido</span>
             <button onclick="logout()">Cerrar Sesión</button>
         </div>
     </div>
@@ -171,59 +253,156 @@
             <p>Sistema de evaluación ergonómica con 6 métodos validados según normas mexicanas.</p>
         </div>
         
-        <h2 style="color: #333; margin-bottom: 20px;">Métodos de Evaluación</h2>
+        <div class="instructions">
+            <strong>ℹ️ Instrucciones:</strong> Revisa la matriz de características abajo para elegir el método de evaluación que mejor se ajuste a tu situación. Cada método evalúa diferentes factores de riesgo y partes del cuerpo.
+        </div>
+        
+        <div class="matrix-section">
+            <div class="matrix-title">
+                📋 Matriz de características de métodos
+                <span>Haz clic en el método para comenzar la evaluación</span>
+            </div>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Método</th>
+                        <th>Riesgo Evaluado</th>
+                        <th>Factores de Riesgo</th>
+                        <th>Partes del Cuerpo Evaluadas</th>
+                        <th>Complejidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="method-name" onclick="goTo('/reba/nueva')">REBA</span></td>
+                        <td>Posturas estáticas y dinámicas</td>
+                        <td>
+                            <span class="badge">Posturas</span>
+                            <span class="badge">Carga</span>
+                            <span class="badge">Repetitividad</span>
+                            <span class="badge">Fuerzas</span>
+                        </td>
+                        <td>
+                            <span class="badge">Cabeza/Cuello</span>
+                            <span class="badge">Tronco</span>
+                            <span class="badge">Brazos/Hombro</span>
+                            <span class="badge">Manos/Muñeca</span>
+                            <span class="badge">Piernas</span>
+                        </td>
+                        <td><span class="complexity high">Alta</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="method-name" onclick="goTo('/ley-silla/nueva')">Ley SILLA</span></td>
+                        <td>Trabajos de pie prolongados</td>
+                        <td>
+                            <span class="badge">Posturas</span>
+                            <span class="badge">Bipedestación</span>
+                        </td>
+                        <td>
+                            <span class="badge">Piernas</span>
+                            <span class="badge">Espalda</span>
+                        </td>
+                        <td><span class="complexity low">Baja</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="method-name" onclick="goTo('/lest/nueva')">LEST</span></td>
+                        <td>Condiciones de trabajo</td>
+                        <td>
+                            <span class="badge">Posturas</span>
+                            <span class="badge">Carga</span>
+                            <span class="badge">Repetitividad</span>
+                        </td>
+                        <td>
+                            <span class="badge">Todo el cuerpo</span>
+                        </td>
+                        <td><span class="complexity medium">Media</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="method-name" onclick="goTo('/apendice-i/nueva')">Apéndice I</span></td>
+                        <td>Levantamiento de cargas</td>
+                        <td>
+                            <span class="badge">Carga</span>
+                            <span class="badge">Frecuencia</span>
+                            <span class="badge">Distancia</span>
+                        </td>
+                        <td>
+                            <span class="badge">Espalda</span>
+                            <span class="badge">Brazos</span>
+                        </td>
+                        <td><span class="complexity high">Alta</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="method-name" onclick="goTo('/apendice-ii/nueva')">Apéndice II</span></td>
+                        <td>Empuje y arrastre</td>
+                        <td>
+                            <span class="badge">Fuerzas</span>
+                            <span class="badge">Frecuencia</span>
+                        </td>
+                        <td>
+                            <span class="badge">Brazos</span>
+                            <span class="badge">Espalda</span>
+                        </td>
+                        <td><span class="complexity medium">Media</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="method-name" onclick="goTo('/cuestionario-nordico/nueva')">Kuorinka</span></td>
+                        <td>Síntomas musculoesqueléticos</td>
+                        <td>
+                            <span class="badge">Síntomas</span>
+                            <span class="badge">Dolor</span>
+                        </td>
+                        <td>
+                            <span class="badge">Todo el cuerpo</span>
+                        </td>
+                        <td><span class="complexity low">Baja</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <h2 style="color: #333; margin-bottom: 20px; margin-top: 40px;">O selecciona directamente</h2>
         
         <div class="methods-grid">
             <div class="method-card">
                 <h3>🔍 REBA</h3>
-                <p>Rapid Entire Body Assessment - Evaluación rápida de todo el cuerpo</p>
-                <a href="/reba/nueva" class="btn">Comenzar</a>
+                <p>Rapid Entire Body Assessment - Evaluación completa del cuerpo en posturas estáticas y dinámicas</p>
+                <a href="/reba/nueva" class="btn">Comenzar REBA</a>
             </div>
             
             <div class="method-card">
                 <h3>🪑 Ley SILLA</h3>
-                <p>Evaluación de Bipedestación - Trabajos de pie</p>
-                <a href="/ley-silla/nueva" class="btn">Comenzar</a>
+                <p>Evaluación especializada para trabajos de pie prolongados</p>
+                <a href="/ley-silla/nueva" class="btn">Comenzar Ley SILLA</a>
             </div>
             
             <div class="method-card">
                 <h3>📋 LEST</h3>
-                <p>List of Ergonomic Tasks - Evaluación de tareas ergonómicas</p>
-                <a href="/lest/nueva" class="btn">Comenzar</a>
+                <p>List of Ergonomic Tasks - Evaluación integral de tareas ergonómicas</p>
+                <a href="/lest/nueva" class="btn">Comenzar LEST</a>
             </div>
             
             <div class="method-card">
                 <h3>📦 Apéndice I</h3>
-                <p>Levantamiento de Cargas - Fórmula ACGIH</p>
-                <a href="/apendice-i/nueva" class="btn">Comenzar</a>
+                <p>Levantamiento de Cargas - Fórmula ACGIH para evaluación de manipulación</p>
+                <a href="/apendice-i/nueva" class="btn">Comenzar Apéndice I</a>
             </div>
             
             <div class="method-card">
                 <h3>🚚 Apéndice II</h3>
-                <p>Empuje y Arrastre - Evaluación de fuerzas</p>
-                <a href="/apendice-ii/nueva" class="btn">Comenzar</a>
+                <p>Empuje y Arrastre - Evaluación de fuerzas en actividades de push/pull</p>
+                <a href="/apendice-ii/nueva" class="btn">Comenzar Apéndice II</a>
             </div>
             
             <div class="method-card">
                 <h3>🩺 Kuorinka</h3>
-                <p>Cuestionario Nórdico - Síntomas musculoesqueléticos</p>
-                <a href="/cuestionario-nordico/nueva" class="btn">Comenzar</a>
+                <p>Cuestionario Nórdico - Detección de síntomas musculoesqueléticos</p>
+                <a href="/cuestionario-nordico/nueva" class="btn">Comenzar Kuorinka</a>
             </div>
         </div>
         
-        <div class="stats">
-            <div class="stat-card">
-                <div class="stat-number">0</div>
-                <div class="stat-label">Evaluaciones</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">6</div>
-                <div class="stat-label">Métodos</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">0</div>
-                <div class="stat-label">Trabajadores</div>
-            </div>
+        <div class="info-box">
+            <strong>💡 Consejo:</strong> Si no estás seguro cuál método usar, revisa la matriz de características arriba. Cada método está diseñado para evaluar riesgos específicos según el tipo de trabajo y las partes del cuerpo afectadas.
         </div>
     </div>
     
@@ -232,6 +411,10 @@
             if (confirm('¿Deseas cerrar sesión?')) {
                 window.location.href = '/logout';
             }
+        }
+        
+        function goTo(url) {
+            window.location.href = url;
         }
     </script>
 </body>

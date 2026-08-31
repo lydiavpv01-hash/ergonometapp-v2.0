@@ -1,0 +1,268 @@
+<!-- templates/metodos/kuorinka/paso3_resultado.html -->
+{% extends "base.html" %}
+{% block title %}Cuestionario Nórdico - Resultado{% endblock %}
+{% block content %}
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-lg-12 mx-auto">
+      <h2>📊 Cuestionario Nórdico: Resultado del Análisis</h2>
+      <div class="progress mb-4" style="height: 8px;">
+        <div class="progress-bar" style="width: 100%;"></div>
+      </div>
+      
+      <!-- ══════════════════════════════════════════════════════════════════════════ -->
+      <!-- RESUMEN GENERAL -->
+      <!-- ══════════════════════════════════════════════════════════════════════════ -->
+      
+      <div class="card mb-4" style="border-left: 6px solid {{ resultado.color_general }};">
+        <div class="card-body">
+          <div class="row align-items-center">
+            <div class="col-md-4 text-center">
+              <div style="font-size: 4rem; font-weight: bold; color: {{ resultado.color_general }};">
+                {{ resultado.prevalencia_general }}%
+              </div>
+              <div style="font-size: 1.3rem; margin-top: 10px;">
+                <span class="badge" style="background-color: {{ resultado.color_general }}; font-size: 1rem; padding: 0.8rem 1.5rem;">
+                  {{ resultado.estado_general }}
+                </span>
+              </div>
+              <div class="text-muted mt-3">
+                <strong>Prevalencia General</strong><br>
+                {{ resultado.zonas_con_sintomas }} de {{ resultado.total_zonas }} zonas
+              </div>
+            </div>
+            <div class="col-md-8">
+              <h5>📌 Interpretación</h5>
+              <p class="mb-3"><strong>{{ resultado.descripcion_general }}</strong></p>
+              <p class="mb-0">
+                {% if resultado.prevalencia_general == 0 %}
+                  ✓ Sin síntomas musculoesqueléticos detectados. Mantener vigilancia periódica.
+                {% elif resultado.prevalencia_general <= 25 %}
+                  ⚠️ Baja prevalencia de síntomas. Evalúe factores ergonómicos y mejore condiciones.
+                {% elif resultado.prevalencia_general <= 50 %}
+                  ⚠️⚠️ Prevalencia moderada. Intervención ergonómica recomendada.
+                {% else %}
+                  🔴 Alta prevalencia. Intervención inmediata y referencia médica recomendada.
+                {% endif %}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- ══════════════════════════════════════════════════════════════════════════ -->
+      <!-- MAPA DE CALOR - 9 ZONAS -->
+      <!-- ══════════════════════════════════════════════════════════════════════════ -->
+      
+      <div class="card mb-4">
+        <div class="card-header bg-light">
+          <h5>🔥 Mapa de Calor: Síntomas por Zona</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            {% for zona_id, zona_data in resultado.zonas.items() %}
+            
+            <div class="col-md-4 mb-3">
+              <div class="card" style="border-left: 6px solid {{ zona_data.color }}; background-color: {{ zona_data.color }}10;">
+                <div class="card-body">
+                  <h6>{{ zona_data.icono }} {{ zona_data.nombre }}</h6>
+                  
+                  <div style="font-size: 2rem; font-weight: bold; color: {{ zona_data.color }}; margin: 10px 0;">
+                    {{ zona_data.puntos }}/4
+                  </div>
+                  
+                  <span class="badge" style="background-color: {{ zona_data.color }};">
+                    {{ zona_data.severidad }}
+                  </span>
+                  
+                  <div class="mt-3 small">
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" disabled 
+                             {% if zona_data.molestias_12m %}checked{% endif %}>
+                      <label class="form-check-label">Molestias 12m</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" disabled 
+                             {% if zona_data.molestias_7d %}checked{% endif %}>
+                      <label class="form-check-label">Molestias 7d</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" disabled 
+                             {% if zona_data.consulta_medica %}checked{% endif %}>
+                      <label class="form-check-label">Consulta médica</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" disabled 
+                             {% if zona_data.ausencia_trabajo %}checked{% endif %}>
+                      <label class="form-check-label">Ausencia trabajo</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      
+      <!-- ══════════════════════════════════════════════════════════════════════════ -->
+      <!-- ZONAS CRÍTICAS -->
+      <!-- ══════════════════════════════════════════════════════════════════════════ -->
+      
+      {% if resultado.zonas_criticas %}
+      <div class="card mb-4 border-danger">
+        <div class="card-header bg-danger bg-opacity-10">
+          <h5>🔴 ZONAS CRÍTICAS IDENTIFICADAS</h5>
+        </div>
+        <div class="card-body">
+          <ul class="list-group list-group-flush">
+            {% for critica in resultado.zonas_criticas %}
+            <li class="list-group-item">
+              <strong>{{ critica.zona }}</strong>
+              <span class="badge" style="background-color: {{ critica.color }}; float: right;">
+                {{ critica.puntos }}/4 puntos
+              </span>
+            </li>
+            {% endfor %}
+          </ul>
+          <div class="alert alert-danger mt-3 mb-0">
+            <strong>⚠️ RECOMENDACIÓN IMPORTANTE:</strong><br>
+            Se detectaron síntomas severos. Se recomienda evaluación médica especializada y valoración ergonómica del puesto.
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      
+      <!-- ══════════════════════════════════════════════════════════════════════════ -->
+      <!-- ANÁLISIS POR REGIÓN -->
+      <!-- ══════════════════════════════════════════════════════════════════════════ -->
+      
+      <div class="card mb-4">
+        <div class="card-header bg-light">
+          <h5>🧬 Análisis por Región del Cuerpo</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="alert alert-info">
+                <h6>🧠 Espalda y Cuello</h6>
+                <div style="font-size: 2rem; font-weight: bold; margin: 10px 0;">
+                  {{ resultado.score_espalda_cuello }}/8
+                </div>
+                <small>
+                  {% if resultado.score_espalda_cuello == 0 %}
+                    Sin síntomas en región dorsal
+                  {% elif resultado.score_espalda_cuello <= 3 %}
+                    Síntomas leves en región dorsal
+                  {% elif resultado.score_espalda_cuello <= 5 %}
+                    Síntomas moderados en región dorsal
+                  {% else %}
+                    Síntomas severos en región dorsal - Intervención urgente
+                  {% endif %}
+                </small>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="alert alert-warning">
+                <h6>💪 Extremidades Superiores</h6>
+                <div style="font-size: 2rem; font-weight: bold; margin: 10px 0;">
+                  {{ resultado.score_extremidades }}/20
+                </div>
+                <small>
+                  {% if resultado.score_extremidades == 0 %}
+                    Sin síntomas en extremidades
+                  {% elif resultado.score_extremidades <= 5 %}
+                    Síntomas leves en extremidades
+                  {% elif resultado.score_extremidades <= 10 %}
+                    Síntomas moderados en extremidades
+                  {% else %}
+                    Síntomas severos en extremidades - Intervención necesaria
+                  {% endif %}
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- ══════════════════════════════════════════════════════════════════════════ -->
+      <!-- RECOMENDACIONES -->
+      <!-- ══════════════════════════════════════════════════════════════════════════ -->
+      
+      <div class="card mb-4" style="border-left: 6px solid {{ resultado.color_general }};">
+        <div class="card-header" style="background-color: {{ resultado.color_general }}20;">
+          <h5>💡 Recomendaciones</h5>
+        </div>
+        <div class="card-body">
+          <ul class="list-unstyled">
+            {% for rec in resultado.recomendaciones %}
+            <li class="mb-2">
+              <strong>{{ rec }}</strong>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      
+      <!-- ══════════════════════════════════════════════════════════════════════════ -->
+      <!-- LEYENDA DE SEVERIDAD -->
+      <!-- ══════════════════════════════════════════════════════════════════════════ -->
+      
+      <div class="card mb-4">
+        <div class="card-header bg-light">
+          <h5>📊 Leyenda de Severidad</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-3">
+              <div class="alert alert-success mb-0">
+                <strong>0 PUNTOS</strong><br>
+                <strong>NORMAL</strong><br>
+                Sin molestias
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="alert alert-info mb-0">
+                <strong>1 PUNTO</strong><br>
+                <strong>LEVE</strong><br>
+                Molestias ocasionales
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="alert alert-warning mb-0">
+                <strong>2 PUNTOS</strong><br>
+                <strong>MODERADO</strong><br>
+                Molestias frecuentes
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="alert alert-danger mb-0">
+                <strong>3-4 PUNTOS</strong><br>
+                <strong>SEVERO</strong><br>
+                Molestias con impacto laboral
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- ══════════════════════════════════════════════════════════════════════════ -->
+      <!-- BOTONES DE ACCIÓN -->
+      <!-- ══════════════════════════════════════════════════════════════════════════ -->
+      
+      <div class="d-flex justify-content-between">
+        <button type="button" class="btn btn-outline-secondary" onclick="window.history.back()">← Atrás</button>
+        <div>
+          <a href="/" class="btn btn-primary">
+            🏠 Volver al inicio
+          </a>
+          <button type="button" class="btn btn-success" onclick="window.print()">
+            📄 Imprimir / Guardar PDF
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

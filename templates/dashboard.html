@@ -1,0 +1,375 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - ErgonometApp{% endblock %}
+{% block content %}
+<div class="container-fluid mt-4">
+  
+  <!-- HEADER -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <h1>📊 Dashboard de Evaluaciones Ergonómicas</h1>
+      <p class="text-muted">Análisis completo de evaluaciones y riesgos</p>
+    </div>
+  </div>
+
+  <!-- FILTROS -->
+  <div class="row mb-4">
+    <div class="col-md-3">
+      <input type="date" class="form-control" id="filtro_fecha_inicio" placeholder="Fecha inicio">
+    </div>
+    <div class="col-md-3">
+      <input type="date" class="form-control" id="filtro_fecha_fin" placeholder="Fecha fin">
+    </div>
+    <div class="col-md-3">
+      <select class="form-control" id="filtro_metodo">
+        <option value="">-- Todos los métodos --</option>
+        <option value="reba">REBA</option>
+        <option value="ley_silla">Ley SILLA</option>
+        <option value="lest">LEST</option>
+        <option value="apendice_i">Apéndice I</option>
+        <option value="apendice_ii">Apéndice II</option>
+        <option value="kuorinka">Cuestionario Nórdico</option>
+      </select>
+    </div>
+    <div class="col-md-3">
+      <button class="btn btn-primary w-100" onclick="aplicarFiltros()">
+        🔍 Filtrar
+      </button>
+    </div>
+  </div>
+
+  <!-- TARJETAS RESUMEN -->
+  <div class="row mb-4">
+    <div class="col-md-3">
+      <div class="card bg-light">
+        <div class="card-body text-center">
+          <h3 id="total_evaluaciones">0</h3>
+          <p class="text-muted">Total Evaluaciones</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card bg-success bg-opacity-10">
+        <div class="card-body text-center">
+          <h3 id="riesgo_bajo">0</h3>
+          <p class="text-success">Riesgo Bajo</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card bg-warning bg-opacity-10">
+        <div class="card-body text-center">
+          <h3 id="riesgo_moderado">0</h3>
+          <p class="text-warning">Riesgo Moderado</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card bg-danger bg-opacity-10">
+        <div class="card-body text-center">
+          <h3 id="riesgo_alto">0</h3>
+          <p class="text-danger">Riesgo Alto</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GRÁFICOS -->
+  <div class="row mb-4">
+    
+    <!-- Gráfico 1: Distribución por método -->
+    <div class="col-md-6 mb-4">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h5>📊 Evaluaciones por Método</h5>
+        </div>
+        <div class="card-body">
+          <canvas id="chartMetodos" height="300"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gráfico 2: Distribución de riesgo -->
+    <div class="col-md-6 mb-4">
+      <div class="card">
+        <div class="card-header bg-info text-white">
+          <h5>⚠️ Distribución de Riesgos</h5>
+        </div>
+        <div class="card-body">
+          <canvas id="chartRiesgos" height="300"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4">
+    
+    <!-- Gráfico 3: Tendencia temporal -->
+    <div class="col-md-8 mb-4">
+      <div class="card">
+        <div class="card-header bg-success text-white">
+          <h5>📈 Tendencia de Evaluaciones (Últimos 30 días)</h5>
+        </div>
+        <div class="card-body">
+          <canvas id="chartTendencia" height="300"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabla: Evaluaciones recientes -->
+    <div class="col-md-4 mb-4">
+      <div class="card">
+        <div class="card-header bg-secondary text-white">
+          <h5>📋 Evaluaciones Recientes</h5>
+        </div>
+        <div class="card-body" style="max-height: 400px; overflow-y: auto;">
+          <table class="table table-sm" id="tablaRecientes">
+            <thead>
+              <tr>
+                <th>Trabajador</th>
+                <th>Método</th>
+                <th>Resultado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Rellenado por JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ZONAS DE RIESGO -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header bg-danger text-white">
+          <h5>🔴 Zonas de Riesgo Crítico (ACCIÓN REQUERIDA)</h5>
+        </div>
+        <div class="card-body">
+          <table class="table table-hover" id="tablaCriticas">
+            <thead>
+              <tr>
+                <th>Trabajador</th>
+                <th>Método</th>
+                <th>Zona/Factor</th>
+                <th>Nivel</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Rellenado por JavaScript -->
+            </tbody>
+          </table>
+          <p class="text-muted" id="sinCriticas" style="display:none;">No hay zonas de riesgo crítico</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ANÁLISIS POR ZONA (Kuorinka) -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header bg-warning text-dark">
+          <h5>🫀 Análisis de Síntomas (Cuestionario Nórdico)</h5>
+        </div>
+        <div class="card-body">
+          <canvas id="chartZonas" height="200"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTONES DE ACCIÓN -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <button class="btn btn-success" onclick="descargarPDF()">
+        📄 Descargar como PDF
+      </button>
+      <button class="btn btn-info" onclick="descargarExcel()">
+        📊 Descargar como Excel
+      </button>
+      <button class="btn btn-secondary" onclick="window.print()">
+        🖨️ Imprimir
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+// Datos de ejemplo (reemplazar con datos reales del servidor)
+const datos = {
+  total_evaluaciones: 42,
+  riesgo_bajo: 28,
+  riesgo_moderado: 10,
+  riesgo_alto: 4,
+  por_metodo: {
+    'REBA': 15,
+    'Ley SILLA': 8,
+    'LEST': 6,
+    'Apéndice I': 7,
+    'Apéndice II': 4,
+    'Kuorinka': 2
+  },
+  recientes: [
+    {trabajador: 'Juan García', metodo: 'REBA', resultado: 'Riesgo Moderado'},
+    {trabajador: 'María López', metodo: 'Apéndice I', resultado: 'Riesgo Bajo'},
+    {trabajador: 'Carlos Ruiz', metodo: 'LEST', resultado: 'Riesgo Alto'},
+  ],
+  criticas: [
+    {trabajador: 'Carlos Ruiz', metodo: 'LEST', zona: 'Carga Mental', nivel: 'ALTO'},
+    {trabajador: 'Ana Martínez', metodo: 'Apéndice II', zona: 'Empuje Inicial', nivel: 'MODERADO'},
+  ]
+};
+
+// Actualizar tarjetas
+document.getElementById('total_evaluaciones').textContent = datos.total_evaluaciones;
+document.getElementById('riesgo_bajo').textContent = datos.riesgo_bajo;
+document.getElementById('riesgo_moderado').textContent = datos.riesgo_moderado;
+document.getElementById('riesgo_alto').textContent = datos.riesgo_alto;
+
+// GRÁFICO 1: Evaluaciones por método
+const ctx1 = document.getElementById('chartMetodos').getContext('2d');
+new Chart(ctx1, {
+  type: 'doughnut',
+  data: {
+    labels: Object.keys(datos.por_metodo),
+    datasets: [{
+      data: Object.values(datos.por_metodo),
+      backgroundColor: [
+        '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'
+      ]
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: {position: 'bottom'}
+    }
+  }
+});
+
+// GRÁFICO 2: Distribución de riesgos
+const ctx2 = document.getElementById('chartRiesgos').getContext('2d');
+new Chart(ctx2, {
+  type: 'pie',
+  data: {
+    labels: ['Riesgo Bajo', 'Riesgo Moderado', 'Riesgo Alto'],
+    datasets: [{
+      data: [
+        datos.riesgo_bajo,
+        datos.riesgo_moderado,
+        datos.riesgo_alto
+      ],
+      backgroundColor: ['#28A745', '#FFC107', '#DC3545']
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: {position: 'bottom'}
+    }
+  }
+});
+
+// GRÁFICO 3: Tendencia temporal
+const ctx3 = document.getElementById('chartTendencia').getContext('2d');
+new Chart(ctx3, {
+  type: 'line',
+  data: {
+    labels: ['1', '5', '10', '15', '20', '25', '30'],
+    datasets: [{
+      label: 'Evaluaciones',
+      data: [2, 5, 8, 12, 18, 35, 42],
+      borderColor: '#28A745',
+      backgroundColor: 'rgba(40, 167, 69, 0.1)',
+      tension: 0.4,
+      fill: true
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: {display: true}
+    },
+    scales: {
+      y: {beginAtZero: true}
+    }
+  }
+});
+
+// GRÁFICO 4: Síntomas por zona (Kuorinka)
+const ctx4 = document.getElementById('chartZonas').getContext('2d');
+new Chart(ctx4, {
+  type: 'bar',
+  data: {
+    labels: ['Cuello', 'Hombro Izq', 'Hombro Der', 'Codo Izq', 'Codo Der', 'Muñeca Izq', 'Muñeca Der', 'Espalda', 'Cadera'],
+    datasets: [{
+      label: 'Prevalencia (%)',
+      data: [35, 45, 42, 28, 31, 22, 25, 62, 18],
+      backgroundColor: '#FF9800'
+    }]
+  },
+  options: {
+    responsive: true,
+    indexAxis: 'y',
+    scales: {
+      x: {beginAtZero: true, max: 100}
+    }
+  }
+});
+
+// Rellenar tabla de recientes
+const tablaRecientes = document.getElementById('tablaRecientes').querySelector('tbody');
+datos.recientes.forEach(item => {
+  const row = tablaRecientes.insertRow();
+  row.innerHTML = `
+    <td>${item.trabajador}</td>
+    <td>${item.metodo}</td>
+    <td><span class="badge bg-warning">${item.resultado}</span></td>
+  `;
+});
+
+// Rellenar tabla de críticas
+const tablaCriticas = document.getElementById('tablaCriticas').querySelector('tbody');
+if (datos.criticas.length > 0) {
+  datos.criticas.forEach(item => {
+    const row = tablaCriticas.insertRow();
+    row.innerHTML = `
+      <td><strong>${item.trabajador}</strong></td>
+      <td>${item.metodo}</td>
+      <td>${item.zona}</td>
+      <td><span class="badge bg-danger">${item.nivel}</span></td>
+      <td><a href="#" class="btn btn-sm btn-primary">Ver</a></td>
+    `;
+  });
+} else {
+  document.getElementById('sinCriticas').style.display = 'block';
+}
+
+// Funciones de filtro y descarga
+function aplicarFiltros() {
+  alert('Filtros aplicados (simulado)');
+}
+
+function descargarPDF() {
+  alert('Descargando PDF...');
+  window.print();
+}
+
+function descargarExcel() {
+  alert('Descargando Excel...');
+}
+</script>
+
+<style>
+canvas {
+  max-height: 400px;
+}
+</style>
+{% endblock %}

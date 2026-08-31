@@ -1,0 +1,120 @@
+<!-- templates/metodos/kuorinka/paso2_preguntas.html -->
+{% extends "base.html" %}
+{% block title %}Cuestionario Nórdico - Preguntas{% endblock %}
+{% block content %}
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-lg-11 mx-auto">
+      <h2>📋 Cuestionario Nórdico: Síntomas Musculoesqueléticos</h2>
+      <p class="text-muted">Evalúe molestias en 9 áreas del cuerpo</p>
+      <div class="progress mb-4" style="height: 8px;">
+        <div class="progress-bar" style="width: 50%;"></div>
+      </div>
+      
+      <form id="form-preguntas">
+        
+        <!-- INSTRUCCIONES -->
+        <div class="alert alert-info mb-4">
+          <h5>📌 Instrucciones</h5>
+          <p class="mb-0">Marque "<strong>Sí</strong>" si ha tenido molestias en cada zona, considerando los últimos 12 meses y 7 días recientes. También indique si ha consultado médico o faltado al trabajo.</p>
+        </div>
+        
+        {% for zona in zonas %}
+        
+        <!-- ZONA {{loop.index}} -->
+        <div class="card mb-4">
+          <div class="card-header" style="background-color: #e8f4f8;">
+            <h5>{{ zona.icono }} {{ zona.nombre }} <small style="color: #666;">{{loop.index}}/{{zonas|length}}</small></h5>
+            <small class="text-muted">{{ zona.descripcion }}</small>
+          </div>
+          <div class="card-body">
+            
+            <!-- Pregunta 1: Molestias 12 meses -->
+            <div class="mb-3">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="molestias_12m_{{ zona.id }}" 
+                       name="molestias_12m" value="{{ zona.id }}">
+                <label class="form-check-label" for="molestias_12m_{{ zona.id }}">
+                  <strong>¿Ha tenido molestias en los últimos 12 meses?</strong>
+                </label>
+              </div>
+            </div>
+            
+            <!-- Pregunta 2: Molestias 7 días -->
+            <div class="mb-3">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="molestias_7d_{{ zona.id }}" 
+                       name="molestias_7d" value="{{ zona.id }}">
+                <label class="form-check-label" for="molestias_7d_{{ zona.id }}">
+                  <strong>¿Ha tenido molestias en los últimos 7 días?</strong>
+                </label>
+              </div>
+            </div>
+            
+            <!-- Pregunta 3: Consulta médica -->
+            <div class="mb-3">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="consulta_{{ zona.id }}" 
+                       name="consulta_medica" value="{{ zona.id }}">
+                <label class="form-check-label" for="consulta_{{ zona.id }}">
+                  <strong>¿Ha consultado a un médico?</strong>
+                </label>
+              </div>
+            </div>
+            
+            <!-- Pregunta 4: Ausencia trabajo -->
+            <div class="mb-3">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="ausencia_{{ zona.id }}" 
+                       name="ausencia_trabajo" value="{{ zona.id }}">
+                <label class="form-check-label" for="ausencia_{{ zona.id }}">
+                  <strong>¿Ha faltado al trabajo?</strong>
+                </label>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+        
+        {% endfor %}
+        
+        <div class="d-flex justify-content-between">
+          <button type="button" class="btn btn-outline-secondary" onclick="window.history.back()">← Atrás</button>
+          <button type="button" class="btn btn-primary btn-lg" id="btn-enviar">
+            Ver Resultado →
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+document.getElementById('btn-enviar').addEventListener('click', async function() {
+  // Construir objeto de respuestas
+  const respuestas = {};
+  
+  {% for zona in zonas %}
+  respuestas['{{ zona.id }}'] = {
+    'molestias_12m': document.getElementById('molestias_12m_{{ zona.id }}').checked,
+    'molestias_7d': document.getElementById('molestias_7d_{{ zona.id }}').checked,
+    'consulta_medica': document.getElementById('consulta_{{ zona.id }}').checked,
+    'ausencia_trabajo': document.getElementById('ausencia_{{ zona.id }}').checked,
+  };
+  {% endfor %}
+  
+  const response = await fetch(window.location.href, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({respuestas})
+  });
+  
+  const result = await response.json();
+  if (result.success) {
+    // Guardar resultado en sessionStorage para pasar a resultado
+    sessionStorage.setItem('kuorinka_resultado', JSON.stringify(result.resultado));
+    window.location.href = result.redirect;
+  }
+});
+</script>
+{% endblock %}

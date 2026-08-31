@@ -1,0 +1,201 @@
+<!-- templates/metodos/apendice_ii/paso2_parametros.html -->
+{% extends "base.html" %}
+{% block title %}Apéndice II - Paso 2: Parámetros{% endblock %}
+{% block content %}
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-lg-10 mx-auto">
+      <h2>💪 Apéndice II: Empuje y Arrastre - Paso 2 de 3</h2>
+      <p class="text-muted">Ingrese los parámetros de la tarea de empuje o arrastre</p>
+      <div class="progress mb-4" style="height: 8px;">
+        <div class="progress-bar" style="width: 66%;"></div>
+      </div>
+      
+      <form id="form-paso2">
+        
+        <!-- ══════════════════════════════════════════════════════════════════════ -->
+        <!-- SECCIÓN 1: TIPO DE ACCIÓN -->
+        <!-- ══════════════════════════════════════════════════════════════════════ -->
+        
+        <div class="card mb-4 border-primary">
+          <div class="card-header bg-primary bg-opacity-10">
+            <h5>🔄 Tipo de Acción</h5>
+          </div>
+          <div class="card-body">
+            <div class="btn-group w-100" role="group">
+              <input type="radio" class="btn-check" name="tipo" value="empuje" id="tipo_empuje" checked>
+              <label class="btn btn-outline-primary" for="tipo_empuje">
+                <strong>🚀 EMPUJE</strong><br>
+                <small>Empujar carga hacia adelante</small>
+              </label>
+              
+              <input type="radio" class="btn-check" name="tipo" value="arrastre" id="tipo_arrastre">
+              <label class="btn btn-outline-danger" for="tipo_arrastre">
+                <strong>⬅️ ARRASTRE</strong><br>
+                <small>Tirar carga hacia atrás</small>
+              </label>
+            </div>
+          </div>
+        </div>
+        
+        <!-- ══════════════════════════════════════════════════════════════════════ -->
+        <!-- SECCIÓN 2: FUERZAS -->
+        <!-- ══════════════════════════════════════════════════════════════════════ -->
+        
+        <div class="card mb-4 border-warning">
+          <div class="card-header bg-warning bg-opacity-10">
+            <h5>⚡ Fuerzas Requeridas</h5>
+          </div>
+          <div class="card-body">
+            
+            <!-- Fuerza Inicial -->
+            <div class="mb-4">
+              <label class="form-label fw-bold">💪 Fuerza Inicial (kg)</label>
+              <div class="input-group">
+                <input type="number" class="form-control" id="fuerza_inicial" name="fuerza_inicial" 
+                       value="20" min="5" max="100" step="1" required>
+                <span class="input-group-text">kg</span>
+              </div>
+              <small class="text-muted">Fuerza necesaria para iniciar el movimiento</small>
+            </div>
+            
+            <!-- Fuerza Sostenida -->
+            <div class="mb-4">
+              <label class="form-label fw-bold">💪 Fuerza Sostenida (kg)</label>
+              <div class="input-group">
+                <input type="number" class="form-control" id="fuerza_sostenida" name="fuerza_sostenida" 
+                       value="10" min="5" max="80" step="1" required>
+                <span class="input-group-text">kg</span>
+              </div>
+              <small class="text-muted">Fuerza necesaria para mantener el movimiento</small>
+            </div>
+          </div>
+        </div>
+        
+        <!-- ══════════════════════════════════════════════════════════════════════ -->
+        <!-- SECCIÓN 3: DISTANCIA Y ALTURA -->
+        <!-- ══════════════════════════════════════════════════════════════════════ -->
+        
+        <div class="card mb-4 border-info">
+          <div class="card-header bg-info bg-opacity-10">
+            <h5>📏 Distancia y Altura del Agarre</h5>
+          </div>
+          <div class="card-body">
+            
+            <!-- Distancia -->
+            <div class="mb-4">
+              <label class="form-label fw-bold">📏 Distancia de Recorrido (metros)</label>
+              <div class="input-group">
+                <input type="number" class="form-control" id="distancia" name="distancia" 
+                       value="3" min="0.5" max="20" step="0.5" required>
+                <span class="input-group-text">m</span>
+              </div>
+              <small class="text-muted">Distancia total del movimiento</small>
+            </div>
+            
+            <!-- Altura del Agarre -->
+            <div class="mb-4">
+              <label class="form-label fw-bold">📍 Altura del Agarre (cm)</label>
+              <select class="form-select" id="altura_agarre" name="altura_agarre" required>
+                <option value="">-- Seleccionar altura --</option>
+                <option value="75">65-95 cm (Espalda baja)</option>
+                <option value="110" selected>95-125 cm (Mano/Pecho)</option>
+                <option value="150">125-180 cm (Hombro)</option>
+              </select>
+              <small class="text-muted">Altura donde se sujeta la carga</small>
+            </div>
+          </div>
+        </div>
+        
+        <!-- ══════════════════════════════════════════════════════════════════════ -->
+        <!-- SECCIÓN 4: FRECUENCIA, DURACIÓN Y SUPERFICIE -->
+        <!-- ══════════════════════════════════════════════════════════════════════ -->
+        
+        <div class="card mb-4 border-success">
+          <div class="card-header bg-success bg-opacity-10">
+            <h5>⏱️ Frecuencia, Duración y Superficie</h5>
+          </div>
+          <div class="card-body">
+            
+            <!-- Frecuencia -->
+            <div class="mb-4">
+              <label class="form-label fw-bold">⏱️ Frecuencia (acciones/minuto)</label>
+              <div class="input-group">
+                <input type="number" class="form-control" id="frecuencia" name="frecuencia" 
+                       value="5" min="1" max="12" step="0.5" required>
+                <span class="input-group-text">acc/min</span>
+              </div>
+              <small class="text-muted">Número de empujes o arrastres por minuto</small>
+            </div>
+            
+            <!-- Duración -->
+            <div class="mb-4">
+              <label class="form-label fw-bold">⏳ Duración de la Tarea (horas)</label>
+              <div class="input-group">
+                <input type="number" class="form-control" id="duracion" name="duracion" 
+                       value="1" min="0.5" max="8" step="0.5" required>
+                <span class="input-group-text">h</span>
+              </div>
+              <small class="text-muted">Tiempo total de la tarea</small>
+            </div>
+            
+            <!-- Superficie -->
+            <div class="mb-4">
+              <label class="form-label fw-bold">🛫 Tipo de Superficie</label>
+              <div class="btn-group w-100" role="group">
+                <input type="radio" class="btn-check" name="superficie" value="lisa" id="sup_lisa">
+                <label class="btn btn-outline-success" for="sup_lisa">
+                  <strong>✓ LISA</strong><br>
+                  <small>Acera pulida, piso encerado</small>
+                </label>
+                
+                <input type="radio" class="btn-check" name="superficie" value="moderada" id="sup_moderada" checked>
+                <label class="btn btn-outline-warning" for="sup_moderada">
+                  <strong>~ MODERADA</strong><br>
+                  <small>Piso normal, alfombra</small>
+                </label>
+                
+                <input type="radio" class="btn-check" name="superficie" value="rugosa" id="sup_rugosa">
+                <label class="btn btn-outline-danger" for="sup_rugosa">
+                  <strong>✗ RUGOSA</strong><br>
+                  <small>Piso áspero, tierra, arena</small>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="d-flex justify-content-between">
+          <button type="button" class="btn btn-outline-secondary" onclick="window.history.back()">← Atrás</button>
+          <button type="button" class="btn btn-primary btn-lg" id="btn-calcular">
+            Calcular Índice de Esfuerzo →
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+document.getElementById('btn-calcular').addEventListener('click', async function() {
+  const form = document.getElementById('form-paso2');
+  const formData = new FormData(form);
+  const parametros = Object.fromEntries(formData);
+  
+  for (const key in parametros) {
+    if (key !== 'tipo' && key !== 'superficie') {
+      parametros[key] = parseFloat(parametros[key]);
+    }
+  }
+  
+  const response = await fetch(window.location.href, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({parametros})
+  });
+  
+  const result = await response.json();
+  if (result.success) window.location.href = result.redirect;
+});
+</script>
+{% endblock %}

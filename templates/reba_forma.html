@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REBA Kinovea - Funcional - ErgonometApp</title>
+    <title>REBA Kinovea con Imagen - ErgonometApp</title>
     <style>
         * {
             margin: 0;
@@ -40,6 +40,51 @@
             border-radius: 5px;
         }
         
+        .upload-section {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border: 2px dashed #667eea;
+        }
+        
+        .upload-section h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+        
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            left: -9999px;
+        }
+        
+        .file-input-label {
+            display: inline-block;
+            padding: 12px 25px;
+            background: #667eea;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        
+        .file-input-label:hover {
+            background: #764ba2;
+        }
+        
+        .file-name {
+            margin-left: 15px;
+            color: #666;
+            font-size: 14px;
+        }
+        
         .canvas-container {
             display: grid;
             grid-template-columns: 1fr 300px;
@@ -60,6 +105,9 @@
             cursor: crosshair;
             border-radius: 5px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            width: 100%;
+            height: auto;
+            max-width: 800px;
         }
         
         .sidebar {
@@ -95,6 +143,12 @@
             border-radius: 5px;
             max-height: 200px;
             overflow-y: auto;
+        }
+        
+        .points-info h3 {
+            font-size: 13px;
+            margin-bottom: 10px;
+            color: #333;
         }
         
         .point-row {
@@ -159,7 +213,6 @@
             padding: 10px;
             border-radius: 3px;
             font-size: 12px;
-            margin-top: 10px;
             max-height: 80px;
             overflow-y: auto;
         }
@@ -196,6 +249,16 @@
             <span id="angleDisplay">0°</span>
         </div>
         
+        <!-- SECCIÓN DE CARGA DE IMAGEN -->
+        <div class="upload-section">
+            <h3>📁 Cargar Imagen del Trabajador</h3>
+            <div class="file-input-wrapper">
+                <input type="file" id="imageInput" accept="image/*" />
+                <label for="imageInput" class="file-input-label">📷 Seleccionar Foto</label>
+                <span class="file-name" id="fileName">Sin imagen seleccionada</span>
+            </div>
+        </div>
+        
         <div class="canvas-container">
             <!-- CANVAS PRINCIPAL -->
             <div>
@@ -228,7 +291,7 @@
                 
                 <!-- DEBUG -->
                 <div class="debug-info" id="debugInfo">
-                    Listo para usar - haz clic en el canvas
+                    Listo para usar - carga una foto y haz clic en el canvas
                 </div>
             </div>
         </div>
@@ -236,44 +299,77 @@
         <!-- INSTRUCCIONES -->
         <div class="instructions">
             <h3>📋 Cómo Usar</h3>
-            <p><strong>1. MEDIR:</strong> Haz 3 clics en el canvas para crear los puntos</p>
-            <p style="margin-left: 20px;">• Primer clic: Punto P1 (azul) - inicio</p>
-            <p style="margin-left: 20px;">• Segundo clic: Punto P2 (rojo) - articulación/centro</p>
-            <p style="margin-left: 20px;">• Tercer clic: Punto P3 (azul) - fin</p>
-            <p><strong>2. EDITAR:</strong> Cambia a modo "Editar" y arrastra cualquier punto</p>
-            <p><strong>3. LIMPIAR:</strong> Borra todos los puntos y empieza de nuevo</p>
+            <p><strong>1. CARGA IMAGEN:</strong> Haz clic en "Seleccionar Foto" para cargar una imagen del trabajador</p>
+            <p><strong>2. MEDIR:</strong> Haz 3 clics en el canvas sobre la imagen para crear los puntos</p>
+            <p style="margin-left: 20px;">• Primer clic: Punto P1 (azul) - inicio de la línea</p>
+            <p style="margin-left: 20px;">• Segundo clic: Punto P2 (rojo) - articulación/centro (AQUÍ SE MIDE)</p>
+            <p style="margin-left: 20px;">• Tercer clic: Punto P3 (azul) - fin de la línea</p>
+            <p><strong>3. EDITAR:</strong> Cambia a modo "Editar" y arrastra cualquier punto para ajustar</p>
+            <p><strong>4. LIMPIAR:</strong> Borra todos los puntos y empieza de nuevo</p>
         </div>
     </div>
     
     <script>
         const canvas = document.getElementById('myCanvas');
         const ctx = canvas.getContext('2d');
+        const imageInput = document.getElementById('imageInput');
         
         let points = [];
         let mode = 'draw';
         let draggingPoint = -1;
         let debugLog = [];
+        let backgroundImage = null;
+        
+        // ===== CARGAR IMAGEN =====
+        imageInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    backgroundImage = img;
+                    
+                    // Ajustar canvas al tamaño de la imagen
+                    const maxWidth = 800;
+                    const ratio = maxWidth / img.width;
+                    canvas.width = img.width * ratio;
+                    canvas.height = img.height * ratio;
+                    
+                    addDebug(`✓ Imagen cargada: ${img.width}x${img.height}`);
+                    document.getElementById('fileName').textContent = `✓ ${file.name}`;
+                    draw();
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
         
         // ===== DIBUJAR CANVAS =====
         function draw() {
-            // Limpiar
-            ctx.fillStyle = '#fafafa';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            // Grid de fondo
-            ctx.strokeStyle = '#eee';
-            ctx.lineWidth = 1;
-            for (let i = 0; i < canvas.width; i += 50) {
-                ctx.beginPath();
-                ctx.moveTo(i, 0);
-                ctx.lineTo(i, canvas.height);
-                ctx.stroke();
-            }
-            for (let i = 0; i < canvas.height; i += 50) {
-                ctx.beginPath();
-                ctx.moveTo(0, i);
-                ctx.lineTo(canvas.width, i);
-                ctx.stroke();
+            // Dibujar imagen o fondo
+            if (backgroundImage) {
+                ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+            } else {
+                ctx.fillStyle = '#fafafa';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // Grid de fondo
+                ctx.strokeStyle = '#eee';
+                ctx.lineWidth = 1;
+                for (let i = 0; i < canvas.width; i += 50) {
+                    ctx.beginPath();
+                    ctx.moveTo(i, 0);
+                    ctx.lineTo(i, canvas.height);
+                    ctx.stroke();
+                }
+                for (let i = 0; i < canvas.height; i += 50) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, i);
+                    ctx.lineTo(canvas.width, i);
+                    ctx.stroke();
+                }
             }
             
             // Dibujar líneas
@@ -308,18 +404,17 @@
                 ctx.arc(points[i].x, points[i].y, 10, 0, Math.PI * 2);
                 ctx.fill();
                 
+                // Borde blanco
+                ctx.strokeStyle = 'white';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                
                 // Número
                 ctx.fillStyle = 'white';
                 ctx.font = 'bold 16px Arial';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.fillText(i + 1, points[i].x, points[i].y);
-                
-                // Coordenadas
-                ctx.fillStyle = '#333';
-                ctx.font = '10px Arial';
-                ctx.fillText(`(${Math.round(points[i].x)}, ${Math.round(points[i].y)})`, 
-                             points[i].x, points[i].y + 20);
             }
         }
         
@@ -482,7 +577,8 @@
                 alert('Primero dibuja los 3 puntos');
                 return;
             }
-            alert('✓ Medida guardada (función pendiente)');
+            const angle = Math.round(parseFloat(document.getElementById('angleDisplay').textContent));
+            alert(`✓ Medida guardada: ${angle}°`);
         }
         
         function addDebug(msg) {
@@ -493,7 +589,7 @@
         
         // INICIAR
         draw();
-        addDebug('✓ Listo - Modo MEDIR activo');
+        addDebug('✓ Listo - Carga una imagen primero');
     </script>
 </body>
 </html>

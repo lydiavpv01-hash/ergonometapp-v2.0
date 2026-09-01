@@ -24,7 +24,7 @@ def nueva():
             'puntuacion': 0
         })
     
-    return render_template('reba_interactivo.html')
+    return render_template('reba_v2_completa.html')
 
 @bp_reba.route('/resultado/<int:id>')
 @login_required

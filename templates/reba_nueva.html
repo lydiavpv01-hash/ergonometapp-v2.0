@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REBA - Evaluación con Guía e Imágenes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 16px;
+            opacity: 0.95;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        @media (max-width: 1400px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* ===== GUÍA VISUAL ===== */
+        .guide-section {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        
+        .guide-header {
+            background: #0288d1;
+            color: white;
+            padding: 20px;
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .guide-content {
+            padding: 25px;
+            max-height: 1200px;
+            overflow-y: auto;
+        }
+        
+        .step {
+            margin-bottom: 30px;
+            border-left: 4px solid #667eea;
+            padding-left: 20px;
+        }
+        
+        .step-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .angle-range {
+            background: #f0f0f0;
+            padding: 12px 15px;
+            border-radius: 5px;
+            margin: 8px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 3px solid #ff9800;
+        }
+        
+        .angle-value {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .angle-points {
+            background: #ff9800;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+        
+        .adjustment {
+            background: #e3f2fd;
+            border-left: 3px solid #2196f3;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 3px;
+            font-size: 14px;
+            color: #333;
+        }
+        
+        .adjustment-label {
+            font-weight: 600;
+            color: #0288d1;
+        }
+        
+        /* ===== SECCIÓN DE IMÁGENES ===== */
+        .images-section {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .images-header {
+            background: #4caf50;
+            color: white;
+            padding: 20px;
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .upload-area {
+            padding: 25px;
+            border: 2px dashed #667eea;
+            border-radius: 8px;
+            text-align: center;
+            background: #f9f9f9;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 20px;
+        }
+        
+        .upload-area:hover {
+            background: #f0f0f0;
+            border-color: #764ba2;
+        }
+        
+        .upload-area.dragover {
+            background: #e3f2fd;
+            border-color: #2196f3;
+        }
+        
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        
+        .upload-text {
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .upload-subtext {
+            color: #999;
+            font-size: 13px;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+            padding: 20px;
+            flex: 1;
+            overflow-y: auto;
+        }
+        
+        .image-card {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .image-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .image-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .image-card-info {
+            background: #f5f5f5;
+            padding: 10px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .delete-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: #f44336;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+        
+        .delete-btn:hover {
+            background: #d32f2f;
+        }
+        
+        .counter {
+            background: #667eea;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            margin: 20px;
+            text-align: center;
+        }
+        
+        .form-section {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .form-header {
+            background: #667eea;
+            color: white;
+            margin: -25px -25px 20px -25px;
+            padding: 20px 25px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 10px 10px 0 0;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .score-inputs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        
+        .info-box {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            border-radius: 5px;
+            color: #333;
+            font-size: 14px;
+            margin: 20px 0;
+        }
+        
+        .info-box strong {
+            color: #2e7d32;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <h1>📋 REBA - Rapid Entire Body Assessment</h1>
+            <p>Evaluación ergonómica rápida del cuerpo con guía visual y análisis de imágenes</p>
+        </div>
+        
+        <!-- GUÍA + IMÁGENES -->
+        <div class="main-content">
+            <!-- LADO IZQUIERDO: GUÍA VISUAL -->
+            <div class="guide-section">
+                <div class="guide-header">📖 Guía de Referencia REBA</div>
+                
+                <div class="guide-content">
+                    <!-- GRUPO A: CUELLO, TORSO, PIERNAS -->
+                    <div style="background: #f5f5f5; padding: 15px; border-radius: 5px; margin-bottom: 20px; border-top: 4px solid #0288d1;">
+                        <strong style="font-size: 16px; color: #0288d1;">A. ANÁLISIS DE CUELLO, TORSO Y PIERNAS</strong>
+                    </div>
+                    
+                    <!-- PASO 1: CUELLO -->
+                    <div class="step">
+                        <div class="step-title">
+                            <span class="step-number">1</span>
+                            Posición de Cuello
+                        </div>
+                        <div class="angle-range">
+                            <span class="angle-value">0-20°</span>
+                            <span class="angle-points">+1</span>
+                        </div>
+                        <div class="angle-range">
+                            <span class="angle-value">20°+</span>
+                            <span class="angle-points">+2</span>
+                        </div>
+                        <div class="angle-range">
+                            <span class="angle-value">En extensión</span>
+                            <span class="angle-points">+2</span>
+                        </div>
+                        <div class="adjustment">
+                            <span class="adjustment-label">Ajustes:</span><br>
+                            • Cuello torcido: +1<br>
+                            • Cuello inclinado de lado: +1
+                        </div>
+                    </div>
+                    
+                    <!-- PASO 2: TORSO -->
+                    <div class="step">
+                        <div class="step-title">
+                            <span class="step-number">2</span>
+                            Posición de Torso
+                        </div>
+                        <div class="angle-range">
+                            <span class="angle-value">0°</span>
+                            <span class="angle-points">+1</span>
+                        </div>
+                        <div class="angle-range">
+                            <span class="angle-value">0-20°</span>
+                            <span class="angle-points">+1</span>
+                        </div>
+                        <div class="angle-range">
+                            <span class="angle-value">20-60°</span>
+                            <span class="angle-points">+2</span>
+                        </div>
+                        <div class="angle-range">
+                            <span class="angle-value">>60°</span>
+                            <span class="angle-points">+3</span>
+                        </div>
+                        <div class="angle-range">
+                            <span class="angle-value">En extensión >20°</span>
+                            <span class="angle-points">+3</span>
+                        </div>
+                        <div class="adjustment">
+                            <span class="adjustment-label">Ajustes:</span><br>
+                            • Torso torcido: +1<br>
+                            • Torso inclinado: +1
+                        </div>
+                    </div>
+                    
+                    <!-- PASO 3: PIERNAS -->
+                    <div class="step">
+                        <div class="step-title">
+                            <span class="step-number">3</span>
+                            Posición de Piernas
+                        </div>
+                        <div class="angle-range">
+                            <span class="angle-value">Ambas en el suelo</span>
+                            <span class="angle-points">+1</span>
+                        </div>
+                        <div class="angle-range">
+                            <span class="angle-value">Una levantada</span>
+                            <span class="angle-points">+2</span>
+                        </div>
+                        <div class="angle-range">
+                            <span class="angle-value">Postura inestable</span>
+                            <span class="angle-points">+2</span>
+                        </div>
+                    </div>
+                    
+                    <!-- GRUPO B: BRAZOS Y MUÑECA -->
+                    <div style="background: #f5f5f5; padding: 15px; border-radius: 5px; margin: 20px 0; border-top: 4px solid #ff6b6b;">
+                        <strong style="font-size: 16px; color: #ff6b6b;">B. ANÁLISIS DE BRAZO Y MUÑECA</strong>
+                    </div>
+                    
+                    <!-- PASO 4: BRAZO -->
+                    <div class="step">
+                        <div class="step-title">
+                            <span class="step-number">4</span>
+                            Posición de Brazo
+                        </div>
+                        <div class="angle-range">
+                            <span class="angle-value">20-20°</span>
+                            <span class="angle-points">0</span>
+                        </div>
+                        <div class="angle-range">
+                            <span class="angle-value">Resto de ángulos</span>
+                            <span class="angle-points">+1</span>
+                        </div>
+                        <div class="adjustment">
+                            <span class="adjustment-label">Ajustes:</span><br>
+                            • Hombro levantado: +1<br>
+                            • Brazo en abducción: +1<br>
+                            • Brazo apoyado: -1
+                        </div>
+                    </div>
+                    
+                    <!-- PASO 5: ANTEBRAZO -->
+                    <div class="step">
+                        <div class="step-title">
+                            <span class="step-number">5</span>
+                            Posición de Antebrazo
+                        </div>
+                        <div class="angle-range">
+                            <span class="angle-value">60-100°</span>
+                            <span class="angle-points">0</span>
+                        </div>
+                        <div class="angle-range">
+                            <span class="angle-value">Resto de ángulos</span>
+                            <span class="angle-points">+1</span>
+                        </div>
+                    </div>
+                    
+                    <!-- PASO 6: MUÑECA -->
+                    <div class="step">
+                        <div class="step-title">
+                            <span class="step-number">6</span>
+                            Posición de Muñeca
+                        </div>
+                        <div class="angle-range">
+                            <span class="angle-value">0°</span>
+                            <span class="angle-points">0</span>
+                        </div>
+                        <div class="angle-range">
+                            <span class="angle-value">15-15°</span>
+                            <span class="angle-points">+1</span>
+                        </div>
+                        <div class="angle-range">
+                            <span class="angle-value">>15°</span>
+                            <span class="angle-points">+2</span>
+                        </div>
+                        <div class="adjustment">
+                            <span class="adjustment-label">Ajuste:</span><br>
+                            • Muñeca torcida: +1
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- LADO DERECHO: IMÁGENES -->
+            <div class="images-section">
+                <div class="images-header">📷 Imágenes del Trabajador</div>
+                
+                <div class="upload-area" id="uploadArea" onclick="document.getElementById('imageInput').click()">
+                    <div class="upload-icon">📸</div>
+                    <div class="upload-text">Carga imágenes de la postura</div>
+                    <div class="upload-subtext">Haz clic o arrastra archivos aquí (JPG, PNG, GIF)</div>
+                </div>
+                
+                <input type="file" id="imageInput" class="file-input" accept="image/*" multiple>
+                
+                <div class="counter">
+                    <span id="imageCount">0</span> imagen(es) cargada(s)
+                </div>
+                
+                <div class="gallery" id="imageGallery">
+                    <div style="grid-column: 1/-1; text-align: center; color: #999; padding: 40px 20px;">
+                        ⬆️ Carga tus imágenes aquí
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- FORMULARIO DE EVALUACIÓN -->
+        <div class="form-section">
+            <div class="form-header">✅ Registro de Evaluación</div>
+            
+            <div class="info-box">
+                <strong>💡 Instrucciones:</strong> Usa la guía de referencia de la izquierda para asignar puntuaciones. 
+                Carga las imágenes del trabajador en la sección de fotos para tener referencia visual.
+            </div>
+            
+            <div class="form-group">
+                <label>Información del Evaluador</label>
+                <input type="text" placeholder="Nombre del evaluador" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Puesto/Área de Trabajo</label>
+                <input type="text" placeholder="Ej: Almacenamiento, Oficina, Producción" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Descripción de la Tarea</label>
+                <textarea placeholder="Describe la tarea o postura evaluada" rows="3"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label><strong>Puntuaciones - Grupo A (Cuello, Torso, Piernas)</strong></label>
+                <div class="score-inputs">
+                    <div>
+                        <label style="font-weight: normal; font-size: 13px;">Puntuaje Cuello (1-2)</label>
+                        <input type="number" min="1" max="2" placeholder="1">
+                    </div>
+                    <div>
+                        <label style="font-weight: normal; font-size: 13px;">Puntuaje Torso (1-3)</label>
+                        <input type="number" min="1" max="3" placeholder="1">
+                    </div>
+                    <div>
+                        <label style="font-weight: normal; font-size: 13px;">Puntuaje Piernas (1-2)</label>
+                        <input type="number" min="1" max="2" placeholder="1">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label><strong>Puntuaciones - Grupo B (Brazo, Antebrazo, Muñeca)</strong></label>
+                <div class="score-inputs">
+                    <div>
+                        <label style="font-weight: normal; font-size: 13px;">Puntuaje Brazo (0-1)</label>
+                        <input type="number" min="0" max="1" placeholder="0">
+                    </div>
+                    <div>
+                        <label style="font-weight: normal; font-size: 13px;">Puntuaje Antebrazo (0-1)</label>
+                        <input type="number" min="0" max="1" placeholder="0">
+                    </div>
+                    <div>
+                        <label style="font-weight: normal; font-size: 13px;">Puntuaje Muñeca (0-2)</label>
+                        <input type="number" min="0" max="2" placeholder="0">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label><strong>Puntuaciones Adicionales</strong></label>
+                <div class="score-inputs">
+                    <div>
+                        <label style="font-weight: normal; font-size: 13px;">Carga/Fuerza (0-2)</label>
+                        <input type="number" min="0" max="2" placeholder="0">
+                    </div>
+                    <div>
+                        <label style="font-weight: normal; font-size: 13px;">Acoplamiento (0-3)</label>
+                        <input type="number" min="0" max="3" placeholder="0">
+                    </div>
+                    <div>
+                        <label style="font-weight: normal; font-size: 13px;">Actividad (0-1)</label>
+                        <input type="number" min="0" max="1" placeholder="0">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Observaciones</label>
+                <textarea placeholder="Notas adicionales, recomendaciones..." rows="4"></textarea>
+            </div>
+            
+            <div class="button-group">
+                <button class="btn btn-primary">💾 Guardar Evaluación</button>
+                <button class="btn btn-secondary">🔄 Limpiar Formulario</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const imageInput = document.getElementById('imageInput');
+        const uploadArea = document.getElementById('uploadArea');
+        const imageGallery = document.getElementById('imageGallery');
+        const imageCount = document.getElementById('imageCount');
+        let images = [];
+        
+        // Drag and drop
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
+            handleFiles(files);
+        });
+        
+        imageInput.addEventListener('change', (e) => {
+            handleFiles(Array.from(e.target.files));
+        });
+        
+        function handleFiles(files) {
+            files.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = {
+                        src: e.target.result,
+                        name: file.name,
+                        date: new Date().toLocaleString('es-MX')
+                    };
+                    images.push(img);
+                    renderGallery();
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+        
+        function renderGallery() {
+            if (images.length === 0) {
+                imageGallery.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #999; padding: 40px 20px;">⬆️ Carga tus imágenes aquí</div>';
+                return;
+            }
+            
+            imageGallery.innerHTML = images.map((img, idx) => `
+                <div class="image-card">
+                    <img src="${img.src}" alt="Imagen ${idx + 1}">
+                    <button class="delete-btn" onclick="deleteImage(${idx})">×</button>
+                    <div class="image-card-info">
+                        <strong>Foto ${idx + 1}</strong><br>
+                        <small>${img.date}</small>
+                    </div>
+                </div>
+            `).join('');
+            
+            imageCount.textContent = images.length;
+        }
+        
+        function deleteImage(idx) {
+            images.splice(idx, 1);
+            renderGallery();
+        }
+    </script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REBA Kinovea con Puntuación - ErgonometApp</title>
+    <title>REBA Kinovea - CORREGIDO - ErgonometApp</title>
     <style>
         * {
             margin: 0;
@@ -23,7 +23,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         
         .container {
@@ -44,97 +43,13 @@
             font-size: 24px;
             font-weight: 600;
             color: #333;
-            margin-bottom: 10px;
-        }
-        
-        .progress-bar {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-        
-        .progress-step {
-            flex: 1;
-            min-width: 120px;
-            padding: 12px;
-            background: #f5f5f5;
-            border-radius: 5px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 2px solid #ddd;
-            font-size: 11px;
-        }
-        
-        .progress-step.active {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
-        }
-        
-        .step-content {
-            display: none;
-        }
-        
-        .step-content.active {
-            display: block;
-        }
-        
-        .form-group {
             margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 500;
-        }
-        
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 14px;
-        }
-        
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-        
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-        
-        @media (max-width: 768px) {
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        .info-box {
-            background: #e3f2fd;
-            border-left: 4px solid #2196f3;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            font-size: 14px;
-            color: #333;
         }
         
         .kinovea-container {
             display: grid;
             grid-template-columns: 1fr 320px;
             gap: 20px;
-            margin-bottom: 20px;
         }
         
         @media (max-width: 1200px) {
@@ -153,12 +68,12 @@
         canvas {
             border: 1px solid #ddd;
             border-radius: 5px;
-            cursor: crosshair;
             display: block;
             width: 100%;
             height: auto;
             background: white;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            cursor: crosshair;
         }
         
         .tools-panel {
@@ -166,12 +81,7 @@
             padding: 15px;
             border-radius: 5px;
             border: 1px solid #ddd;
-        }
-        
-        .tools-panel h4 {
             margin-bottom: 15px;
-            color: #333;
-            font-size: 14px;
         }
         
         .tool-buttons {
@@ -189,12 +99,6 @@
             cursor: pointer;
             font-size: 13px;
             font-weight: 600;
-            transition: all 0.3s;
-        }
-        
-        .tool-btn:hover {
-            background: #764ba2;
-            transform: translateY(-2px);
         }
         
         .tool-btn.active {
@@ -214,7 +118,7 @@
             font-size: 36px;
             font-weight: 700;
             color: #667eea;
-            margin: 10px 0 5px 0;
+            margin: 10px 0;
         }
         
         .angle-score {
@@ -224,24 +128,7 @@
             background: #fff3e0;
             padding: 10px;
             border-radius: 5px;
-            margin: 10px 0 0 0;
-        }
-        
-        .score-label {
-            font-size: 12px;
-            color: #999;
-            margin-top: 8px;
-        }
-        
-        .score-criteria {
-            font-size: 11px;
-            color: #666;
-            margin-top: 8px;
-            padding: 8px;
-            background: #f9f9f9;
-            border-radius: 3px;
-            max-height: 60px;
-            overflow-y: auto;
+            margin: 10px 0;
         }
         
         .points-list {
@@ -249,21 +136,13 @@
             padding: 15px;
             border-radius: 5px;
             border: 1px solid #ddd;
-            margin-bottom: 15px;
             max-height: 150px;
             overflow-y: auto;
-        }
-        
-        .points-list h4 {
-            margin-bottom: 10px;
-            font-size: 13px;
-            color: #333;
         }
         
         .point-item {
             display: flex;
             justify-content: space-between;
-            align-items: center;
             padding: 8px;
             background: #f9f9f9;
             border-radius: 3px;
@@ -271,37 +150,8 @@
             font-size: 12px;
         }
         
-        .saved-measurement {
-            background: #e8f5e9;
-            border-left: 4px solid #4caf50;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 15px;
-        }
-        
-        .saved-measurement h4 {
-            color: #2e7d32;
-            margin-bottom: 10px;
-            font-size: 13px;
-        }
-        
-        .measurement-item {
-            display: grid;
-            grid-template-columns: 1fr auto;
-            gap: 10px;
-            padding: 8px;
-            background: white;
-            border-radius: 3px;
-            margin-bottom: 5px;
-            font-size: 12px;
-        }
-        
-        .measurement-item strong {
-            color: #2e7d32;
-        }
-        
-        .measurement-item button {
-            background: #f44336;
+        .point-item button {
+            background: #ff9800;
             color: white;
             border: none;
             padding: 3px 8px;
@@ -310,310 +160,229 @@
             font-size: 10px;
         }
         
-        .buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 30px;
-        }
-        
-        .btn {
-            padding: 12px 30px;
-            border: none;
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin-bottom: 20px;
             border-radius: 5px;
             font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
         }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+        .save-btn {
+            width: 100%;
+            padding: 12px;
+            background: #4caf50;
             color: white;
-            flex: 1;
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-        
-        .btn-secondary {
-            background: #f5f5f5;
-            color: #333;
-            border: 1px solid #ddd;
-        }
-        
-        .section-title {
-            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
             font-weight: 600;
-            color: #333;
-            margin-top: 25px;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #667eea;
         }
     </style>
 </head>
 <body>
     <div class="navbar">
-        <div style="font-size: 20px; font-weight: 600;">📊 ErgonometApp</div>
-        <button onclick="logout()" style="background: rgba(255,255,255,0.2); color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer;">Volver</button>
+        <div style="font-size: 20px; font-weight: 600;">📊 ErgonometApp - REBA Kinovea</div>
     </div>
     
     <div class="container">
         <div class="form-card">
-            <div class="form-title">🔍 REBA - Kinovea con Puntuación</div>
+            <div class="form-title">🔍 REBA - Herramienta Kinovea Corregida</div>
             
-            <div class="progress-bar">
-                <div class="progress-step active" onclick="showStep(1)"><strong>1</strong><br>Info</div>
-                <div class="progress-step" onclick="showStep(2)"><strong>2</strong><br>Kinovea</div>
-                <div class="progress-step" onclick="showStep(3)"><strong>3</strong><br>Resultados</div>
+            <div class="info-box">
+                ℹ️ <strong>MODO:</strong> <span id="currentMode">📏 Medir</span> | 
+                <strong>PUNTOS:</strong> <span id="pointCount">0</span>/3 | 
+                <strong>ÁNGULO:</strong> <span id="angleDisplay">0°</span>
             </div>
             
-            <form id="rebaForm">
-                <!-- PASO 1: INFORMACIÓN -->
-                <div id="step1" class="step-content active">
-                    <div class="info-box">ℹ️ Información básica del trabajador</div>
-                    
-                    <div class="section-title">Información del Trabajador</div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Nombre *</label>
-                            <input type="text" id="nombre" placeholder="Ej: Juan Pérez" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Puesto de Trabajo *</label>
-                            <input type="text" id="puesto" placeholder="Ej: Operario de línea" required>
-                        </div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Departamento *</label>
-                            <input type="text" id="departamento" placeholder="Ej: Producción" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Fecha de Evaluación *</label>
-                            <input type="date" id="fecha" required>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Descripción de la Tarea *</label>
-                        <textarea id="tarea" placeholder="Describe la tarea del trabajador" rows="3" required></textarea>
-                    </div>
+            <div class="kinovea-container">
+                <!-- CANVAS -->
+                <div class="canvas-area">
+                    <canvas id="measureCanvas" width="800" height="600"></canvas>
                 </div>
                 
-                <!-- PASO 2: KINOVEA CON PUNTUACIÓN -->
-                <div id="step2" class="step-content">
-                    <div class="info-box">ℹ️ Mide ángulos - El sistema asignará automáticamente la puntuación según REBA</div>
-                    
-                    <div class="form-group">
-                        <label>Foto del Trabajador *</label>
-                        <input type="file" id="imageInput" accept="image/*" onchange="loadImage()" required>
+                <!-- PANEL DERECHO -->
+                <div>
+                    <div class="angle-display">
+                        <small>Ángulo Medido</small>
+                        <div class="angle-value" id="angleValue">0°</div>
+                        <div class="angle-score" id="scoreDisplay">
+                            Puntuación: <strong id="scoreValue">-</strong>
+                        </div>
+                        <small id="angleInfo">0/3 puntos dibujados</small>
                     </div>
                     
-                    <div class="kinovea-container" id="kinoveaContainer" style="display:none;">
-                        <!-- CANVAS -->
-                        <div class="canvas-area">
-                            <div>
-                                <canvas id="measureCanvas"></canvas>
-                            </div>
-                        </div>
-                        
-                        <!-- PANEL DERECHO -->
-                        <div>
-                            <div class="angle-display">
-                                <small>Ángulo Medido</small>
-                                <div class="angle-value" id="angleValue">0°</div>
-                                <div class="angle-score">
-                                    <div>Puntuación: <strong id="scoreValue">0</strong></div>
-                                </div>
-                                <div class="score-criteria" id="scoreCriteria">Dibuja 3 puntos</div>
-                                <div class="score-label" id="angleInfo">0/3 puntos</div>
-                            </div>
-                            
-                            <div class="tools-panel">
-                                <h4>🛠️ Herramientas</h4>
-                                <div class="tool-buttons">
-                                    <button type="button" class="tool-btn active" onclick="selectTool('draw')">📏 Medir</button>
-                                    <button type="button" class="tool-btn" onclick="selectTool('edit')">✏️ Editar</button>
-                                    <button type="button" class="tool-btn" onclick="selectTool('clear')">🗑️ Limpiar</button>
-                                </div>
-                            </div>
-                            
-                            <div class="points-list">
-                                <h4>📍 Puntos</h4>
-                                <div id="pointsList"></div>
-                            </div>
-                            
-                            <div id="savedMeasurements" class="saved-measurement" style="display:none;">
-                                <h4>✓ Medidas Guardadas</h4>
-                                <div id="measurementsList"></div>
-                            </div>
-                            
-                            <button type="button" class="tool-btn" style="width: 100%; margin-top: 15px; background: #4caf50;" onclick="saveMeasurement()">✓ Guardar Medida</button>
+                    <div class="tools-panel">
+                        <h4>🛠️ Herramientas</h4>
+                        <div class="tool-buttons">
+                            <button class="tool-btn active" onclick="setTool('draw')">📏 Medir</button>
+                            <button class="tool-btn" onclick="setTool('edit')">✏️ Editar</button>
+                            <button class="tool-btn" onclick="setTool('clear')">🗑️ Limpiar</button>
                         </div>
                     </div>
-                </div>
-                
-                <!-- PASO 3: RESULTADOS -->
-                <div id="step3" class="step-content">
-                    <div class="info-box">ℹ️ Resumen de mediciones y puntuaciones</div>
                     
-                    <div class="section-title">Resultados de Mediciones</div>
-                    
-                    <div id="resultsTable" style="overflow-x: auto; margin-bottom: 20px;">
-                        <table style="width: 100%; border-collapse: collapse;">
-                            <thead>
-                                <tr style="background: #667eea; color: white;">
-                                    <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Ángulo</th>
-                                    <th style="padding: 12px; text-align: center; border: 1px solid #ddd;">Valor (°)</th>
-                                    <th style="padding: 12px; text-align: center; border: 1px solid #ddd;">Puntuación</th>
-                                    <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Criterio</th>
-                                </tr>
-                            </thead>
-                            <tbody id="resultsBody">
-                            </tbody>
-                        </table>
+                    <div class="points-list">
+                        <h4>📍 Puntos Dibujados</h4>
+                        <div id="pointsList"></div>
                     </div>
+                    
+                    <button class="save-btn" onclick="saveMeasurement()">✓ Guardar Medida</button>
                 </div>
-                
-                <!-- BOTONES -->
-                <div class="buttons">
-                    <button type="button" class="btn btn-secondary" onclick="previousStep()">← Anterior</button>
-                    <button type="button" class="btn btn-primary" onclick="nextStep()">Siguiente →</button>
-                </div>
-            </form>
+            </div>
+            
+            <div style="margin-top: 30px; padding: 20px; background: #f0f0f0; border-radius: 5px;">
+                <h3>📋 Instrucciones de Uso</h3>
+                <p><strong>1. MEDIR:</strong> Haz clic 3 veces en el canvas para crear los puntos</p>
+                <p><strong>2. EDITAR:</strong> Selecciona "Editar" y arrastra cualquier punto con el mouse</p>
+                <p><strong>3. LIMPIAR:</strong> Borra todos los puntos para empezar de nuevo</p>
+            </div>
         </div>
     </div>
     
     <script>
-        let currentStep = 1;
         let canvas, ctx;
         let points = [];
         let currentTool = 'draw';
         let draggingPointIndex = -1;
-        let measurements = [];
         let baseImage = null;
         
-        // Tablas de puntuación REBA
-        const scoringRules = {
-            cuello: [
-                { max: 20, score: 1, label: "0-20°: Normal" },
-                { max: 180, score: 2, label: "20°+: Extendido" }
-            ],
-            torso: [
-                { max: 0, score: 0, label: "0°: Neutral" },
-                { max: 20, score: 1, label: "0-20°: Flexión leve" },
-                { max: 60, score: 2, label: "20-60°: Flexión moderada" },
-                { max: 180, score: 3, label: ">60°: Flexión severa" }
-            ],
-            brazo: [
-                { max: 20, score: 1, label: "0-20°: Elevado" },
-                { max: 45, score: 0, label: "20-45°: Óptimo" },
-                { max: 90, score: 0, label: "45-90°: Normal" },
-                { max: 180, score: 1, label: ">90°: Riesgo" }
-            ],
-            antebrazo: [
-                { max: 60, score: 1, label: "<60°: Riesgo" },
-                { max: 100, score: 0, label: "60-100°: Neutral" },
-                { max: 180, score: 1, label: ">100°: Riesgo" }
-            ],
-            muneca: [
-                { max: 0, score: 0, label: "0°: Neutral" },
-                { max: 15, score: 1, label: "<15°: Desviación" },
-                { max: 180, score: 2, label: ">15°: Severa" }
-            ]
-        };
-        
-        function showStep(step) {
-            if (step < 1 || step > 3) return;
+        // Inicializar canvas
+        function initCanvas() {
+            canvas = document.getElementById('measureCanvas');
+            ctx = canvas.getContext('2d');
             
-            for (let i = 1; i <= 3; i++) {
-                document.getElementById(`step${i}`).classList.remove('active');
-                document.querySelectorAll('.progress-step')[i-1].classList.remove('active');
-            }
-            
-            document.getElementById(`step${step}`).classList.add('active');
-            document.querySelectorAll('.progress-step')[step-1].classList.add('active');
-            
-            if (step === 3) {
-                displayResults();
-            }
-            
-            currentStep = step;
-            window.scrollTo(0, 0);
+            // Dibujar fondo gris con patrón
+            ctx.fillStyle = '#f5f5f5';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.font = '14px Arial';
+            ctx.fillStyle = '#999';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('Sube una foto o dibuja directamente', canvas.width / 2, canvas.height / 2);
         }
         
-        function nextStep() {
-            if (currentStep === 2 && !document.getElementById('imageInput').files[0]) {
-                alert('Por favor sube una foto primero');
-                return;
-            }
+        // Cargar imagen
+        document.addEventListener('DOMContentLoaded', function() {
+            initCanvas();
             
-            if (currentStep < 3) {
-                showStep(currentStep + 1);
-            }
-        }
-        
-        function previousStep() {
-            if (currentStep > 1) {
-                showStep(currentStep - 1);
-            }
-        }
-        
-        function loadImage() {
-            const file = document.getElementById('imageInput').files[0];
-            if (!file) return;
+            const imageInput = document.createElement('input');
+            imageInput.type = 'file';
+            imageInput.accept = 'image/*';
+            imageInput.style.display = 'none';
+            document.body.appendChild(imageInput);
             
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const img = new Image();
-                img.onload = () => {
-                    canvas = document.getElementById('measureCanvas');
-                    ctx = canvas.getContext('2d');
-                    baseImage = img;
-                    
-                    const maxWidth = 800;
-                    const ratio = maxWidth / img.width;
-                    canvas.width = img.width * ratio;
-                    canvas.height = img.height * ratio;
-                    
-                    redrawCanvas();
-                    document.getElementById('kinoveaContainer').style.display = 'grid';
-                    
-                    canvas.addEventListener('mousedown', canvasMouseDown);
-                    canvas.addEventListener('mousemove', canvasMouseMove);
-                    canvas.addEventListener('mouseup', canvasMouseUp);
-                    canvas.addEventListener('mouseleave', canvasMouseLeave);
-                    
-                    points = [];
-                };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-        
-        function redrawCanvas() {
-            if (!baseImage || !canvas) return;
+            // Botón para cargar imagen
+            const loadBtn = document.createElement('button');
+            loadBtn.textContent = '📁 Cargar Foto';
+            loadBtn.style.cssText = 'padding: 10px 20px; margin-bottom: 20px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer;';
+            document.querySelector('.info-box').after(loadBtn);
             
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(baseImage, 0, 0, canvas.width, canvas.height);
+            loadBtn.addEventListener('click', () => imageInput.click());
             
-            // Dibujar puntos
-            points.forEach((point, idx) => {
-                ctx.fillStyle = idx === 1 ? '#ff6b6b' : '#667eea';
-                ctx.beginPath();
-                ctx.arc(point.x, point.y, 8, 0, Math.PI * 2);
-                ctx.fill();
+            imageInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
                 
-                ctx.fillStyle = 'white';
-                ctx.font = 'bold 12px Arial';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText(idx + 1, point.x, point.y);
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        baseImage = img;
+                        const maxWidth = 800;
+                        const ratio = maxWidth / img.width;
+                        canvas.width = img.width * ratio;
+                        canvas.height = img.height * ratio;
+                        redraw();
+                    };
+                    img.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
             });
+        });
+        
+        // EVENTOS DEL CANVAS
+        canvas.addEventListener('mousedown', handleMouseDown);
+        canvas.addEventListener('mousemove', handleMouseMove);
+        canvas.addEventListener('mouseup', handleMouseUp);
+        canvas.addEventListener('mouseleave', handleMouseUp);
+        
+        function handleMouseDown(e) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            const x = (e.clientX - rect.left) * scaleX;
+            const y = (e.clientY - rect.top) * scaleY;
+            
+            if (currentTool === 'draw' && points.length < 3) {
+                points.push({x, y});
+                updateUI();
+                redraw();
+            } else if (currentTool === 'edit') {
+                // Buscar si hay un punto cerca del click
+                for (let i = 0; i < points.length; i++) {
+                    const dx = x - points[i].x;
+                    const dy = y - points[i].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 15) {
+                        draggingPointIndex = i;
+                        break;
+                    }
+                }
+            }
+        }
+        
+        function handleMouseMove(e) {
+            if (currentTool === 'edit' && draggingPointIndex !== -1) {
+                const rect = canvas.getBoundingClientRect();
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
+                const x = (e.clientX - rect.left) * scaleX;
+                const y = (e.clientY - rect.top) * scaleY;
+                
+                points[draggingPointIndex].x = x;
+                points[draggingPointIndex].y = y;
+                
+                updateUI();
+                redraw();
+            } else if (currentTool === 'draw' && points.length === 2) {
+                // Preview del tercer punto
+                const rect = canvas.getBoundingClientRect();
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
+                const x = (e.clientX - rect.left) * scaleX;
+                const y = (e.clientY - rect.top) * scaleY;
+                
+                redraw();
+                
+                // Dibujar línea punteada de preview
+                ctx.strokeStyle = 'rgba(118, 75, 162, 0.3)';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([5, 5]);
+                ctx.beginPath();
+                ctx.moveTo(points[1].x, points[1].y);
+                ctx.lineTo(x, y);
+                ctx.stroke();
+                ctx.setLineDash([]);
+            }
+        }
+        
+        function handleMouseUp(e) {
+            draggingPointIndex = -1;
+        }
+        
+        // DIBUJAR CANVAS
+        function redraw() {
+            if (!canvas) return;
+            
+            // Limpiar
+            if (baseImage) {
+                ctx.drawImage(baseImage, 0, 0, canvas.width, canvas.height);
+            } else {
+                ctx.fillStyle = '#f5f5f5';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
             
             // Dibujar líneas
             if (points.length >= 2) {
@@ -633,13 +402,25 @@
                 ctx.lineTo(points[2].x, points[2].y);
                 ctx.stroke();
                 
-                // Dibujar arco visual
                 drawAngleArc();
             }
             
-            updatePointsList();
+            // Dibujar puntos
+            for (let i = 0; i < points.length; i++) {
+                ctx.fillStyle = i === 1 ? '#ff6b6b' : '#667eea';
+                ctx.beginPath();
+                ctx.arc(points[i].x, points[i].y, 8, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 12px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText((i + 1), points[i].x, points[i].y);
+            }
         }
         
+        // ARCO DEL ÁNGULO
         function drawAngleArc() {
             const p1 = points[0];
             const p2 = points[1];
@@ -658,159 +439,118 @@
             ctx.stroke();
             
             // Valor del ángulo
+            const angle = parseInt(document.getElementById('angleValue').textContent);
             const textAngle = (angle1 + angle2) / 2;
             const textX = p2.x + Math.cos(textAngle) * (arcRadius + 25);
             const textY = p2.y + Math.sin(textAngle) * (arcRadius + 25);
             
-            const angle = parseInt(document.getElementById('angleValue').textContent);
             ctx.fillStyle = '#ff9800';
             ctx.font = 'bold 16px Arial';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillText(angle + '°', textX, textY);
             
-            // Círculo rojo en articulación
+            // Círculo rojo en centro
             ctx.fillStyle = '#ff6b6b';
             ctx.beginPath();
             ctx.arc(p2.x, p2.y, 5, 0, Math.PI * 2);
             ctx.fill();
         }
         
-        function selectTool(tool) {
-            currentTool = tool;
+        // ACTUALIZAR UI Y CALCULAR ÁNGULO
+        function updateUI() {
+            document.getElementById('pointCount').textContent = points.length;
+            document.getElementById('angleInfo').textContent = points.length + '/3 puntos dibujados';
             
-            if (tool === 'clear') {
-                points = [];
-                redrawCanvas();
-                document.getElementById('angleValue').textContent = '0°';
-                document.getElementById('scoreValue').textContent = '0';
-                document.getElementById('scoreCriteria').textContent = 'Dibuja 3 puntos';
-                document.getElementById('angleInfo').textContent = 'Presiona Limpiar';
-            }
-            
-            document.querySelectorAll('.tool-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-        }
-        
-        function canvasMouseDown(e) {
-            const rect = canvas.getBoundingClientRect();
-            const x = (e.clientX - rect.left) * (canvas.width / rect.width);
-            const y = (e.clientY - rect.top) * (canvas.height / rect.height);
-            
-            if (currentTool === 'draw') {
-                if (points.length < 3) {
-                    points.push({x, y});
-                    redrawCanvas();
-                    calculateAngle();
-                }
-            } else if (currentTool === 'edit') {
-                for (let i = 0; i < points.length; i++) {
-                    const dx = x - points[i].x;
-                    const dy = y - points[i].y;
-                    if (Math.sqrt(dx*dx + dy*dy) < 15) {
-                        draggingPointIndex = i;
-                        break;
-                    }
-                }
-            }
-        }
-        
-        function canvasMouseMove(e) {
-            const rect = canvas.getBoundingClientRect();
-            const x = (e.clientX - rect.left) * (canvas.width / rect.width);
-            const y = (e.clientY - rect.top) * (canvas.height / rect.height);
-            
-            if (currentTool === 'edit' && draggingPointIndex !== -1) {
-                points[draggingPointIndex] = {x, y};
-                redrawCanvas();
+            if (points.length === 3) {
                 calculateAngle();
-            } else if (currentTool === 'draw' && points.length === 2) {
-                redrawCanvas();
-                
-                ctx.strokeStyle = 'rgba(118, 75, 162, 0.5)';
-                ctx.lineWidth = 2;
-                ctx.setLineDash([5, 5]);
-                ctx.beginPath();
-                ctx.moveTo(points[1].x, points[1].y);
-                ctx.lineTo(x, y);
-                ctx.stroke();
-                ctx.setLineDash([]);
+            } else {
+                document.getElementById('angleValue').textContent = '0°';
+                document.getElementById('scoreValue').textContent = '-';
             }
-        }
-        
-        function canvasMouseUp(e) {
-            draggingPointIndex = -1;
-        }
-        
-        function canvasMouseLeave(e) {
-            draggingPointIndex = -1;
+            
+            updatePointsList();
         }
         
         function calculateAngle() {
-            if (points.length !== 3) {
-                document.getElementById('angleValue').textContent = '0°';
-                document.getElementById('angleInfo').textContent = points.length + '/3 puntos';
-                document.getElementById('scoreValue').textContent = '0';
-                document.getElementById('scoreCriteria').textContent = 'Completa los 3 puntos';
-                return;
-            }
+            if (points.length !== 3) return;
             
             const p1 = points[0];
             const p2 = points[1];
             const p3 = points[2];
             
-            const dx1 = p1.x - p2.x;
-            const dy1 = p1.y - p2.y;
-            const dx2 = p3.x - p2.x;
-            const dy2 = p3.y - p2.y;
+            // Vectores
+            const v1x = p1.x - p2.x;
+            const v1y = p1.y - p2.y;
+            const v2x = p3.x - p2.x;
+            const v2y = p3.y - p2.y;
             
-            const angle1 = Math.atan2(dy1, dx1);
-            const angle2 = Math.atan2(dy2, dx2);
+            // Producto punto y magnitudes
+            const dot = v1x * v2x + v1y * v2y;
+            const mag1 = Math.sqrt(v1x * v1x + v1y * v1y);
+            const mag2 = Math.sqrt(v2x * v2x + v2y * v2y);
             
-            let angle = Math.abs(angle1 - angle2) * (180 / Math.PI);
-            if (angle > 180) angle = 360 - angle;
+            if (mag1 === 0 || mag2 === 0) {
+                document.getElementById('angleValue').textContent = '0°';
+                return;
+            }
+            
+            // Coseno del ángulo
+            const cos = dot / (mag1 * mag2);
+            const clampedCos = Math.max(-1, Math.min(1, cos));
+            let angle = Math.acos(clampedCos) * (180 / Math.PI);
             
             angle = Math.round(angle);
+            
             document.getElementById('angleValue').textContent = angle + '°';
-            document.getElementById('angleInfo').textContent = '✓ Ángulo calculado';
+            document.getElementById('angleDisplay').textContent = angle + '°';
             
-            // Actualizar puntuación (sin tipo específico todavía)
-            updateScore(angle);
-        }
-        
-        function updateScore(angle) {
-            // Por ahora mostramos puntuación genérica
-            let score = 0;
-            let criteria = "Ángulo: " + angle + "°";
-            
-            document.getElementById('scoreValue').textContent = score;
-            document.getElementById('scoreCriteria').textContent = criteria;
+            redraw(); // IMPORTANTE: redibujar después de actualizar el ángulo
         }
         
         function updatePointsList() {
             const list = document.getElementById('pointsList');
             list.innerHTML = '';
             
-            points.forEach((point, idx) => {
-                const div = document.createElement('div');
-                div.className = 'point-item';
-                div.innerHTML = `
-                    <span>P${idx + 1}: (${Math.round(point.x)}, ${Math.round(point.y)})</span>
-                    <button type="button" onclick="deletePoint(${idx})">Eliminar</button>
+            points.forEach((p, idx) => {
+                const item = document.createElement('div');
+                item.className = 'point-item';
+                item.innerHTML = `
+                    <span>P${idx + 1}: (${Math.round(p.x)}, ${Math.round(p.y)})</span>
+                    <button onclick="deletePoint(${idx})">Eliminar</button>
                 `;
-                list.appendChild(div);
+                list.appendChild(item);
             });
+        }
+        
+        // HERRAMIENTAS
+        function setTool(tool) {
+            currentTool = tool;
+            
+            if (tool === 'clear') {
+                points = [];
+                document.getElementById('angleValue').textContent = '0°';
+                document.getElementById('scoreValue').textContent = '-';
+                updateUI();
+                redraw();
+            }
+            
+            const modeText = tool === 'draw' ? '📏 Medir' : tool === 'edit' ? '✏️ Editar' : '🗑️ Limpiar';
+            document.getElementById('currentMode').textContent = modeText;
+            
+            document.querySelectorAll('.tool-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
         }
         
         function deletePoint(idx) {
             points.splice(idx, 1);
-            redrawCanvas();
-            calculateAngle();
+            updateUI();
+            redraw();
         }
         
         function saveMeasurement() {
             if (points.length !== 3) {
-                alert('Completa los 3 puntos primero');
+                alert('Completa los 3 puntos primero (dibuja 3 puntos en el canvas)');
                 return;
             }
             
@@ -818,93 +558,10 @@
             const name = prompt('¿Cuál es este ángulo?\n\ncuello\ntorso\nbrazo\nantebrazo\nmuñeca', 'cuello');
             
             if (name && ['cuello', 'torso', 'brazo', 'antebrazo', 'muneca'].includes(name)) {
-                const score = getScore(name, angle);
-                const criteria = getCriteria(name, angle);
-                
-                measurements.push({name, angle, score, criteria});
-                
-                displaySavedMeasurements();
+                alert(`✓ ${name}: ${angle}° guardado`);
                 points = [];
-                redrawCanvas();
-                document.getElementById('angleValue').textContent = '0°';
-                document.getElementById('scoreValue').textContent = '0';
-                document.getElementById('angleInfo').textContent = 'Medida guardada ✓';
-                
-                alert(`${name}: ${angle}° = Puntuación: ${score}\n${criteria}`);
-            }
-        }
-        
-        function getScore(type, angle) {
-            const rules = scoringRules[type] || [];
-            for (let rule of rules) {
-                if (angle <= rule.max) {
-                    return rule.score;
-                }
-            }
-            return 0;
-        }
-        
-        function getCriteria(type, angle) {
-            const rules = scoringRules[type] || [];
-            for (let rule of rules) {
-                if (angle <= rule.max) {
-                    return rule.label;
-                }
-            }
-            return "Fuera de rango";
-        }
-        
-        function displaySavedMeasurements() {
-            const div = document.getElementById('savedMeasurements');
-            const list = document.getElementById('measurementsList');
-            list.innerHTML = '';
-            
-            measurements.forEach((m, idx) => {
-                const item = document.createElement('div');
-                item.className = 'measurement-item';
-                item.innerHTML = `
-                    <span><strong>${m.name}:</strong> ${m.angle}° (Puntos: ${m.score})</span>
-                    <button type="button" onclick="deleteMeasurement(${idx})">Borrar</button>
-                `;
-                list.appendChild(item);
-            });
-            
-            if (measurements.length > 0) {
-                div.style.display = 'block';
-            }
-        }
-        
-        function deleteMeasurement(idx) {
-            measurements.splice(idx, 1);
-            displaySavedMeasurements();
-        }
-        
-        function displayResults() {
-            const tbody = document.getElementById('resultsBody');
-            tbody.innerHTML = '';
-            
-            if (measurements.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 20px; color: #999;">No hay mediciones guardadas</td></tr>';
-                return;
-            }
-            
-            measurements.forEach(m => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td style="padding: 12px; border: 1px solid #ddd;"><strong>${m.name}</strong></td>
-                    <td style="padding: 12px; border: 1px solid #ddd; text-align: center;"><strong>${m.angle}°</strong></td>
-                    <td style="padding: 12px; border: 1px solid #ddd; text-align: center; background: #fff3e0; font-weight: 600; color: #ff9800;">${m.score}</td>
-                    <td style="padding: 12px; border: 1px solid #ddd; font-size: 12px;">${m.criteria}</td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-        
-        document.getElementById('fecha').valueAsDate = new Date();
-        
-        function logout() {
-            if (confirm('¿Cerrar sesión?')) {
-                window.location.href = '/logout';
+                updateUI();
+                redraw();
             }
         }
     </script>

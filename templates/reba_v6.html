@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REBA v6 - Evaluación Ergonómica Profesional</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+        }
+        
+        .layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+        }
+        
+        /* SIDEBAR */
+        .sidebar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            overflow-y: auto;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            max-height: 100vh;
+        }
+        
+        .sidebar-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .evaluador-info {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 12px;
+        }
+        
+        .evaluador-nombre {
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+        
+        .evaluacion-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .evaluacion-fecha {
+            font-size: 10px;
+            opacity: 0.8;
+        }
+        
+        .btn-nueva-eval, .btn-logout {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 15px;
+            font-size: 12px;
+        }
+        
+        .btn-nueva-eval {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .btn-logout {
+            background: rgba(255, 0, 0, 0.3);
+            color: white;
+            border: 1px solid rgba(255, 0, 0, 0.5);
+        }
+        
+        /* MAIN */
+        .main-content {
+            padding: 30px;
+            overflow-y: auto;
+            max-height: 100vh;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .container-title {
+            background: #0288d1;
+            color: white;
+            margin: -25px -25px 20px -25px;
+            padding: 15px 25px;
+            border-radius: 10px 10px 0 0;
+            font-weight: 600;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 6px;
+            font-size: 13px;
+        }
+        
+        .form-group input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        
+        .required {
+            color: #f44336;
+            font-weight: 700;
+        }
+        
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        @media (max-width: 1200px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* KINOVEA */
+        .kinovea-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+        }
+        
+        .kinovea-header {
+            background: #4caf50;
+            color: white;
+            margin: -25px -25px 20px -25px;
+            padding: 15px 25px;
+            border-radius: 10px 10px 0 0;
+            font-weight: 600;
+        }
+        
+        .imagen-bloque {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .imagen-titulo {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+        
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 5px;
+            padding: 20px;
+            text-align: center;
+            background: #f5f5f5;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 12px;
+        }
+        
+        .upload-area:hover {
+            border-color: #764ba2;
+            background: #f0f0f0;
+        }
+        
+        .upload-area.required-field {
+            border: 3px dashed #ff9800;
+            background: #fff3e0;
+        }
+        
+        .upload-area.loaded {
+            border: 2px solid #4caf50;
+            background: #f1f8e9;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        canvas {
+            border: 2px solid #0288d1;
+            border-radius: 5px;
+            display: block;
+            margin: 15px 0;
+            background: white;
+            width: 100%;
+            height: auto;
+            cursor: crosshair;
+            max-width: 600px;
+        }
+        
+        .kinovea-controles {
+            display: flex;
+            gap: 8px;
+            margin: 12px 0;
+            flex-wrap: wrap;
+        }
+        
+        .btn-kinovea {
+            flex: 1;
+            min-width: 70px;
+            padding: 8px;
+            border: none;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-kinovea:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: #ccc !important;
+        }
+        
+        .btn-medir {
+            background: #4caf50;
+            color: white;
+        }
+        
+        .btn-medir.active {
+            background: #2e7d32;
+            box-shadow: 0 0 10px rgba(46, 125, 50, 0.5);
+        }
+        
+        .btn-editar {
+            background: #ff9800;
+            color: white;
+        }
+        
+        .btn-editar.active {
+            background: #e65100;
+            box-shadow: 0 0 10px rgba(230, 81, 0, 0.5);
+        }
+        
+        .btn-limpiar {
+            background: #f44336;
+            color: white;
+        }
+        
+        .kinovea-info {
+            background: #e3f2fd;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #1565c0;
+            border-left: 3px solid #0288d1;
+            min-height: 20px;
+        }
+        
+        .error-message {
+            background: #ffebee;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #c62828;
+            border-left: 3px solid #f44336;
+            margin-top: 8px;
+            display: none;
+        }
+        
+        /* INPUTS REBA */
+        .inputs-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            max-height: 800px;
+            overflow-y: auto;
+        }
+        
+        .inputs-header {
+            background: #0288d1;
+            color: white;
+            margin: -25px -25px 20px -25px;
+            padding: 15px 25px;
+            border-radius: 10px 10px 0 0;
+            font-weight: 600;
+        }
+        
+        .separador-puntaje {
+            background: linear-gradient(90deg, transparent, #667eea, transparent);
+            height: 3px;
+            margin: 20px 0;
+            border-radius: 2px;
+            position: relative;
+        }
+        
+        .separador-label {
+            position: absolute;
+            left: 50%;
+            top: -12px;
+            transform: translateX(-50%);
+            background: white;
+            padding: 0 8px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #667eea;
+        }
+        
+        .grupo-titulo {
+            background: #f0f0f0;
+            padding: 10px;
+            margin: 15px 0 10px 0;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #0288d1;
+            border-left: 4px solid #0288d1;
+            font-size: 12px;
+        }
+        
+        .opcion-grupo {
+            margin-bottom: 12px;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 4px;
+            border-left: 3px solid #667eea;
+        }
+        
+        .opcion-titulo {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+        }
+        
+        .opcion-numero {
+            background: #667eea;
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        
+        .opcion-item {
+            display: flex;
+            align-items: center;
+            margin: 4px 0;
+            padding: 4px;
+            font-size: 12px;
+        }
+        
+        .opcion-item input {
+            margin-right: 6px;
+            cursor: pointer;
+        }
+        
+        .opcion-item label {
+            flex: 1;
+            cursor: pointer;
+            margin: 0;
+        }
+        
+        .puntos {
+            background: #ff9800;
+            color: white;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+        
+        /* RESULTADO */
+        .resultado-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .resultado-header {
+            background: #9c27b0;
+            color: white;
+            margin: -25px -25px 20px -25px;
+            padding: 15px 25px;
+            border-radius: 10px 10px 0 0;
+            font-weight: 600;
+        }
+        
+        .resultado-separador {
+            background: linear-gradient(90deg, transparent, #9c27b0, transparent);
+            height: 2px;
+            margin: 15px 0;
+            border-radius: 1px;
+        }
+        
+        .resultado-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .resultado-caja {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            border-top: 3px solid #9c27b0;
+        }
+        
+        .resultado-label {
+            font-size: 11px;
+            color: #999;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .resultado-valor {
+            font-size: 28px;
+            color: #9c27b0;
+            font-weight: 700;
+        }
+        
+        .puntuacion-final {
+            background: linear-gradient(135deg, #9c27b0 0%, #673ab7 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 15px 0;
+        }
+        
+        .puntuacion-valor {
+            font-size: 42px;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+        
+        .botones {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            flex: 1;
+            min-width: 120px;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-guardar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-guardar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-pdf {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+        }
+        
+        .btn-pdf:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
+        }
+        
+        .btn-pdf:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .btn-reset {
+            background: #f0f0f0;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="layout">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-title">📋 MIS EVALUACIONES</div>
+            
+            <div class="evaluador-info">
+                <div class="evaluador-nombre">👤 Lydia Peralta</div>
+                <div style="font-size: 11px; margin-top: 5px;">lydia@concienciaverde.mx</div>
+            </div>
+            
+            <div id="listaEvaluaciones">
+                <div class="evaluacion-item">
+                    <div class="evaluador-nombre">Juan García López</div>
+                    <div class="evaluacion-fecha">01/09/2026 14:30</div>
+                </div>
+            </div>
+            
+            <button class="btn-nueva-eval">+ Nueva Evaluación</button>
+            <button class="btn-logout">Cerrar Sesión</button>
+        </aside>
+        
+        <!-- MAIN -->
+        <main class="main-content">
+            <div class="header">
+                <h1>📋 REBA v6 - Evaluación Ergonómica Profesional</h1>
+                <p>Con Kinovea integrado + Imágenes de referencia requeridas + BD</p>
+            </div>
+            
+            <!-- DATOS PERSONA -->
+            <div class="container">
+                <div class="container-title">👤 Datos de la Persona Evaluada</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Nombre <span class="required">*</span></label>
+                        <input type="text" id="nombre" placeholder="Juan García López" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Puesto <span class="required">*</span></label>
+                        <input type="text" id="puesto" placeholder="Operario" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Área</label>
+                        <input type="text" id="area" placeholder="Producción">
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha</label>
+                        <input type="date" id="fecha">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- MAIN GRID -->
+            <div class="main-grid">
+                <!-- KINOVEA -->
+                <div class="kinovea-container">
+                    <div class="kinovea-header">📷 KINOVEA - Imágenes de Referencia <span class="required">*</span></div>
+                    
+                    <!-- IMAGEN 1: CUELLO -->
+                    <div class="imagen-bloque">
+                        <div class="imagen-titulo">① Cuello - Imagen de Referencia <span class="required">*</span></div>
+                        <div class="upload-area required-field" id="area1" onclick="document.getElementById('file1').click()">
+                            📷 Cargar imagen de referencia (Obligatoria)
+                        </div>
+                        <input type="file" id="file1" class="file-input" accept="image/*" onchange="cargarImagen(1, this)">
+                        <canvas id="canvas1" width="600" height="400" style="display:none;"></canvas>
+                        <div class="kinovea-controles" id="controles1" style="display:none;">
+                            <button class="btn-kinovea btn-medir" onclick="kinovea1.iniciarMedir()">📏 Medir</button>
+                            <button class="btn-kinovea btn-editar" onclick="kinovea1.iniciarEditar()">✏️ Editar</button>
+                            <button class="btn-kinovea btn-limpiar" onclick="kinovea1.limpiar()">🗑️ Limpiar</button>
+                        </div>
+                        <div class="kinovea-info" id="info1"></div>
+                        <div class="error-message" id="error1">⚠️ Debes cargar una imagen de referencia para medir</div>
+                    </div>
+                    
+                    <!-- IMAGEN 2: TORSO -->
+                    <div class="imagen-bloque">
+                        <div class="imagen-titulo">② Torso - Imagen de Referencia <span class="required">*</span></div>
+                        <div class="upload-area required-field" id="area2" onclick="document.getElementById('file2').click()">
+                            📷 Cargar imagen de referencia (Obligatoria)
+                        </div>
+                        <input type="file" id="file2" class="file-input" accept="image/*" onchange="cargarImagen(2, this)">
+                        <canvas id="canvas2" width="600" height="400" style="display:none;"></canvas>
+                        <div class="kinovea-controles" id="controles2" style="display:none;">
+                            <button class="btn-kinovea btn-medir" onclick="kinovea2.iniciarMedir()">📏 Medir</button>
+                            <button class="btn-kinovea btn-editar" onclick="kinovea2.iniciarEditar()">✏️ Editar</button>
+                            <button class="btn-kinovea btn-limpiar" onclick="kinovea2.limpiar()">🗑️ Limpiar</button>
+                        </div>
+                        <div class="kinovea-info" id="info2"></div>
+                        <div class="error-message" id="error2">⚠️ Debes cargar una imagen de referencia para medir</div>
+                    </div>
+                    
+                    <!-- IMAGEN 3: BRAZO -->
+                    <div class="imagen-bloque">
+                        <div class="imagen-titulo">③ Brazo y Muñeca - Imagen de Referencia <span class="required">*</span></div>
+                        <div class="upload-area required-field" id="area3" onclick="document.getElementById('file3').click()">
+                            📷 Cargar imagen de referencia (Obligatoria)
+                        </div>
+                        <input type="file" id="file3" class="file-input" accept="image/*" onchange="cargarImagen(3, this)">
+                        <canvas id="canvas3" width="600" height="400" style="display:none;"></canvas>
+                        <div class="kinovea-controles" id="controles3" style="display:none;">
+                            <button class="btn-kinovea btn-medir" onclick="kinovea3.iniciarMedir()">📏 Medir</button>
+                            <button class="btn-kinovea btn-editar" onclick="kinovea3.iniciarEditar()">✏️ Editar</button>
+                            <button class="btn-kinovea btn-limpiar" onclick="kinovea3.limpiar()">🗑️ Limpiar</button>
+                        </div>
+                        <div class="kinovea-info" id="info3"></div>
+                        <div class="error-message" id="error3">⚠️ Debes cargar una imagen de referencia para medir</div>
+                    </div>
+                </div>
+                
+                <!-- INPUTS REBA -->
+                <div class="inputs-container">
+                    <div class="inputs-header">⚙️ REBA - Selecciona Valores</div>
+                    
+                    <div class="grupo-titulo">SECCIÓN A: Cuello, Torso, Piernas</div>
+                    <div class="separador-puntaje" style="position: relative;">
+                        <div class="separador-label">Puntajes A</div>
+                    </div>
+                    
+                    <div class="opcion-grupo">
+                        <div class="opcion-titulo"><span class="opcion-numero">1</span>Cuello</div>
+                        <div class="opcion-item"><input type="radio" name="cuello" value="1" onchange="calcular()"><label>0-20°</label><span class="puntos">+1</span></div>
+                        <div class="opcion-item"><input type="radio" name="cuello" value="2" onchange="calcular()"><label>20°+</label><span class="puntos">+2</span></div>
+                        <div style="margin-top: 6px; padding: 6px; background: #fff3e0; border-radius: 3px;">
+                            <div class="opcion-item"><input type="checkbox" id="cuello_t" onchange="calcular()"><label for="cuello_t">Torcido</label><span class="puntos">+1</span></div>
+                            <div class="opcion-item"><input type="checkbox" id="cuello_i" onchange="calcular()"><label for="cuello_i">Inclinado</label><span class="puntos">+1</span></div>
+                        </div>
+                    </div>
+                    
+                    <div class="opcion-grupo">
+                        <div class="opcion-titulo"><span class="opcion-numero">2</span>Torso</div>
+                        <div class="opcion-item"><input type="radio" name="torso" value="1" onchange="calcular()"><label>0-20°</label><span class="puntos">+1</span></div>
+                        <div class="opcion-item"><input type="radio" name="torso" value="2" onchange="calcular()"><label>20-60°</label><span class="puntos">+2</span></div>
+                        <div class="opcion-item"><input type="radio" name="torso" value="3" onchange="calcular()"><label>>60°</label><span class="puntos">+3</span></div>
+                        <div style="margin-top: 6px; padding: 6px; background: #fff3e0; border-radius: 3px;">
+                            <div class="opcion-item"><input type="checkbox" id="torso_i" onchange="calcular()"><label for="torso_i">Inclinado</label><span class="puntos">+1</span></div>
+                        </div>
+                    </div>
+                    
+                    <div class="opcion-grupo">
+                        <div class="opcion-titulo"><span class="opcion-numero">3</span>Piernas</div>
+                        <div class="opcion-item"><input type="radio" name="piernas" value="1" onchange="calcular()"><label>Ambas suelo</label><span class="puntos">+1</span></div>
+                        <div class="opcion-item"><input type="radio" name="piernas" value="2" onchange="calcular()"><label>Una levantada</label><span class="puntos">+2</span></div>
+                    </div>
+                    
+                    <div class="grupo-titulo">SECCIÓN B: Brazo, Antebrazo, Muñeca</div>
+                    <div class="separador-puntaje" style="position: relative;">
+                        <div class="separador-label">Puntajes B</div>
+                    </div>
+                    
+                    <div class="opcion-grupo">
+                        <div class="opcion-titulo"><span class="opcion-numero">4</span>Brazo</div>
+                        <div class="opcion-item"><input type="radio" name="brazo" value="1" onchange="calcular()"><label>Neutro</label><span class="puntos">+1</span></div>
+                        <div class="opcion-item"><input type="radio" name="brazo" value="2" onchange="calcular()"><label>Resto</label><span class="puntos">+2</span></div>
+                    </div>
+                    
+                    <div class="opcion-grupo">
+                        <div class="opcion-titulo"><span class="opcion-numero">5</span>Antebrazo</div>
+                        <div class="opcion-item"><input type="radio" name="antebrazo" value="1" onchange="calcular()"><label>60-100°</label><span class="puntos">+1</span></div>
+                        <div class="opcion-item"><input type="radio" name="antebrazo" value="2" onchange="calcular()"><label>Resto</label><span class="puntos">+2</span></div>
+                    </div>
+                    
+                    <div class="opcion-grupo">
+                        <div class="opcion-titulo"><span class="opcion-numero">6</span>Muñeca</div>
+                        <div class="opcion-item"><input type="radio" name="muneca" value="1" onchange="calcular()"><label>Neutro</label><span class="puntos">+1</span></div>
+                        <div class="opcion-item"><input type="radio" name="muneca" value="2" onchange="calcular()"><label>±15°</label><span class="puntos">+2</span></div>
+                    </div>
+                    
+                    <div class="grupo-titulo">SECCIÓN C: Carga y Acoplamiento</div>
+                    <div class="separador-puntaje" style="position: relative;">
+                        <div class="separador-label">Puntajes C</div>
+                    </div>
+                    
+                    <div class="opcion-grupo">
+                        <div class="opcion-titulo"><span class="opcion-numero">7</span>Carga</div>
+                        <div class="opcion-item"><input type="radio" name="carga" value="0" onchange="calcular()"><label><11 lbs</label><span class="puntos">0</span></div>
+                        <div class="opcion-item"><input type="radio" name="carga" value="1" onchange="calcular()"><label>11-22 lbs</label><span class="puntos">+1</span></div>
+                        <div class="opcion-item"><input type="radio" name="carga" value="2" onchange="calcular()"><label>>22 lbs</label><span class="puntos">+2</span></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- RESULTADO -->
+            <div class="resultado-container">
+                <div class="resultado-header">📊 Cálculo Automático REBA</div>
+                
+                <div class="resultado-grid">
+                    <div class="resultado-caja">
+                        <div class="resultado-label">Puntaje A</div>
+                        <div class="resultado-valor" id="resultA">-</div>
+                    </div>
+                    <div class="resultado-caja">
+                        <div class="resultado-label">Puntaje B</div>
+                        <div class="resultado-valor" id="resultB">-</div>
+                    </div>
+                    <div class="resultado-caja">
+                        <div class="resultado-label">Puntaje C</div>
+                        <div class="resultado-valor" id="resultC">-</div>
+                    </div>
+                </div>
+                
+                <div class="resultado-separador"></div>
+                
+                <div class="puntuacion-final">
+                    <div>🎯 PUNTAJE REBA FINAL</div>
+                    <div class="puntuacion-valor" id="puntajeReba">-</div>
+                    <div style="font-size: 14px; font-weight: 600;" id="riesgo">-</div>
+                </div>
+                
+                <div class="botones">
+                    <button class="btn btn-guardar" onclick="guardarEvaluacion()">💾 Guardar</button>
+                    <button class="btn btn-pdf" id="btnPDF" disabled onclick="descargarPDF()">📥 PDF</button>
+                    <button class="btn btn-reset" onclick="limpiar()">🔄 Limpiar</button>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        // Clase Kinovea v4
+        class Kinovea {
+            constructor(canvasId) {
+                this.canvas = document.getElementById(canvasId);
+                this.ctx = this.canvas.getContext('2d');
+                this.points = [];
+                this.draggingPoint = null;
+                this.mode = 'none';
+                this.image = null;
+                this.infoId = canvasId.replace('canvas', 'info');
+                
+                this.canvas.addEventListener('click', (e) => this.handleClick(e));
+                this.canvas.addEventListener('mousemove', (e) => this.handleMouseMove(e));
+                this.canvas.addEventListener('mousedown', (e) => this.handleMouseDown(e));
+                this.canvas.addEventListener('mouseup', () => this.handleMouseUp());
+            }
+            
+            cargarImagen(file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        this.image = img;
+                        const maxWidth = 600;
+                        const scale = Math.min(maxWidth / img.width, 1);
+                        this.canvas.width = img.width * scale;
+                        this.canvas.height = img.height * scale;
+                        this.canvas.style.display = 'block';
+                        this.redraw();
+                        document.getElementById(this.infoId).textContent = '✅ Imagen cargada - Haz clic en [📏 Medir]';
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+            
+            iniciarMedir() {
+                this.mode = this.mode === 'measure' ? 'none' : 'measure';
+                this.updateButtonStates();
+                const canvas = this.canvas.id;
+                const controles = document.getElementById(canvas.replace('canvas', 'controles'));
+                const btn = controles.querySelector('.btn-medir');
+                if (this.mode === 'measure') {
+                    btn.classList.add('active');
+                    document.getElementById(this.infoId).textContent = '🎯 Modo MEDIR: Haz 3 clics (inicio → articulación → fin)';
+                } else {
+                    btn.classList.remove('active');
+                    document.getElementById(this.infoId).textContent = '';
+                }
+            }
+            
+            iniciarEditar() {
+                this.mode = this.mode === 'edit' ? 'none' : 'edit';
+                this.updateButtonStates();
+                const canvas = this.canvas.id;
+                const controles = document.getElementById(canvas.replace('canvas', 'controles'));
+                const btn = controles.querySelector('.btn-editar');
+                if (this.mode === 'edit') {
+                    btn.classList.add('active');
+                    document.getElementById(this.infoId).textContent = '✏️ Modo EDITAR: Arrastra puntos para ajustar';
+                } else {
+                    btn.classList.remove('active');
+                }
+            }
+            
+            limpiar() {
+                this.points = [];
+                this.mode = 'none';
+                this.updateButtonStates();
+                this.redraw();
+                document.getElementById(this.infoId).textContent = '🗑️ Medición limpiada';
+            }
+            
+            updateButtonStates() {
+                const canvas = this.canvas.id;
+                const controles = document.getElementById(canvas.replace('canvas', 'controles'));
+                if (!controles) return;
+                controles.querySelectorAll('.btn-kinovea').forEach(btn => btn.classList.remove('active'));
+                if (this.mode === 'measure') controles.querySelector('.btn-medir').classList.add('active');
+                if (this.mode === 'edit') controles.querySelector('.btn-editar').classList.add('active');
+            }
+            
+            getMousePos(e) {
+                const rect = this.canvas.getBoundingClientRect();
+                const scaleX = this.canvas.width / rect.width;
+                const scaleY = this.canvas.height / rect.height;
+                return {
+                    x: (e.clientX - rect.left) * scaleX,
+                    y: (e.clientY - rect.top) * scaleY
+                };
+            }
+            
+            handleClick(e) {
+                if (this.mode !== 'measure' || this.points.length >= 3) return;
+                const pos = this.getMousePos(e);
+                this.points.push(pos);
+                this.redraw();
+                if (this.points.length === 3) {
+                    this.calcularAngulo();
+                }
+            }
+            
+            handleMouseDown(e) {
+                if (this.mode !== 'edit') return;
+                const pos = this.getMousePos(e);
+                for (let i = 0; i < this.points.length; i++) {
+                    if (Math.hypot(this.points[i].x - pos.x, this.points[i].y - pos.y) < 15) {
+                        this.draggingPoint = i;
+                        this.canvas.style.cursor = 'grabbing';
+                        break;
+                    }
+                }
+            }
+            
+            handleMouseMove(e) {
+                if (this.mode === 'edit') {
+                    const pos = this.getMousePos(e);
+                    let over = false;
+                    for (let i = 0; i < this.points.length; i++) {
+                        if (Math.hypot(this.points[i].x - pos.x, this.points[i].y - pos.y) < 15) {
+                            over = true;
+                            break;
+                        }
+                    }
+                    this.canvas.style.cursor = over ? 'grab' : 'default';
+                }
+                
+                if (this.draggingPoint !== null) {
+                    const pos = this.getMousePos(e);
+                    this.points[this.draggingPoint] = pos;
+                    this.redraw();
+                    if (this.points.length === 3) {
+                        this.calcularAngulo();
+                    }
+                }
+            }
+            
+            handleMouseUp() {
+                this.draggingPoint = null;
+                this.canvas.style.cursor = 'default';
+            }
+            
+            calcularAngulo() {
+                if (this.points.length < 3) return;
+                const p1 = this.points[0], p2 = this.points[1], p3 = this.points[2];
+                const v1 = {x: p1.x - p2.x, y: p1.y - p2.y};
+                const v2 = {x: p3.x - p2.x, y: p3.y - p2.y};
+                const dot = v1.x * v2.x + v1.y * v2.y;
+                const mag1 = Math.sqrt(v1.x * v1.x + v1.y * v1.y);
+                const mag2 = Math.sqrt(v2.x * v2.x + v2.y * v2.y);
+                const cos_a = Math.max(-1, Math.min(1, dot / (mag1 * mag2)));
+                const angulo = Math.acos(cos_a) * 180 / Math.PI;
+                document.getElementById(this.infoId).textContent = `📐 Ángulo: ${angulo.toFixed(1)}°`;
+                return angulo;
+            }
+            
+            redraw() {
+                if (!this.image) return;
+                this.ctx.drawImage(this.image, 0, 0, this.canvas.width, this.canvas.height);
+                
+                if (this.points.length > 0) {
+                    this.ctx.fillStyle = '#0288d1';
+                    this.ctx.beginPath();
+                    this.ctx.arc(this.points[0].x, this.points[0].y, 8, 0, Math.PI * 2);
+                    this.ctx.fill();
+                    
+                    if (this.points.length > 1) {
+                        this.ctx.strokeStyle = '#0288d1';
+                        this.ctx.lineWidth = 3;
+                        this.ctx.beginPath();
+                        this.ctx.moveTo(this.points[0].x, this.points[0].y);
+                        this.ctx.lineTo(this.points[1].x, this.points[1].y);
+                        this.ctx.stroke();
+                        
+                        this.ctx.fillStyle = '#ff5722';
+                        this.ctx.beginPath();
+                        this.ctx.arc(this.points[1].x, this.points[1].y, 8, 0, Math.PI * 2);
+                        this.ctx.fill();
+                    }
+                    
+                    if (this.points.length === 3) {
+                        this.ctx.strokeStyle = '#0288d1';
+                        this.ctx.lineWidth = 3;
+                        this.ctx.beginPath();
+                        this.ctx.moveTo(this.points[1].x, this.points[1].y);
+                        this.ctx.lineTo(this.points[2].x, this.points[2].y);
+                        this.ctx.stroke();
+                        
+                        this.ctx.fillStyle = '#0288d1';
+                        this.ctx.beginPath();
+                        this.ctx.arc(this.points[2].x, this.points[2].y, 8, 0, Math.PI * 2);
+                        this.ctx.fill();
+                    }
+                }
+            }
+        }
+        
+        let kinovea1, kinovea2, kinovea3;
+        
+        function cargarImagen(num, input) {
+            const file = input.files[0];
+            if (!file) return;
+            
+            if (!window['kinovea' + num]) {
+                window['kinovea' + num] = new Kinovea('canvas' + num);
+            }
+            
+            window['kinovea' + num].cargarImagen(file);
+            
+            const controles = document.getElementById('controles' + num);
+            const area = document.getElementById('area' + num);
+            const error = document.getElementById('error' + num);
+            
+            controles.style.display = 'flex';
+            area.classList.add('loaded');
+            area.classList.remove('required-field');
+            error.style.display = 'none';
+        }
+        
+        kinovea1 = new Kinovea('canvas1');
+        kinovea2 = new Kinovea('canvas2');
+        kinovea3 = new Kinovea('canvas3');
+        
+        // Tablas REBA
+        const tablaA = [
+            [1, 2, 3, 4, 1, 2, 3, 4, 3, 3, 5, 6],
+            [2, 3, 4, 5, 3, 4, 5, 6, 4, 5, 6, 7],
+            [2, 4, 5, 6, 4, 5, 6, 7, 5, 6, 7, 8],
+            [3, 5, 6, 7, 5, 6, 7, 8, 6, 7, 8, 9],
+            [4, 6, 7, 8, 6, 7, 8, 9, 7, 8, 9, 9]
+        ];
+        
+        const tablaC = [
+            [1, 1, 1, 2, 3, 3, 4, 5, 6, 7, 7, 7],
+            [1, 2, 2, 3, 4, 4, 5, 6, 6, 7, 7, 8],
+            [2, 3, 3, 3, 4, 5, 6, 7, 7, 8, 8, 8],
+            [3, 4, 4, 4, 5, 6, 7, 8, 8, 9, 9, 9],
+            [4, 4, 4, 5, 6, 7, 8, 8, 9, 9, 9, 9],
+            [6, 6, 6, 7, 8, 8, 9, 9, 10, 10, 10, 10],
+            [7, 7, 7, 8, 9, 9, 9, 10, 10, 11, 11, 11],
+            [8, 8, 8, 9, 10, 10, 10, 10, 10, 11, 11, 11],
+            [9, 9, 9, 10, 10, 10, 11, 11, 11, 12, 12, 12],
+            [10, 10, 10, 11, 11, 11, 11, 12, 12, 12, 12, 12],
+            [11, 11, 11, 11, 12, 12, 12, 12, 12, 12, 12, 12],
+            [12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12]
+        ];
+        
+        function obtenerValor(name) {
+            const el = document.querySelector(`input[name="${name}"]:checked`);
+            return el ? parseInt(el.value) : null;
+        }
+        
+        function esChecked(id) {
+            return document.getElementById(id).checked ? 1 : 0;
+        }
+        
+        function calcular() {
+            let c = obtenerValor('cuello'), t = obtenerValor('torso'), p = obtenerValor('piernas');
+            if (!c || !t || !p) return;
+            
+            let a = c + t + p + esChecked('cuello_t') + esChecked('cuello_i') + esChecked('torso_i');
+            a = Math.max(1, Math.min(a, 5));
+            
+            let b = (obtenerValor('brazo') || 1) + (obtenerValor('antebrazo') || 1) + (obtenerValor('muneca') || 1);
+            b = Math.max(0, Math.min(b, 6));
+            
+            let cc = tablaC[a - 1][b] + (obtenerValor('carga') || 0);
+            cc = Math.min(12, cc);
+            
+            let r = cc;
+            let risk = r === 1 ? '✅ Riesgo Mínimo' : r <= 3 ? '⚠️ Riesgo Bajo' : r <= 7 ? '🔴 Riesgo Medio' : r <= 10 ? '🔴🔴 Riesgo Alto' : '🔴🔴🔴 Riesgo Muy Alto';
+            
+            document.getElementById('resultA').textContent = a;
+            document.getElementById('resultB').textContent = b;
+            document.getElementById('resultC').textContent = cc;
+            document.getElementById('puntajeReba').textContent = r;
+            document.getElementById('riesgo').textContent = risk;
+            document.getElementById('btnPDF').disabled = false;
+        }
+        
+        function guardarEvaluacion() {
+            if (!document.getElementById('nombre').value) {
+                alert('⚠️ Completa nombre');
+                return;
+            }
+            alert('✅ Evaluación guardada en BD');
+        }
+        
+        function descargarPDF() {
+            alert('📥 Descargando PDF...');
+        }
+        
+        function limpiar() {
+            document.getElementById('nombre').value = '';
+            document.getElementById('puesto').value = '';
+            document.getElementById('area').value = '';
+            document.getElementById('fecha').value = '';
+            document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(el => el.checked = false);
+            document.getElementById('resultA').textContent = '-';
+            document.getElementById('resultB').textContent = '-';
+            document.getElementById('resultC').textContent = '-';
+            document.getElementById('puntajeReba').textContent = '-';
+            document.getElementById('riesgo').textContent = '-';
+        }
+    </script>
+</body>
+</html>

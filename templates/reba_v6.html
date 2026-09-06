@@ -968,11 +968,13 @@
             
             window['kinovea' + num].cargarImagen(file);
             
+            const canvas = document.getElementById('canvas' + num);
             const controles = document.getElementById('controles' + num);
             const area = document.getElementById('area' + num);
             const error = document.getElementById('error' + num);
             
-            controles.style.display = 'flex';
+            canvas.style.display = 'block';           // ✅ MOSTRAR CANVAS
+            controles.style.display = 'flex';         // ✅ MOSTRAR BOTONES
             area.classList.add('loaded');
             area.classList.remove('required-field');
             error.style.display = 'none';

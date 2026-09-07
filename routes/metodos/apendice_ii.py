@@ -1,7 +1,7 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, render_template
 
 bp_apendice_ii = Blueprint('apendice_ii', __name__, url_prefix='/apendice-ii')
 
-@bp_apendice_ii.route('/nueva', methods=['GET', 'POST'])
+@bp_apendice_ii.route('/nueva', methods=['GET'])
 def nueva():
-    return jsonify({'método': 'Apéndice II', 'estado': 'en desarrollo'})
+    return render_template('apendice_ii_workspace.html')

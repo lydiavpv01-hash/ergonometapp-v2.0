@@ -62,5 +62,6 @@ def nueva():
     intro = render_template('apendice_i_intro.html')
     refinements = render_template('apendice_i_refinements_v3.html')
     refinements_v4 = render_template('apendice_i_refinements_v4.html')
+    refinements_v5 = render_template('apendice_i_refinements_v5.html')
     html = html.replace("<div class='tabs'>", intro + "<div class='tabs'>", 1)
-    return html.replace('</body>', AI5_ENHANCEMENT + refinements + refinements_v4 + '</body>')
+    return html.replace('</body>', AI5_ENHANCEMENT + refinements + refinements_v4 + refinements_v5 + '</body>')

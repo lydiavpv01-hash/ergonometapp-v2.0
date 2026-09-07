@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REBA FASE 2 - Evaluación Guiada (8 Pasos)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 30px;
+        }
+
+        @media (max-width: 1024px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .step-indicator {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 18px;
+        }
+
+        .step-title {
+            display: inline-block;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            vertical-align: middle;
+        }
+
+        .section {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            margin-bottom: 20px;
+        }
+
+        .section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        input[type="number"],
+        input[type="text"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        input[type="number"]:focus,
+        input[type="text"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .checkbox-label {
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+
+        .btn-next,
+        .btn-back {
+            flex: 1;
+        }
+
+        .result-box {
+            background: #f0f7ff;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .result-box h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .result-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .trace-box {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 15px;
+            font-size: 12px;
+            font-family: 'Courier New', monospace;
+            color: #666;
+        }
+
+        .trace-line {
+            padding: 4px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .trace-line:last-child {
+            border-bottom: none;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .status-message {
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        .status-info {
+            background: #e3f2fd;
+            color: #1976d2;
+            border-left: 3px solid #1976d2;
+        }
+
+        .status-success {
+            background: #e8f5e9;
+            color: #388e3c;
+            border-left: 3px solid #388e3c;
+        }
+
+        .status-error {
+            background: #ffebee;
+            color: #c62828;
+            border-left: 3px solid #c62828;
+        }
+
+        .reference-box {
+            background: #fffbea;
+            border: 1px solid #ffc107;
+            border-radius: 4px;
+            padding: 10px;
+            margin-top: 15px;
+            font-size: 12px;
+            color: #333;
+        }
+
+        .reference-box strong {
+            color: #f57c00;
+        }
+
+        .direction-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .direction-btn {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            background: white;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .direction-btn:hover {
+            border-color: #667eea;
+            background: #f5f5f5;
+        }
+
+        .direction-btn.active {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        .navigation-progress {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .progress-step {
+            flex: 1;
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .progress-step.active {
+            background: #667eea;
+        }
+
+        .progress-step.completed {
+            background: #4caf50;
+        }
+
+        .final-result {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .final-result .score {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .final-result .risk-level {
+            font-size: 24px;
+            margin: 15px 0;
+        }
+
+        .final-result .action {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <h1>Evaluación REBA - Fase 2</h1>
+            <p>Proceso guiado de 8 pasos con medición angular integrada</p>
+        </div>
+
+        <!-- CONTENIDO -->
+        <div class="content">
+            <!-- LADO IZQUIERDO: Pasos y entrada de datos -->
+            <div>
+                <!-- PASO ACTUAL -->
+                <div id="current-step-indicator" class="step-indicator">
+                    <span class="step-number">1</span>
+                    <span class="step-title">Preparación - Cargue de Fotografía</span>
+                </div>
+
+                <!-- PASO 1: Fotografía -->
+                <div id="step-1" class="step-content">
+                    <div class="section">
+                        <h3>Paso 1: Fotografía y Preparación</h3>
+                        <div class="input-group">
+                            <label for="worker-name">Nombre del Trabajador*</label>
+                            <input type="text" id="worker-name" placeholder="Ej: Juan Pérez">
+                        </div>
+                        <div class="input-group">
+                            <label for="worker-position">Puesto/Área*</label>
+                            <input type="text" id="worker-position" placeholder="Ej: Operario de línea">
+                        </div>
+                        <div class="input-group">
+                            <label for="worker-task">Descripción de Tarea</label>
+                            <textarea id="worker-task" placeholder="Describe brevemente la tarea siendo evaluada..." rows="3"></textarea>
+                        </div>
+                        <div class="input-group">
+                            <label for="photo-upload">Cargar Fotografía</label>
+                            <input type="file" id="photo-upload" accept="image/*">
+                            <div id="photo-preview" style="margin-top: 10px;"></div>
+                        </div>
+                        <div class="button-group">
+                            <button class="btn-primary btn-next" onclick="nextStep()">Siguiente: Cuello →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PASO 2: Cuello -->
+                <div id="step-2" class="step-content hidden">
+                    <div class="section">
+                        <h3>Paso 2: Grupo A - Cuello</h3>
+                        <div class="input-group">
+                            <label>Ángulo de Cuello (grados)</label>
+                            <input type="number" id="neck-angle" step="0.1" placeholder="Ej: 32.4">
+                        </div>
+                        <div class="input-group">
+                            <label>Dirección del Movimiento*</label>
+                            <div class="direction-selector">
+                                <button class="direction-btn" onclick="selectDirection('neck', 'flexion')">Flexión</button>
+                                <button class="direction-btn" onclick="selectDirection('neck', 'neutral')">Neutral</button>
+                                <button class="direction-btn" onclick="selectDirection('neck', 'extension')">Extensión</button>
+                            </div>
+                        </div>
+                        <div class="reference-box">
+                            <strong>Referencia REBA:</strong><br>
+                            - 0-20° flexión = 1pt<br>
+                            - >20° flexión = 2pts<br>
+                            - Extensión = 2pts<br>
+                            - Torcido/inclinación = +1 c/u
+                        </div>
+                        <div class="input-group" style="margin-top: 15px;">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="neck-twisted">
+                                <label class="checkbox-label" for="neck-twisted">Cuello torcido (+1)</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="neck-tilted">
+                                <label class="checkbox-label" for="neck-tilted">Inclinación lateral (+1)</label>
+                            </div>
+                        </div>
+                        <div id="neck-result" class="result-box" style="display: none;"></div>
+                        <div class="button-group">
+                            <button class="btn-secondary btn-back" onclick="prevStep()">← Atrás</button>
+                            <button class="btn-primary btn-next" onclick="nextStep()">Siguiente →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PASO 3: Torso y Piernas -->
+                <div id="step-3" class="step-content hidden">
+                    <div class="section">
+                        <h3>Paso 3: Grupo A - Torso y Piernas</h3>
+                        
+                        <h4 style="color: #333; margin: 20px 0 10px 0;">Torso</h4>
+                        <div class="input-group">
+                            <label>Ángulo de Torso (grados)</label>
+                            <input type="number" id="trunk-angle" step="0.1" placeholder="Ej: 45">
+                        </div>
+                        <div class="input-group">
+                            <label>Dirección del Movimiento*</label>
+                            <div class="direction-selector">
+                                <button class="direction-btn" onclick="selectDirection('trunk', 'flexion')">Flexión</button>
+                                <button class="direction-btn" onclick="selectDirection('trunk', 'neutral')">Neutral</button>
+                                <button class="direction-btn" onclick="selectDirection('trunk', 'extension')">Extensión</button>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="trunk-twisted">
+                                <label class="checkbox-label" for="trunk-twisted">Torso torcido (+1)</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="trunk-tilted">
+                                <label class="checkbox-label" for="trunk-tilted">Inclinado lateralmente (+1)</label>
+                            </div>
+                        </div>
+
+                        <h4 style="color: #333; margin: 20px 0 10px 0;">Piernas</h4>
+                        <div class="input-group">
+                            <label>Condición de Piernas</label>
+                            <select id="legs-condition">
+                                <option value="">-- Selecciona --</option>
+                                <option value="both_supported">Ambas apoyadas</option>
+                                <option value="one_lifted">Una levantada</option>
+                                <option value="unstable">Soporte inestable</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Ángulo de Flexión de Rodilla (opcional, grados)</label>
+                            <input type="number" id="knee-angle" step="0.1" placeholder="Ej: 45">
+                        </div>
+
+                        <div id="torso-result" class="result-box" style="display: none;"></div>
+                        <div id="legs-result" class="result-box" style="display: none;"></div>
+
+                        <div class="button-group">
+                            <button class="btn-secondary btn-back" onclick="prevStep()">← Atrás</button>
+                            <button class="btn-primary btn-next" onclick="nextStep()">Siguiente →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PASO 4: Tabla A + Fuerza/Carga -->
+                <div id="step-4" class="step-content hidden">
+                    <div class="section">
+                        <h3>Paso 4: Tabla A + Fuerza/Carga = Puntaje A</h3>
+                        
+                        <div id="table-a-result" class="result-box" style="display: none;">
+                            <h4>Tabla A - Puntaje de Postura</h4>
+                            <div class="result-value" id="table-a-value">-</div>
+                        </div>
+
+                        <h4 style="color: #333; margin: 20px 0 10px 0;">Fuerza/Carga</h4>
+                        <div class="input-group">
+                            <label>Carga (Peso)</label>
+                            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px;">
+                                <input type="number" id="load-value" step="0.1" placeholder="Ej: 15">
+                                <select id="load-unit">
+                                    <option value="kg">kg</option>
+                                    <option value="lb">lb</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="load-shock">
+                                <label class="checkbox-label" for="load-shock">Choque o movimiento rápido (+1)</label>
+                            </div>
+                        </div>
+
+                        <div id="load-result" class="result-box" style="display: none;"></div>
+                        <div id="score-a-result" class="result-box" style="display: none;">
+                            <h4>Puntaje A FINAL</h4>
+                            <div class="result-value" id="score-a-value">-</div>
+                        </div>
+
+                        <div class="button-group">
+                            <button class="btn-secondary btn-back" onclick="prevStep()">← Atrás</button>
+                            <button class="btn-primary btn-next" onclick="nextStep()">Siguiente →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PASO 5: Brazo, Antebrazo, Muñeca -->
+                <div id="step-5" class="step-content hidden">
+                    <div class="section">
+                        <h3>Paso 5: Grupo B - Brazo, Antebrazo, Muñeca</h3>
+                        
+                        <h4 style="color: #333; margin: 0 0 10px 0;">Brazo</h4>
+                        <div class="input-group">
+                            <label>Ángulo de Brazo (grados)</label>
+                            <input type="number" id="arm-angle" step="0.1" placeholder="Ej: 60">
+                        </div>
+                        <div class="input-group">
+                            <label>Dirección</label>
+                            <div class="direction-selector">
+                                <button class="direction-btn" onclick="selectDirection('arm', 'flexion')">Flexión</button>
+                                <button class="direction-btn" onclick="selectDirection('arm', 'neutral')">Neutral</button>
+                                <button class="direction-btn" onclick="selectDirection('arm', 'extension')">Extensión</button>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="shoulder-raised">
+                                <label class="checkbox-label" for="shoulder-raised">Hombro levantado (+1)</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="arm-abducted">
+                                <label class="checkbox-label" for="arm-abducted">Brazo en abducción (+1)</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="arm-supported">
+                                <label class="checkbox-label" for="arm-supported">Brazo apoyado (-1)</label>
+                            </div>
+                        </div>
+
+                        <h4 style="color: #333; margin: 20px 0 10px 0;">Antebrazo</h4>
+                        <div class="input-group">
+                            <label>Ángulo de Antebrazo (grados)</label>
+                            <input type="number" id="forearm-angle" step="0.1" placeholder="Ej: 75">
+                        </div>
+
+                        <h4 style="color: #333; margin: 20px 0 10px 0;">Muñeca</h4>
+                        <div class="input-group">
+                            <label>Ángulo de Muñeca (grados)</label>
+                            <input type="number" id="wrist-angle" step="0.1" placeholder="Ej: 10">
+                        </div>
+                        <div class="input-group">
+                            <label>Dirección</label>
+                            <div class="direction-selector">
+                                <button class="direction-btn" onclick="selectDirection('wrist', 'flexion')">Flexión</button>
+                                <button class="direction-btn" onclick="selectDirection('wrist', 'neutral')">Neutral</button>
+                                <button class="direction-btn" onclick="selectDirection('wrist', 'extension')">Extensión</button>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="wrist-deviated">
+                                <label class="checkbox-label" for="wrist-deviated">Muñeca desviada (+1)</label>
+                            </div>
+                        </div>
+
+                        <div class="button-group">
+                            <button class="btn-secondary btn-back" onclick="prevStep()">← Atrás</button>
+                            <button class="btn-primary btn-next" onclick="nextStep()">Siguiente →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PASO 6: Tabla B + Acoplamiento -->
+                <div id="step-6" class="step-content hidden">
+                    <div class="section">
+                        <h3>Paso 6: Tabla B + Acoplamiento = Puntaje B</h3>
+                        
+                        <div id="table-b-result" class="result-box" style="display: none;">
+                            <h4>Tabla B - Puntaje de Postura</h4>
+                            <div class="result-value" id="table-b-value">-</div>
+                        </div>
+
+                        <h4 style="color: #333; margin: 20px 0 10px 0;">Acoplamiento</h4>
+                        <div class="input-group">
+                            <label>Tipo de Acoplamiento</label>
+                            <select id="coupling">
+                                <option value="">-- Selecciona --</option>
+                                <option value="good">Bueno (asa con buen agarre) = 0</option>
+                                <option value="regular">Regular (agarre aceptable) = +1</option>
+                                <option value="poor">Pobre (agarre inaceptable) = +2</option>
+                                <option value="unacceptable">Inaceptable (sin asas, incómodo) = +3</option>
+                            </select>
+                        </div>
+
+                        <div id="coupling-result" class="result-box" style="display: none;"></div>
+                        <div id="score-b-result" class="result-box" style="display: none;">
+                            <h4>Puntaje B FINAL</h4>
+                            <div class="result-value" id="score-b-value">-</div>
+                        </div>
+
+                        <div class="button-group">
+                            <button class="btn-secondary btn-back" onclick="prevStep()">← Atrás</button>
+                            <button class="btn-primary btn-next" onclick="nextStep()">Siguiente →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PASO 7: Tabla C + Actividad -->
+                <div id="step-7" class="step-content hidden">
+                    <div class="section">
+                        <h3>Paso 7: Tabla C + Actividad</h3>
+                        
+                        <div id="table-c-result" class="result-box" style="display: none;">
+                            <h4>Tabla C - Puntaje Base</h4>
+                            <div class="result-value" id="table-c-value">-</div>
+                        </div>
+
+                        <h4 style="color: #333; margin: 20px 0 10px 0;">Actividad</h4>
+                        <div class="input-group">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="activity-static">
+                                <label class="checkbox-label" for="activity-static">Postura estática >1 minuto (+1)</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="activity-repetitive">
+                                <label class="checkbox-label" for="activity-repetitive">Acciones repetidas >4x/min (+1)</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="activity-rapid">
+                                <label class="checkbox-label" for="activity-rapid">Cambios rápidos/base inestable (+1)</label>
+                            </div>
+                        </div>
+
+                        <div id="activity-result" class="result-box" style="display: none;"></div>
+
+                        <div class="button-group">
+                            <button class="btn-secondary btn-back" onclick="prevStep()">← Atrás</button>
+                            <button class="btn-primary btn-next" onclick="nextStep()">Siguiente →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PASO 8: Resultado Final -->
+                <div id="step-8" class="step-content hidden">
+                    <div class="section">
+                        <h3>Paso 8: Resultado REBA Final y Nivel de Riesgo</h3>
+                        
+                        <div id="final-result" class="final-result" style="display: none;">
+                            <div style="font-size: 14px;">Puntaje REBA</div>
+                            <div class="score" id="final-score-value">-</div>
+                            <div class="risk-level" id="final-risk-level">-</div>
+                            <div class="action" id="final-action">-</div>
+                        </div>
+
+                        <div class="trace-box">
+                            <div style="font-weight: bold; margin-bottom: 10px;">Trazabilidad Completa del Cálculo:</div>
+                            <div id="calculation-trace"></div>
+                        </div>
+
+                        <div class="button-group">
+                            <button class="btn-secondary btn-back" onclick="prevStep()">← Atrás</button>
+                            <button class="btn-primary" onclick="downloadResults()">📥 Descargar Resultados</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LADO DERECHO: Referencia y preview -->
+            <div>
+                <div style="position: sticky; top: 20px;">
+                    <!-- Preview de fotografía -->
+                    <div class="section">
+                        <h3>Fotografía Cargada</h3>
+                        <div id="photo-display" style="text-align: center; color: #999; padding: 20px; background: #f5f5f5; border-radius: 4px;">
+                            <p>(La fotografía aparecerá aquí)</p>
+                        </div>
+                    </div>
+
+                    <!-- Referencias REBA rápidas -->
+                    <div class="section">
+                        <h3>Referencias Rápidas REBA</h3>
+                        <div style="font-size: 12px; color: #666; line-height: 1.6;">
+                            <strong>Cuello:</strong> 0-20°=1, >20°=2, ext=2<br><br>
+                            <strong>Torso:</strong> 0°=1, 0-20°=2, 20-60°=3, >60°=4<br><br>
+                            <strong>Piernas:</strong> ambas=1, levantada=2<br><br>
+                            <strong>Brazo:</strong> -20/+20°=1, 20-45°=2, 45-90°=3, >90°=4<br><br>
+                            <strong>Antebrazo:</strong> 60-100°=1, otro=2<br><br>
+                            <strong>Muñeca:</strong> -15/+15°=1, otro=2<br><br>
+                            <strong>Carga:</strong> <11lb=0, 11-22=1, >22=2<br><br>
+                            <strong>Acoplamiento:</strong> 0-3<br><br>
+                            <strong>Actividad:</strong> 0-3
+                        </div>
+                    </div>
+
+                    <!-- Resumen actual -->
+                    <div class="section">
+                        <h3>Resumen del Paso Actual</h3>
+                        <div id="step-summary" style="font-size: 12px; color: #666;">
+                            <p>Completa los campos del paso actual</p>
+                        </div>
+                    </div>
+
+                    <!-- Progreso -->
+                    <div class="navigation-progress">
+                        <div class="progress-step" onclick="goToStep(1)"></div>
+                        <div class="progress-step" onclick="goToStep(2)"></div>
+                        <div class="progress-step" onclick="goToStep(3)"></div>
+                        <div class="progress-step" onclick="goToStep(4)"></div>
+                        <div class="progress-step" onclick="goToStep(5)"></div>
+                        <div class="progress-step" onclick="goToStep(6)"></div>
+                        <div class="progress-step" onclick="goToStep(7)"></div>
+                        <div class="progress-step" onclick="goToStep(8)"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Estado global
+        let currentStep = 1;
+        let selectedDirections = {};
+        let evaluationData = {};
+
+        // Funciones de navegación
+        function nextStep() {
+            if (currentStep < 8) {
+                goToStep(currentStep + 1);
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                goToStep(currentStep - 1);
+            }
+        }
+
+        function goToStep(step) {
+            if (step < 1 || step > 8) return;
+            
+            // Ocultar paso actual
+            document.getElementById(`step-${currentStep}`).classList.add('hidden');
+            
+            // Mostrar nuevo paso
+            currentStep = step;
+            document.getElementById(`step-${step}`).classList.remove('hidden');
+            
+            // Actualizar indicador
+            const stepTitles = [
+                '', 
+                'Preparación - Cargue de Fotografía',
+                'Grupo A - Cuello',
+                'Grupo A - Torso y Piernas',
+                'Tabla A + Fuerza/Carga = Puntaje A',
+                'Grupo B - Brazo, Antebrazo, Muñeca',
+                'Tabla B + Acoplamiento = Puntaje B',
+                'Tabla C + Actividad',
+                'Resultado REBA Final'
+            ];
+            
+            document.querySelector('.step-number').textContent = step;
+            document.querySelector('.step-title').textContent = stepTitles[step];
+            
+            // Actualizar progreso visual
+            document.querySelectorAll('.progress-step').forEach((el, i) => {
+                if (i + 1 === step) {
+                    el.classList.add('active');
+                    el.classList.remove('completed');
+                } else if (i + 1 < step) {
+                    el.classList.remove('active');
+                    el.classList.add('completed');
+                } else {
+                    el.classList.remove('active', 'completed');
+                }
+            });
+            
+            // Scroll al inicio del contenedor
+            document.querySelector('.content').scrollTop = 0;
+        }
+
+        function selectDirection(segment, direction) {
+            selectedDirections[segment] = direction;
+            document.querySelectorAll(`[onclick*="selectDirection('${segment}'"]`).forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent.toLowerCase().includes(direction)) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        function downloadResults() {
+            alert('Función de descarga disponible en versión final. Los resultados se mostrarán en PDF.');
+        }
+
+        // Inicialización
+        window.addEventListener('load', () => {
+            console.log('REBA Fase 2 - Interfaz cargada');
+            goToStep(1);
+        });
+    </script>
+</body>
+</html>

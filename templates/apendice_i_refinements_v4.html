@@ -1,5 +1,5 @@
 <style>
-.coupling-nom{margin:8px 0 12px}.coupling-nom-intro{font-size:11px;line-height:1.6;color:#505a54;margin-bottom:10px}.coupling-table-wrap{overflow:auto;border:1px solid #dfe6d8;border-radius:11px}.coupling-table{width:100%;border-collapse:collapse;min-width:760px;font-size:11px}.coupling-table th,.coupling-table td{padding:10px 11px;border-right:1px solid #e7ebe4;border-bottom:1px solid #e7ebe4;vertical-align:top;text-align:left;line-height:1.5}.coupling-table th:last-child,.coupling-table td:last-child{border-right:0}.coupling-table tr:last-child td{border-bottom:0}.coupling-table th{font-size:11px;font-weight:900}.coupling-green{background:#eaf3df}.coupling-orange{background:#fff0d8}.coupling-red{background:#fde5e2}.coupling-level{font-weight:900;text-align:center!important}.coupling-select-title{font-size:11px;font-weight:850;color:#536d25;margin:12px 0 7px}.ai5-realcolor{font-weight:900!important;text-align:center!important;border-radius:0!important}.ai5-realcolor-green{background:#68b84f!important;color:#fff!important}.ai5-realcolor-orange{background:#f2a31d!important;color:#2d1a00!important}.ai5-realcolor-red{background:#e64039!important;color:#fff!important}.ai5-realcolor-purple{background:#62439a!important;color:#fff!important}
+.coupling-nom{margin:8px 0 12px}.coupling-nom-intro{font-size:11px;line-height:1.6;color:#505a54;margin-bottom:10px}.coupling-table-wrap{overflow:auto;border:1px solid #dfe6d8;border-radius:11px}.coupling-table{width:100%;border-collapse:collapse;min-width:760px;font-size:11px}.coupling-table th,.coupling-table td{padding:10px 11px;border-right:1px solid #e7ebe4;border-bottom:1px solid #e7ebe4;vertical-align:top;text-align:left;line-height:1.5}.coupling-table th:last-child,.coupling-table td:last-child{border-right:0}.coupling-table tr:last-child td{border-bottom:0}.coupling-table th{font-size:11px;font-weight:900}.coupling-green{background:#eaf3df}.coupling-orange{background:#fff0d8}.coupling-red{background:#fde5e2}.coupling-level{font-weight:900;text-align:center!important}.coupling-select-title{font-size:11px;font-weight:850;color:#536d25;margin:12px 0 7px}.ai5-realcolor{font-weight:900!important;text-align:center!important}.ai5-realcolor-green{background:#68b84f!important;color:#fff!important}.ai5-realcolor-orange{background:#f2a31d!important;color:#2d1a00!important}.ai5-realcolor-red{background:#e64039!important;color:#fff!important}.ai5-realcolor-purple{background:#62439a!important;color:#fff!important}.vertical-note{font-size:10px;color:#6d756f;margin-top:7px;line-height:1.45}
 </style>
 <script>
 (function(){
@@ -7,37 +7,27 @@
  function findFactorByTitle(prefix){return qsa('#ai2 .factor').find(f=>{const h=f.querySelector('h3');return h&&h.textContent.trim().startsWith(prefix)})}
  const fFactor=findFactorByTitle('f) Acoplamiento mano-carga');
  if(fFactor){
-   const oldChoices=fFactor.querySelector('[data-factor="ai2_agarre"]');
-   fFactor.innerHTML=`<h3>f) Acoplamiento mano-carga (elementos de sujeción)</h3>
-   <div class="coupling-nom"><div class="coupling-nom-intro"><b>Criterio de la NOM:</b> Este factor considera las propiedades geométricas y de diseño de la carga que se va a manejar, en cuanto a su interacción con las manos del trabajador, según se indica a continuación.</div>
-   <div class="coupling-table-wrap"><table class="coupling-table"><thead><tr><th class="coupling-green">Buen agarre</th><th class="coupling-orange">Agarre regular</th><th class="coupling-red">Mal agarre</th></tr></thead><tbody>
-   <tr><td>Contenedores con elementos de sujeción, como asas o manijas bien diseñados, aptos para este propósito.</td><td>Contenedores con asas o manijas mal diseñadas. El material permite hacer un agarre con la mano en pinza.</td><td>Contenedores de diseño deficiente. Partes holgadas, objetos irregulares, voluminosos o difíciles de manejar.</td></tr>
-   <tr><td>Partes holgadas que permiten un agarre cómodo.</td><td>Los dedos deben estar sujetos a 90 grados bajo el contenedor o la carga.</td><td>Sacos no rígidos, como bultos de arena o cemento, o cargas impredecibles.</td></tr>
-   <tr><td class="coupling-level coupling-green">Nivel: Verde<br>Valor: 0</td><td class="coupling-level coupling-orange">Nivel: Naranja<br>Valor: 1</td><td class="coupling-level coupling-red">Nivel: Rojo<br>Valor: 2</td></tr>
-   </tbody></table></div></div>
-   <div class="coupling-select-title">Selecciona la condición observada</div>
-   <div class="choices" data-factor="ai2_agarre"><div class="choice c0" data-v="0">Buen agarre · Verde · 0</div><div class="choice c1" data-v="1">Agarre regular · Naranja · 1</div><div class="choice c2" data-v="2">Mal agarre · Rojo · 2</div></div>`;
-   const box=fFactor.querySelector('[data-factor="ai2_agarre"]');
-   qsa('.choice',box).forEach(c=>c.addEventListener('click',()=>{qsa('.choice',box).forEach(x=>x.classList.remove('active'));c.classList.add('active');if(window.vals&&vals.ai2)vals.ai2.ai2_agarre=Number(c.dataset.v);if(typeof calc==='function')calc()}));
+   fFactor.innerHTML=`<h3>f) Acoplamiento mano-carga (elementos de sujeción)</h3><div class="coupling-nom"><div class="coupling-nom-intro"><b>Criterio de la NOM:</b> Este factor considera las propiedades geométricas y de diseño de la carga que se va a manejar, en cuanto a su interacción con las manos del trabajador, según se indica a continuación.</div><div class="coupling-table-wrap"><table class="coupling-table"><thead><tr><th class="coupling-green">Buen agarre</th><th class="coupling-orange">Agarre regular</th><th class="coupling-red">Mal agarre</th></tr></thead><tbody><tr><td>Contenedores con elementos de sujeción, como asas o manijas bien diseñados, aptos para este propósito.</td><td>Contenedores con asas o manijas mal diseñadas. El material permite hacer un agarre con la mano en pinza.</td><td>Contenedores de diseño deficiente. Partes holgadas, objetos irregulares, voluminosos o difíciles de manejar.</td></tr><tr><td>Partes holgadas que permiten un agarre cómodo.</td><td>Los dedos deben estar sujetos a 90 grados bajo el contenedor o la carga.</td><td>Sacos no rígidos, como bultos de arena o cemento, o cargas impredecibles.</td></tr><tr><td class="coupling-level coupling-green">Nivel: Verde<br>Valor: 0</td><td class="coupling-level coupling-orange">Nivel: Naranja<br>Valor: 1</td><td class="coupling-level coupling-red">Nivel: Rojo<br>Valor: 2</td></tr></tbody></table></div></div><div class="coupling-select-title">Selecciona la condición observada</div><div class="choices" data-factor="ai2_agarre"><div class="choice c0" data-v="0">Buen agarre · Verde · 0</div><div class="choice c1" data-v="1">Agarre regular · Naranja · 1</div><div class="choice c2" data-v="2">Mal agarre · Rojo · 2</div></div>`;
+   const box=fFactor.querySelector('[data-factor="ai2_agarre"]');qsa('.choice',box).forEach(c=>c.addEventListener('click',()=>{qsa('.choice',box).forEach(x=>x.classList.remove('active'));c.classList.add('active');if(window.vals&&vals.ai2)vals.ai2.ai2_agarre=Number(c.dataset.v);if(typeof calc==='function')calc()}));
  }
- function strongPaintAI5(){
+ /* AI.2 c): conservar por separado las dos condiciones rojas que comparten el mismo valor normativo. */
+ const vertical=document.querySelector('#ai2 [data-factor="ai2_vertical"]');
+ if(vertical){
+   const choices=qsa('.choice',vertical); const red=choices.filter(c=>Number(c.dataset.v)===3 || /rojo/i.test(c.textContent));
+   if(red.length>=2){red[0].innerHTML=red[0].textContent.replace(/\s*·?\s*3\s*$/,'')+' · Rojo · 3';red[0].dataset.condition='rojo_vertical_1';red[1].innerHTML=red[1].textContent.replace(/\s*·?\s*3\s*$/,'')+' · Rojo · 3';red[1].dataset.condition='rojo_vertical_2';}
+   vertical.insertAdjacentHTML('afterend','<div class="vertical-note">Las dos condiciones de nivel rojo conservan el mismo valor normativo, pero se registran por separado para documentar con precisión cuál condición fue observada.</div>');
+ }
+ /* AI.5: pintar directamente cada celda Color en el momento en que se renderiza, sin depender del badge ni del MutationObserver. */
+ function paintAI5(){
+   const colors={verde:['#68b84f','#fff'],naranja:['#f2a31d','#2d1a00'],rojo:['#e64039','#fff'],morado:['#62439a','#fff']};
    qsa('#ai5 table.ai5-table tbody tr').forEach(tr=>{
-     qsa('td',tr).forEach(td=>{
-       const txt=td.textContent.trim().toLowerCase();
-       td.classList.remove('ai5-realcolor','ai5-realcolor-green','ai5-realcolor-orange','ai5-realcolor-red','ai5-realcolor-purple');
-       td.style.backgroundColor='';td.style.color='';
-       const color=['verde','naranja','rojo','morado'].find(c=>txt===c || txt.startsWith(c+' '));
-       if(color){
-         td.classList.add('ai5-realcolor','ai5-realcolor-'+color);
-         const map={verde:['#68b84f','#fff'],naranja:['#f2a31d','#2d1a00'],rojo:['#e64039','#fff'],morado:['#62439a','#fff']};
-         td.style.backgroundColor=map[color][0];td.style.color=map[color][1];td.textContent=color.charAt(0).toUpperCase()+color.slice(1);
-       }
-     })
-   })
+     const cells=qsa('td',tr); [1,3,5].forEach(i=>{const td=cells[i];if(!td)return;const txt=td.textContent.trim().toLowerCase();const color=Object.keys(colors).find(c=>txt.includes(c));td.classList.remove('ai5-realcolor','ai5-realcolor-green','ai5-realcolor-orange','ai5-realcolor-red','ai5-realcolor-purple');td.style.removeProperty('background-color');td.style.removeProperty('color');if(color){td.innerHTML=color.charAt(0).toUpperCase()+color.slice(1);td.classList.add('ai5-realcolor','ai5-realcolor-'+color);td.style.setProperty('background-color',colors[color][0],'important');td.style.setProperty('color',colors[color][1],'important');}});
+   });
  }
- const target=document.getElementById('ai5');
- if(target)new MutationObserver(()=>strongPaintAI5()).observe(target,{childList:true,subtree:true});
- document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>setTimeout(strongPaintAI5,20)));
- setTimeout(strongPaintAI5,50);
+ function schedulePaint(){requestAnimationFrame(()=>requestAnimationFrame(paintAI5))}
+ const target=document.getElementById('ai5');if(target)new MutationObserver(schedulePaint).observe(target,{childList:true,subtree:true});
+ document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',schedulePaint));
+ document.addEventListener('click',e=>{if(e.target.closest('.choice'))setTimeout(schedulePaint,0)});
+ setTimeout(schedulePaint,50);
 })();
 </script>

@@ -3,313 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ErgonometApp - Dashboard</title>
+    <title>ErgonometApp - Panel de métodos</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5f7fa;
-        }
-        
-        .navbar {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 15px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        .navbar-title {
-            font-size: 20px;
-            font-weight: 600;
-        }
-        
-        .navbar-user {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .navbar-user button {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        
-        .navbar-user button:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 30px 20px;
-        }
-        
-        .welcome {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        }
-        
-        .welcome h1 {
-            color: #333;
-            margin-bottom: 10px;
-        }
-        
-        .welcome p {
-            color: #666;
-            font-size: 16px;
-        }
-        
-        .instructions {
-            background: #e8f4f8;
-            border-left: 4px solid #0288d1;
-            padding: 15px;
-            margin-bottom: 30px;
-            border-radius: 5px;
-            color: #333;
-            font-size: 15px;
-        }
-        
-        .matrix-section {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            overflow-x: auto;
-        }
-        
-        .matrix-title {
-            background: #0288d1;
-            color: white;
-            padding: 12px 15px;
-            border-radius: 5px 5px 0 0;
-            margin: -20px -20px 20px -20px;
-            font-weight: 600;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13px;
-        }
-        
-        th {
-            background: #f5f5f5;
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
-            font-weight: 600;
-            color: #333;
-        }
-        
-        td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            vertical-align: middle;
-        }
-        
-        tr:nth-child(even) {
-            background: #fafafa;
-        }
-        
-        tr:hover {
-            background: #f0f0f0;
-        }
-        
-        .method-name {
-            font-weight: 600;
-            color: #0288d1;
-            cursor: pointer;
-            text-decoration: underline;
-        }
-        
-        .method-name:hover {
-            color: #667eea;
-        }
-        
-        .badge {
-            display: inline-block;
-            background: #e3f2fd;
-            color: #0288d1;
-            padding: 3px 8px;
-            border-radius: 3px;
-            font-size: 12px;
-            margin: 2px;
-        }
-        
-        .complexity {
-            text-align: center;
-            font-weight: 600;
-        }
-        
-        .complexity.low {
-            color: #4caf50;
-        }
-        
-        .complexity.medium {
-            color: #ff9800;
-        }
-        
-        .complexity.high {
-            color: #f44336;
-        }
-        
-
+        * { box-sizing:border-box; margin:0; padding:0; }
+        body { font-family:"Segoe UI",Arial,sans-serif; background:#f4f7fb; color:#24313d; }
+        .topbar { background:linear-gradient(135deg,#667eea,#764ba2); color:white; padding:17px 30px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 4px 16px rgba(37,49,61,.12); }
+        .brand { font-size:21px; font-weight:800; letter-spacing:-.02em; }
+        .brand small { display:block; font-size:11px; font-weight:500; opacity:.8; letter-spacing:.08em; text-transform:uppercase; margin-top:2px; }
+        .user { display:flex; align-items:center; gap:14px; font-size:14px; }
+        .logout { border:1px solid rgba(255,255,255,.35); background:rgba(255,255,255,.12); color:white; padding:8px 12px; border-radius:8px; cursor:pointer; }
+        .container { max-width:1380px; margin:0 auto; padding:28px 22px 45px; }
+        .hero { background:#fff; border:1px solid #e5eaf1; border-radius:16px; padding:27px 30px; box-shadow:0 6px 24px rgba(28,42,56,.06); margin-bottom:20px; }
+        .hero h1 { font-size:26px; margin-bottom:7px; }
+        .hero p { color:#657487; line-height:1.55; max-width:850px; }
+        .notice { margin:18px 0 22px; padding:14px 16px; background:#eaf7fc; border-left:4px solid #0891d1; border-radius:8px; color:#334155; }
+        .matrix { background:#fff; border:1px solid #e5eaf1; border-radius:16px; overflow:hidden; box-shadow:0 6px 24px rgba(28,42,56,.06); }
+        .matrix-header { background:#078dcc; color:#fff; padding:14px 18px; display:flex; justify-content:space-between; gap:16px; font-weight:750; }
+        .table-wrap { overflow-x:auto; padding:18px; }
+        table { width:100%; border-collapse:collapse; min-width:980px; font-size:13px; }
+        th { text-align:left; padding:12px; background:#f6f8fb; border:1px solid #dce2e9; }
+        td { padding:13px 12px; border:1px solid #dce2e9; vertical-align:middle; }
+        tbody tr:hover { background:#f8fbff; }
+        .method { color:#007fc4; font-weight:750; text-decoration:underline; cursor:pointer; }
+        .badge { display:inline-block; padding:4px 8px; margin:2px; border-radius:5px; background:#e4f3fc; color:#087fb9; font-size:12px; white-space:nowrap; }
+        .status { font-weight:700; font-size:12px; border-radius:999px; padding:5px 9px; display:inline-block; }
+        .status.active { background:#dcfce7; color:#166534; }
+        .status.dev { background:#fef3c7; color:#92400e; }
+        @media(max-width:700px){ .topbar{padding:14px 18px}.container{padding:18px 12px}.hero{padding:21px}.matrix-header{display:block}.matrix-header span{display:block;margin-top:5px;font-size:12px;opacity:.85}.user span{display:none} }
     </style>
 </head>
 <body>
-    <div class="navbar">
-        <div class="navbar-title"> ErgonometApp</div>
-        <div class="navbar-user">
-            <span>Bienvenido</span>
-            <button onclick="logout()">Cerrar Sesión</button>
-        </div>
-    </div>
-    
-    <div class="container">
-        <div class="welcome">
-            <h1>Bienvenido a ErgonometApp</h1>
-            <p>Sistema de evaluación ergonómica con 6 métodos validados según normas mexicanas.</p>
-        </div>
-        
-        <div class="instructions">
-            <strong>ℹ Instrucciones:</strong> Selecciona un método en la matriz abajo. Cada uno evalúa diferentes riesgos ergonómicos. Haz clic en el nombre del método para comenzar.
-        </div>
-        
-        <div class="matrix-section">
-            <div class="matrix-title">
-                 Matriz de características de métodos
-                <span>Haz clic en el método para comenzar la evaluación</span>
+    <header class="topbar">
+        <div class="brand">ErgonometApp<small>Suite de evaluación ergonómica</small></div>
+        <div class="user"><span>Sesión: {{ usuario }}</span><button class="logout" onclick="location.href='/logout'">Cerrar sesión</button></div>
+    </header>
+    <main class="container">
+        <section class="hero">
+            <h1>Panel principal</h1>
+            <p>Selecciona la herramienta que corresponde al riesgo o condición ergonómica que necesitas evaluar. ErgonometApp está concebida como una suite: cada método conserva su propia metodología, entradas, cálculo y reporte.</p>
+        </section>
+        <div class="notice"><strong>Instrucciones:</strong> selecciona un método en la matriz. Los módulos marcados como “En desarrollo” conservarán su lugar en la suite mientras completamos su interfaz y validación metodológica.</div>
+        <section class="matrix">
+            <div class="matrix-header"><div>Matriz de herramientas ErgonometApp</div><span>Haz clic en el método para comenzar</span></div>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>Método</th><th>Riesgo evaluado</th><th>Factores de riesgo</th><th>Partes / dimensión evaluada</th><th>Estado</th></tr></thead>
+                    <tbody>
+                        <tr><td><a class="method" href="/reba/nueva">REBA</a></td><td>Posturas estáticas y dinámicas</td><td><span class="badge">Posturas</span><span class="badge">Carga</span><span class="badge">Repetitividad</span><span class="badge">Fuerza</span></td><td><span class="badge">Cuello</span><span class="badge">Tronco</span><span class="badge">Brazos</span><span class="badge">Muñeca</span><span class="badge">Piernas</span></td><td><span class="status active">Módulo activo</span></td></tr>
+                        <tr><td><a class="method" href="/ley-silla/nueva">Ley Silla</a></td><td>Bipedestación y organización del descanso</td><td><span class="badge">Tiempo de pie</span><span class="badge">Postura</span><span class="badge">Pausas</span></td><td><span class="badge">Puesto de trabajo</span><span class="badge">Miembros inferiores</span></td><td><span class="status dev">Interfaz en desarrollo</span></td></tr>
+                        <tr><td><a class="method" href="/lest/nueva">LEST</a></td><td>Condiciones de trabajo multidimensionales</td><td><span class="badge">Carga física</span><span class="badge">Entorno</span><span class="badge">Carga mental</span><span class="badge">Tiempo</span></td><td><span class="badge">Puesto / tarea</span></td><td><span class="status dev">Interfaz en desarrollo</span></td></tr>
+                        <tr><td><a class="method" href="/apendice-i/nueva">Apéndice I</a></td><td>Manejo manual / levantamiento de cargas</td><td><span class="badge">Carga</span><span class="badge">Frecuencia</span><span class="badge">Distancia</span><span class="badge">Agarre</span></td><td><span class="badge">Espalda</span><span class="badge">Brazos</span></td><td><span class="status dev">Interfaz en desarrollo</span></td></tr>
+                        <tr><td><a class="method" href="/apendice-ii/nueva">Apéndice II</a></td><td>Empuje y arrastre</td><td><span class="badge">Fuerza</span><span class="badge">Frecuencia</span><span class="badge">Distancia</span></td><td><span class="badge">Brazos</span><span class="badge">Espalda</span></td><td><span class="status dev">Interfaz en desarrollo</span></td></tr>
+                        <tr><td><a class="method" href="/cuestionario-nordico/nueva">Cuestionario Nórdico / Kuorinka</a></td><td>Síntomas musculoesqueléticos</td><td><span class="badge">Molestias</span><span class="badge">Prevalencia</span><span class="badge">Ausencia</span></td><td><span class="badge">9 zonas corporales</span></td><td><span class="status dev">Interfaz en desarrollo</span></td></tr>
+                    </tbody>
+                </table>
             </div>
-            
-            <table>
-                <thead>
-                    <tr>
-                        <th>Método</th>
-                        <th>Riesgo Evaluado</th>
-                        <th>Factores de Riesgo</th>
-                        <th>Partes del Cuerpo Evaluadas</th>
-                        <th>Complejidad</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><span class="method-name" onclick="goTo('/reba/nueva')">REBA</span></td>
-                        <td>Posturas estáticas y dinámicas</td>
-                        <td>
-                            <span class="badge">Posturas</span>
-                            <span class="badge">Carga</span>
-                            <span class="badge">Repetitividad</span>
-                            <span class="badge">Fuerzas</span>
-                        </td>
-                        <td>
-                            <span class="badge">Cabeza/Cuello</span>
-                            <span class="badge">Tronco</span>
-                            <span class="badge">Brazos/Hombro</span>
-                            <span class="badge">Manos/Muñeca</span>
-                            <span class="badge">Piernas</span>
-                        </td>
-                        <td><span class="complexity high">Alta</span></td>
-                    </tr>
-                    <tr>
-                        <td><span class="method-name" onclick="goTo('/ley-silla/nueva')">Ley SILLA</span></td>
-                        <td>Trabajos de pie prolongados</td>
-                        <td>
-                            <span class="badge">Posturas</span>
-                            <span class="badge">Bipedestación</span>
-                        </td>
-                        <td>
-                            <span class="badge">Piernas</span>
-                            <span class="badge">Espalda</span>
-                        </td>
-                        <td><span class="complexity low">Baja</span></td>
-                    </tr>
-                    <tr>
-                        <td><span class="method-name" onclick="goTo('/lest/nueva')">LEST</span></td>
-                        <td>Condiciones de trabajo</td>
-                        <td>
-                            <span class="badge">Posturas</span>
-                            <span class="badge">Carga</span>
-                            <span class="badge">Repetitividad</span>
-                        </td>
-                        <td>
-                            <span class="badge">Todo el cuerpo</span>
-                        </td>
-                        <td><span class="complexity medium">Media</span></td>
-                    </tr>
-                    <tr>
-                        <td><span class="method-name" onclick="goTo('/apendice-i/nueva')">Apéndice I</span></td>
-                        <td>Levantamiento de cargas</td>
-                        <td>
-                            <span class="badge">Carga</span>
-                            <span class="badge">Frecuencia</span>
-                            <span class="badge">Distancia</span>
-                        </td>
-                        <td>
-                            <span class="badge">Espalda</span>
-                            <span class="badge">Brazos</span>
-                        </td>
-                        <td><span class="complexity high">Alta</span></td>
-                    </tr>
-                    <tr>
-                        <td><span class="method-name" onclick="goTo('/apendice-ii/nueva')">Apéndice II</span></td>
-                        <td>Empuje y arrastre</td>
-                        <td>
-                            <span class="badge">Fuerzas</span>
-                            <span class="badge">Frecuencia</span>
-                        </td>
-                        <td>
-                            <span class="badge">Brazos</span>
-                            <span class="badge">Espalda</span>
-                        </td>
-                        <td><span class="complexity medium">Media</span></td>
-                    </tr>
-                    <tr>
-                        <td><span class="method-name" onclick="goTo('/cuestionario-nordico/nueva')">Kuorinka</span></td>
-                        <td>Síntomas musculoesqueléticos</td>
-                        <td>
-                            <span class="badge">Síntomas</span>
-                            <span class="badge">Dolor</span>
-                        </td>
-                        <td>
-                            <span class="badge">Todo el cuerpo</span>
-                        </td>
-                        <td><span class="complexity low">Baja</span></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    
-    <script>
-        function logout() {
-            if (confirm('¿Deseas cerrar sesión?')) {
-                window.location.href = '/logout';
-            }
-        }
-        
-        function goTo(url) {
-            window.location.href = url;
-        }
-    </script>
+        </section>
+    </main>
 </body>
 </html>

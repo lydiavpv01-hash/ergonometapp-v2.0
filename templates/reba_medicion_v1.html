@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medidor Angular REBA - Evaluación Ergonómica</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/medidor.css') }}">
+</head>
+<body>
+    <div class="medidor-container">
+        
+        <!-- SIDEBAR - CONTROLES -->
+        <div class="medidor-sidebar">
+            <h2>Medidor Angular</h2>
+            
+            <!-- CARGA DE IMAGEN -->
+            <div class="control-group">
+                <label>Cargar Fotografía</label>
+                <input type="file" id="imageInput" accept="image/*">
+                <div class="control-buttons">
+                    <button class="btn btn-primary" onclick="clearImage()">Limpiar</button>
+                </div>
+            </div>
+            
+            <!-- INFORMACIÓN DE IMAGEN -->
+            <div class="measurement-info">
+                <strong>Imagen Cargada:</strong>
+                <div id="imageInfo">No hay imagen</div>
+            </div>
+            
+            <!-- CONTROLES DE MEDICIÓN -->
+            <div class="control-group">
+                <label>Herramientas</label>
+                <div class="control-buttons">
+                    <button class="btn btn-primary" onclick="repeatMeasurement()">Repetir</button>
+                    <button class="btn btn-danger" onclick="clearPoints()">Limpiar Puntos</button>
+                </div>
+            </div>
+            
+            <!-- INFORMACIÓN DE MEDICIÓN ACTUAL -->
+            <div class="measurement-info" id="currentMeasurementInfo">
+                <strong>Medición Actual:</strong>
+                <div id="measurementStatus">Esperando puntos...</div>
+                <div id="measurementAngle"></div>
+                <div class="control-buttons" style="margin-top: 10px;">
+                    <button class="btn btn-primary" id="saveMeasurementBtn" onclick="saveMeasurement()" disabled>Guardar</button>
+                </div>
+            </div>
+            
+            <!-- MEDICIONES GUARDADAS -->
+            <div class="measurement-info" style="background: rgba(76, 205, 196, 0.1); border-color: #4ECDC4;">
+                <strong>Mediciones Guardadas: <span id="measurementCount">0</span></strong>
+                <div class="measurements-list" id="measurementsList"></div>
+            </div>
+            
+            <!-- INSTRUCCIONES -->
+            <div class="measurement-info" style="background: rgba(255, 107, 107, 0.1); border-color: #FF6B6B; font-size: 11px;">
+                <strong>Instrucciones:</strong>
+                1. Carga una fotografía<br>
+                2. Haz clic para colocar 3 puntos (A, B, C)<br>
+                3. El ángulo se calcula en B<br>
+                4. Arrastra los puntos para ajustar<br>
+                5. Usa zoom con rueda del ratón<br>
+                6. Guarda la medición
+            </div>
+        </div>
+        
+        <!-- CANVAS AREA -->
+        <div class="medidor-canvas-container">
+            <div class="canvas-header">
+                <h3>Área de Medición</h3>
+                <div class="zoom-controls">
+                    <button onclick="zoomOut()">-</button>
+                    <span class="zoom-value"><span id="zoomValue">100</span>%</span>
+                    <button onclick="zoomIn()">+</button>
+                    <button onclick="resetZoom()">Resetear</button>
+                </div>
+            </div>
+            
+            <div class="canvas-wrapper">
+                <canvas id="medidor-canvas" width="800" height="600"></canvas>
+                <div class="canvas-info" id="canvasInfo">
+                    Carga una imagen para empezar
+                </div>
+            </div>
+        </div>
+        
+        <!-- REFERENCE PANEL (Preparado para Fase 2) -->
+        <div class="reference-panel" id="referencePanel">
+            <h3>Referencia REBA</h3>
+            <img class="reference-image" id="referenceImage" src="" alt="Referencia REBA">
+            <div class="reference-ranges" id="referenceRanges"></div>
+        </div>
+    </div>
+    
+    <!-- SCRIPTS -->
+    <script src="{{ url_for('static', filename='js/medidor_angular.js') }}"></script>
+    <script>
+        // ==================== INSTANCIA GLOBAL ====================
+        let medidor = null;
+        
+        // ==================== INICIALIZACIÓN ====================
+        document.addEventListener('DOMContentLoaded', function() {
+            medidor = new MedidorAngular('medidor-canvas');
+            
+            // Event listener para carga de imagen
+            document.getElementById('imageInput').addEventListener('change', handleImageSelect);
+            
+            // Redimensionar canvas al cambiar tamaño de ventana
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+        });
+        
+        // ==================== FUNCIONES DE INTERFAZ ====================
+        function resizeCanvas() {
+            const container = document.querySelector('.canvas-wrapper');
+            if (!container) return;
+            
+            const canvas = document.getElementById('medidor-canvas');
+            canvas.width = container.clientWidth - 2;
+            canvas.height = container.clientHeight - 2;
+            
+            if (medidor && medidor.image) {
+                medidor.fitImageToCanvas();
+                medidor.draw();
+            }
+        }
+        
+        function handleImageSelect(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            medidor.loadImage(file).then(info => {
+                updateImageInfo(info);
+                updateCanvasInfo(`Imagen cargada: ${info.size}`);
+                
+                // Limpiar puntos anteriores
+                medidor.clearCurrentPoints();
+                updateMeasurementUI();
+            }).catch(err => {
+                alert('Error al cargar imagen: ' + err.message);
+            });
+        }
+        
+        function clearImage() {
+            document.getElementById('imageInput').value = '';
+            medidor.image = null;
+            medidor.clearCurrentPoints();
+            updateImageInfo(null);
+            updateCanvasInfo('Carga una imagen para empezar');
+            updateMeasurementUI();
+            medidor.draw();
+        }
+        
+        function clearPoints() {
+            medidor.clearCurrentPoints();
+            updateMeasurementUI();
+        }
+        
+        function repeatMeasurement() {
+            medidor.repeatMeasurement();
+            updateMeasurementUI();
+        }
+        
+        function saveMeasurement() {
+            const measurement = medidor.saveMeasurement();
+            if (measurement) {
+                updateMeasurementsList();
+                clearPoints();
+                showNotification(`Medición guardada: ${measurement.angle.toFixed(1)}°`);
+            }
+        }
+        
+        function deleteMeasurement(id) {
+            medidor.deleteMeasurement(id);
+            updateMeasurementsList();
+        }
+        
+        function zoomIn() {
+            if (!medidor.image) return;
+            medidor.zoom = Math.min(3, medidor.zoom * 1.2);
+            medidor.draw();
+            updateZoomUI();
+        }
+        
+        function zoomOut() {
+            if (!medidor.image) return;
+            medidor.zoom = Math.max(0.5, medidor.zoom / 1.2);
+            medidor.draw();
+            updateZoomUI();
+        }
+        
+        function resetZoom() {
+            if (!medidor.image) return;
+            medidor.fitImageToCanvas();
+            medidor.draw();
+            updateZoomUI();
+        }
+        
+        // ==================== ACTUALIZACIÓN DE UI ====================
+        function updateImageInfo(info) {
+            const infoDiv = document.getElementById('imageInfo');
+            if (info) {
+                infoDiv.innerHTML = `
+                    <div style="font-size: 12px; margin-top: 5px;">
+                        Resolución: ${info.size}<br>
+                        Zoom: ${(medidor.zoom * 100).toFixed(0)}%
+                    </div>
+                `;
+            } else {
+                infoDiv.innerHTML = 'No hay imagen';
+            }
+        }
+        
+        function updateCanvasInfo(text) {
+            document.getElementById('canvasInfo').textContent = text;
+        }
+        
+        function updateZoomUI() {
+            const zoomPercent = Math.round(medidor.zoom * 100);
+            document.getElementById('zoomValue').textContent = zoomPercent;
+            
+            if (medidor.image) {
+                updateImageInfo({
+                    width: medidor.imageWidth,
+                    height: medidor.imageHeight,
+                    size: `${medidor.imageWidth}x${medidor.imageHeight}px`
+                });
+            }
+        }
+        
+        function updateMeasurementUI() {
+            const statusDiv = document.getElementById('measurementStatus');
+            const angleDiv = document.getElementById('measurementAngle');
+            const saveBtn = document.getElementById('saveMeasurementBtn');
+            
+            if (medidor.points.length === 0) {
+                statusDiv.innerHTML = 'Esperando puntos...';
+                angleDiv.innerHTML = '';
+                saveBtn.disabled = true;
+            } else if (medidor.points.length < 3) {
+                statusDiv.innerHTML = `Puntos colocados: ${medidor.points.length}/3`;
+                angleDiv.innerHTML = '';
+                saveBtn.disabled = true;
+            } else if (medidor.currentMeasurement) {
+                statusDiv.innerHTML = `Medición completada`;
+                angleDiv.innerHTML = `<strong style="font-size: 18px; color: #667eea;">
+                    ${medidor.currentMeasurement.angle.toFixed(1)}°
+                </strong>`;
+                saveBtn.disabled = false;
+            }
+        }
+        
+        function updateMeasurementsList() {
+            const listDiv = document.getElementById('measurementsList');
+            const countSpan = document.getElementById('measurementCount');
+            
+            countSpan.textContent = medidor.measurements.length;
+            
+            if (medidor.measurements.length === 0) {
+                listDiv.innerHTML = '<div style="color: #999; font-size: 12px;">No hay mediciones guardadas</div>';
+                return;
+            }
+            
+            listDiv.innerHTML = medidor.measurements.map((m, i) => `
+                <div class="measurement-item">
+                    <div>
+                        <strong>#${i + 1}</strong> ${m.angle.toFixed(1)}°<br>
+                        <span class="range-value">${m.timestamp}</span>
+                    </div>
+                    <button onclick="deleteMeasurement(${m.id})">Borrar</button>
+                </div>
+            `).join('');
+        }
+        
+        function showNotification(message) {
+            const notif = document.createElement('div');
+            notif.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #4ECDC4;
+                color: white;
+                padding: 15px 20px;
+                border-radius: 4px;
+                font-size: 14px;
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+            `;
+            notif.textContent = message;
+            document.body.appendChild(notif);
+            
+            setTimeout(() => notif.remove(), 3000);
+        }
+        
+        // Agregar animación CSS
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(400px);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Monitorizar cambios en medidor
+        setInterval(() => {
+            if (medidor && medidor.image) {
+                updateMeasurementUI();
+                updateZoomUI();
+            }
+        }, 100);
+    </script>
+</body>
+</html>

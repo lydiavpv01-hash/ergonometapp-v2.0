@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pruebas - Medidor Angular</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Courier New', monospace;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #4EC9B0;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #4EC9B0;
+            padding-bottom: 10px;
+        }
+        
+        h2 {
+            color: #569CD6;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        
+        .button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .button:hover {
+            background: #5568d3;
+            transform: scale(1.05);
+        }
+        
+        .button:active {
+            transform: scale(0.98);
+        }
+        
+        .output {
+            background: #1e1e1e;
+            border: 1px solid #3e3e3e;
+            border-radius: 4px;
+            padding: 20px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+        
+        .output-line {
+            margin-bottom: 8px;
+        }
+        
+        .pass {
+            color: #6A9955;
+        }
+        
+        .fail {
+            color: #F48771;
+        }
+        
+        .info {
+            color: #569CD6;
+        }
+        
+        .warning {
+            color: #DCDCAA;
+        }
+        
+        .success {
+            color: #4EC9B0;
+            font-weight: bold;
+        }
+        
+        .summary {
+            background: #252526;
+            border: 2px solid #4EC9B0;
+            border-radius: 4px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .summary-stat {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .stat {
+            background: #1e1e1e;
+            padding: 12px;
+            border-radius: 4px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            color: #4EC9B0;
+            font-weight: bold;
+        }
+        
+        .test-details {
+            background: #252526;
+            border: 1px solid #3e3e3e;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+        
+        .test-name {
+            color: #569CD6;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .test-result {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 8px;
+        }
+        
+        .test-result-item {
+            background: #1e1e1e;
+            padding: 8px;
+            border-radius: 3px;
+        }
+        
+        .test-result-label {
+            color: #999;
+            font-size: 11px;
+        }
+        
+        .test-result-value {
+            color: #d4d4d4;
+            margin-top: 3px;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-left: 8px;
+        }
+        
+        .badge-pass {
+            background: #6A9955;
+            color: white;
+        }
+        
+        .badge-fail {
+            background: #F48771;
+            color: white;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Pruebas de Cálculo Angular - Medidor REBA</h1>
+        
+        <div class="section">
+            <button class="button" onclick="runTests()">Ejecutar Pruebas Geométricas</button>
+            <button class="button" onclick="clearOutput()">Limpiar Salida</button>
+        </div>
+        
+        <div class="output" id="output"></div>
+        
+        <div class="summary" id="summary" style="display: none;">
+            <h2>Resumen de Resultados</h2>
+            <div class="summary-stat">
+                <div class="stat">
+                    <div class="stat-label">Pruebas Pasadas</div>
+                    <div class="stat-value" id="passedCount">0</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Pruebas Fallidas</div>
+                    <div class="stat-value" id="failedCount">0</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Total de Pruebas</div>
+                    <div class="stat-value" id="totalCount">0</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Tasa de Éxito</div>
+                    <div class="stat-value" id="successRate">0%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/medidor_angular.js') }}"></script>
+    <script src="{{ url_for('static', filename='../../tests/test_medidor_angular.js') }}"></script>
+    
+    <script>
+        const output = document.getElementById('output');
+        
+        function log(message, type = 'info') {
+            const line = document.createElement('div');
+            line.className = `output-line ${type}`;
+            line.textContent = message;
+            output.appendChild(line);
+            output.scrollTop = output.scrollHeight;
+        }
+        
+        function clearOutput() {
+            output.innerHTML = '';
+            document.getElementById('summary').style.display = 'none';
+        }
+        
+        function runTests() {
+            clearOutput();
+            
+            log('=== PRUEBAS DE CÁLCULO ANGULAR ===', 'info');
+            log('', 'info');
+            
+            // Crear instancia de pruebas
+            const tester = new AngularCalculatorTest();
+            
+            // Ejecutar pruebas
+            tester.runAllTests();
+            
+            // Mostrar resultados
+            log('=== RESULTADOS DETALLADOS ===', 'info');
+            log('', 'info');
+            
+            tester.results.forEach((result, index) => {
+                const status = result.passed ? 'PASS' : 'FAIL';
+                const statusClass = result.passed ? 'pass' : 'fail';
+                
+                log(`${index + 1}. ${result.name}`, statusClass);
+                log(`   Esperado: ${result.expected.toFixed(2)}°`, 'info');
+                log(`   Obtenido: ${result.result.toFixed(2)}°`, 'info');
+                log(`   Error: ${result.error.toFixed(4)}°`, result.error < 0.1 ? 'pass' : 'fail');
+                log('', 'info');
+            });
+            
+            // Resumen
+            log('=== RESUMEN ===', 'info');
+            log(`Pruebas pasadas: ${tester.passed}/${tester.results.length}`, tester.passed === tester.results.length ? 'success' : 'warning');
+            log(`Pruebas fallidas: ${tester.failed}/${tester.results.length}`, tester.failed === 0 ? 'success' : 'fail');
+            log(`Tasa de éxito: ${((tester.passed / tester.results.length) * 100).toFixed(1)}%`, 'info');
+            log('', 'info');
+            
+            if (tester.failed === 0) {
+                log('✓ TODAS LAS PRUEBAS PASADAS', 'success');
+            } else {
+                log(`✗ ${tester.failed} PRUEBAS FALLIDAS`, 'fail');
+            }
+            
+            // Actualizar resumen
+            document.getElementById('summary').style.display = 'block';
+            document.getElementById('passedCount').textContent = tester.passed;
+            document.getElementById('failedCount').textContent = tester.failed;
+            document.getElementById('totalCount').textContent = tester.results.length;
+            document.getElementById('successRate').textContent = 
+                ((tester.passed / tester.results.length) * 100).toFixed(1) + '%';
+        }
+    </script>
+</body>
+</html>

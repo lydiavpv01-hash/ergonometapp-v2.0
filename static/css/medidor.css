@@ -1,0 +1,346 @@
+/* MEDIDOR ANGULAR - Estilos */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f5f5f5;
+}
+
+.medidor-container {
+    display: flex;
+    height: 100vh;
+    background: #fff;
+}
+
+/* SIDEBAR - Controles */
+.medidor-sidebar {
+    width: 300px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+    overflow-y: auto;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.medidor-sidebar h2 {
+    font-size: 18px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    padding-bottom: 10px;
+}
+
+.control-group {
+    margin-bottom: 20px;
+}
+
+.control-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    opacity: 0.9;
+}
+
+.control-group input[type="file"],
+.control-group select {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.control-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.btn {
+    padding: 10px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: white;
+    color: #667eea;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: #f0f0f0;
+    transform: scale(1.02);
+}
+
+.btn-danger {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.btn-danger:hover:not(:disabled) {
+    background: rgba(255, 75, 75, 0.8);
+    border-color: white;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.measurement-info {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    padding: 15px;
+    margin-top: 20px;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.measurement-info strong {
+    display: block;
+    margin-top: 8px;
+}
+
+.measurements-list {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    padding: 12px;
+    margin-top: 20px;
+    max-height: 200px;
+    overflow-y: auto;
+    font-size: 12px;
+}
+
+.measurement-item {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 8px;
+    margin-bottom: 5px;
+    border-radius: 3px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.measurement-item button {
+    background: rgba(255, 75, 75, 0.8);
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 2px;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.measurement-item button:hover {
+    background: rgba(255, 75, 75, 1);
+}
+
+/* CANVAS AREA */
+.medidor-canvas-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: #fafafa;
+}
+
+.canvas-header {
+    background: white;
+    padding: 15px 20px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.canvas-header h3 {
+    font-size: 16px;
+    color: #333;
+}
+
+.zoom-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.zoom-controls button {
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.2s ease;
+}
+
+.zoom-controls button:hover {
+    background: #f0f0f0;
+}
+
+.zoom-value {
+    min-width: 60px;
+    text-align: center;
+    font-size: 13px;
+    color: #666;
+}
+
+.canvas-wrapper {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#medidor-canvas {
+    cursor: crosshair;
+    border: 1px solid #e0e0e0;
+    background: white;
+    display: block;
+}
+
+.canvas-info {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-family: 'Courier New', monospace;
+    z-index: 10;
+}
+
+.angle-label {
+    position: absolute;
+    background: rgba(102, 126, 234, 0.9);
+    color: white;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: bold;
+    pointer-events: none;
+    z-index: 5;
+    white-space: nowrap;
+}
+
+/* REFERENCE PANEL (FASE 2) */
+.reference-panel {
+    width: 250px;
+    background: white;
+    border-left: 1px solid #ddd;
+    padding: 15px;
+    overflow-y: auto;
+    display: none;
+}
+
+.reference-panel.visible {
+    display: block;
+}
+
+.reference-image {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.reference-ranges {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.reference-ranges h4 {
+    margin-bottom: 8px;
+    color: #667eea;
+    font-size: 13px;
+}
+
+.range-item {
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.range-item:last-child {
+    border-bottom: none;
+}
+
+.range-value {
+    color: #666;
+    font-size: 11px;
+}
+
+/* RESPONSIVO */
+@media (max-width: 1024px) {
+    .medidor-sidebar {
+        width: 250px;
+    }
+    
+    .reference-panel {
+        width: 180px;
+    }
+}
+
+@media (max-width: 768px) {
+    .medidor-container {
+        flex-direction: column;
+        height: auto;
+    }
+    
+    .medidor-sidebar,
+    .medidor-canvas-container,
+    .reference-panel {
+        width: 100%;
+    }
+    
+    .medidor-canvas-container {
+        min-height: 500px;
+    }
+}
+
+/* ESTADO DE CARGA */
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #999;
+    font-size: 14px;
+}
+
+.spinner {
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #667eea;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    margin-right: 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

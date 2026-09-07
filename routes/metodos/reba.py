@@ -26,6 +26,17 @@ def nueva():
     
     return render_template('reba_v5_pdf_profesional.html')
 
+@bp_reba.route('/medicion', methods=['GET'])
+@login_required
+def medicion():
+    """Herramienta de medición angular - FASE 1"""
+    return render_template('reba_medicion_v1.html')
+
+@bp_reba.route('/test', methods=['GET'])
+def test():
+    """Página de pruebas del cálculo angular (sin login requerido para desarrollo)"""
+    return render_template('test_medidor_angular.html')
+
 @bp_reba.route('/resultado/<int:id>')
 @login_required
 def resultado(id):

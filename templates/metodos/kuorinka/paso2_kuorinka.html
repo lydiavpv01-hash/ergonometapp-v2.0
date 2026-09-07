@@ -1,12 +1,12 @@
 <!-- templates/metodos/kuorinka/paso2_preguntas.html -->
 {% extends "base.html" %}
-{% block title %}Cuestionario NÃ³rdico - Preguntas{% endblock %}
+{% block title %}Cuestionario NÃrdico - Preguntas{% endblock %}
 {% block content %}
 <div class="container mt-4">
   <div class="row">
     <div class="col-lg-11 mx-auto">
-      <h2>ğŸ“‹ Cuestionario NÃ³rdico: SÃ­ntomas MusculoesquelÃ©ticos</h2>
-      <p class="text-muted">EvalÃºe molestias en 9 Ã¡reas del cuerpo</p>
+      <h2> Cuestionario NÃrdico: SÃntomas MusculoesquelÃticos</h2>
+      <p class="text-muted">EvalÃe molestias en 9 Ãreas del cuerpo</p>
       <div class="progress mb-4" style="height: 8px;">
         <div class="progress-bar" style="width: 50%;"></div>
       </div>
@@ -15,8 +15,8 @@
         
         <!-- INSTRUCCIONES -->
         <div class="alert alert-info mb-4">
-          <h5>ğŸ“Œ Instrucciones</h5>
-          <p class="mb-0">Marque "<strong>SÃ­</strong>" si ha tenido molestias en cada zona, considerando los Ãºltimos 12 meses y 7 dÃ­as recientes. TambiÃ©n indique si ha consultado mÃ©dico o faltado al trabajo.</p>
+          <h5> Instrucciones</h5>
+          <p class="mb-0">Marque "<strong>SÃ</strong>" si ha tenido molestias en cada zona, considerando los Ãltimos 12 meses y 7 dÃas recientes. TambiÃn indique si ha consultado mÃdico o faltado al trabajo.</p>
         </div>
         
         {% for zona in zonas %}
@@ -35,29 +35,29 @@
                 <input class="form-check-input" type="checkbox" id="molestias_12m_{{ zona.id }}" 
                        name="molestias_12m" value="{{ zona.id }}">
                 <label class="form-check-label" for="molestias_12m_{{ zona.id }}">
-                  <strong>Â¿Ha tenido molestias en los Ãºltimos 12 meses?</strong>
+                  <strong>ÂHa tenido molestias en los Ãltimos 12 meses?</strong>
                 </label>
               </div>
             </div>
             
-            <!-- Pregunta 2: Molestias 7 dÃ­as -->
+            <!-- Pregunta 2: Molestias 7 dÃas -->
             <div class="mb-3">
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" id="molestias_7d_{{ zona.id }}" 
                        name="molestias_7d" value="{{ zona.id }}">
                 <label class="form-check-label" for="molestias_7d_{{ zona.id }}">
-                  <strong>Â¿Ha tenido molestias en los Ãºltimos 7 dÃ­as?</strong>
+                  <strong>ÂHa tenido molestias en los Ãltimos 7 dÃas?</strong>
                 </label>
               </div>
             </div>
             
-            <!-- Pregunta 3: Consulta mÃ©dica -->
+            <!-- Pregunta 3: Consulta mÃdica -->
             <div class="mb-3">
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" id="consulta_{{ zona.id }}" 
                        name="consulta_medica" value="{{ zona.id }}">
                 <label class="form-check-label" for="consulta_{{ zona.id }}">
-                  <strong>Â¿Ha consultado a un mÃ©dico?</strong>
+                  <strong>ÂHa consultado a un mÃdico?</strong>
                 </label>
               </div>
             </div>
@@ -68,7 +68,7 @@
                 <input class="form-check-input" type="checkbox" id="ausencia_{{ zona.id }}" 
                        name="ausencia_trabajo" value="{{ zona.id }}">
                 <label class="form-check-label" for="ausencia_{{ zona.id }}">
-                  <strong>Â¿Ha faltado al trabajo?</strong>
+                  <strong>ÂHa faltado al trabajo?</strong>
                 </label>
               </div>
             </div>
@@ -79,9 +79,9 @@
         {% endfor %}
         
         <div class="d-flex justify-content-between">
-          <button type="button" class="btn btn-outline-secondary" onclick="window.history.back()">â† AtrÃ¡s</button>
+          <button type="button" class="btn btn-outline-secondary" onclick="window.history.back()"> AtrÃs</button>
           <button type="button" class="btn btn-primary btn-lg" id="btn-enviar">
-            Ver Resultado â†’
+            Ver Resultado 
           </button>
         </div>
       </form>

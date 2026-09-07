@@ -1,18 +1,18 @@
 <!-- templates/metodos/apendice_ii/paso3_resultado.html -->
 {% extends "base.html" %}
-{% block title %}Apéndice II - Resultado{% endblock %}
+{% block title %}Ap�ndice II - Resultado{% endblock %}
 {% block content %}
 <div class="container mt-4">
   <div class="row">
     <div class="col-lg-11 mx-auto">
-      <h2>📊 Apéndice II: Resultado del {{ resultado.tipo|upper }} - Paso 3 de 3</h2>
+      <h2> Ap�ndice II: Resultado del {{ resultado.tipo|upper }} - Paso 3 de 3</h2>
       <div class="progress mb-4" style="height: 8px;">
         <div class="progress-bar" style="width: 100%;"></div>
       </div>
       
-      <!-- ══════════════════════════════════════════════════════════════════════════ -->
+      <!--  -->
       <!-- RESULTADO PRINCIPAL -->
-      <!-- ══════════════════════════════════════════════════════════════════════════ -->
+      <!--  -->
       
       <div class="card mb-4" style="border-left: 6px solid {{ resultado.color }};">
         <div class="card-body">
@@ -27,25 +27,25 @@
                 </span>
               </div>
               <div class="text-muted mt-3">
-                <strong>Índice de Esfuerzo</strong><br>
+                <strong>�ndice de Esfuerzo</strong><br>
                 (PSI - Push/Pull Strain Index)<br>
                 Rango: 0-5
               </div>
             </div>
             <div class="col-md-6">
-              <h5>📌 Interpretación</h5>
+              <h5> Interpretaci�n</h5>
               <p class="mb-3"><strong>{{ resultado.descripcion }}</strong></p>
-              <p class="mb-3"><strong>Acción recomendada:</strong> {{ resultado.accion }}</p>
+              <p class="mb-3"><strong>Acci�n recomendada:</strong> {{ resultado.accion }}</p>
               <div class="alert" style="background-color: {{ resultado.color }}20; border-color: {{ resultado.color }};">
                 <strong>{{ resultado.nivel_riesgo }}</strong><br>
                 {% if resultado.indice_esfuerzo <= 1 %}
-                  Actividad segura para la mayoría de trabajadores
+                  Actividad segura para la mayor�a de trabajadores
                 {% elif resultado.indice_esfuerzo <= 1.5 %}
                   Algunos trabajadores pueden sufrir lesiones
                 {% elif resultado.indice_esfuerzo <= 2.5 %}
-                  Intervención recomendada para proteger trabajadores
+                  Intervenci�n recomendada para proteger trabajadores
                 {% else %}
-                  Intervención inmediata requerida
+                  Intervenci�n inmediata requerida
                 {% endif %}
               </div>
             </div>
@@ -53,20 +53,20 @@
         </div>
       </div>
       
-      <!-- ══════════════════════════════════════════════════════════════════════════ -->
-      <!-- PARÁMETROS INGRESADOS -->
-      <!-- ══════════════════════════════════════════════════════════════════════════ -->
+      <!--  -->
+      <!-- PAR�METROS INGRESADOS -->
+      <!--  -->
       
       <div class="card mb-4">
         <div class="card-header bg-light">
-          <h5>⚙️ Parámetros de la Tarea</h5>
+          <h5> Par�metros de la Tarea</h5>
         </div>
         <div class="card-body">
           <div class="row">
             <div class="col-md-6">
               <table class="table table-sm">
                 <tr>
-                  <td><strong>Tipo de acción:</strong></td>
+                  <td><strong>Tipo de acci�n:</strong></td>
                   <td><strong>{{ resultado.tipo|upper }}</strong></td>
                 </tr>
                 <tr>
@@ -94,7 +94,7 @@
                   <td>{{ resultado.frecuencia }} acc/min</td>
                 </tr>
                 <tr>
-                  <td><strong>Duración:</strong></td>
+                  <td><strong>Duraci�n:</strong></td>
                   <td>{{ resultado.duracion }} horas</td>
                 </tr>
                 <tr>
@@ -107,13 +107,13 @@
         </div>
       </div>
       
-      <!-- ══════════════════════════════════════════════════════════════════════════ -->
-      <!-- LÍMITES RECOMENDADOS (RWL) -->
-      <!-- ══════════════════════════════════════════════════════════════════════════ -->
+      <!--  -->
+      <!-- L�MITES RECOMENDADOS (RWL) -->
+      <!--  -->
       
       <div class="card mb-4">
         <div class="card-header bg-light">
-          <h5>📋 Límites Recomendados (RWL)</h5>
+          <h5> L�mites Recomendados (RWL)</h5>
         </div>
         <div class="card-body">
           <div class="row">
@@ -121,14 +121,14 @@
               <div class="alert alert-info">
                 <strong>RWL Inicial:</strong><br>
                 <h4 style="margin-top: 10px;">{{ resultado.rwl.inicial }} kg</h4>
-                <small>Fuerza máxima recomendada para iniciar movimiento</small>
+                <small>Fuerza m�xima recomendada para iniciar movimiento</small>
               </div>
             </div>
             <div class="col-md-6">
               <div class="alert alert-warning">
                 <strong>RWL Sostenida:</strong><br>
                 <h4 style="margin-top: 10px;">{{ resultado.rwl.sostenida }} kg</h4>
-                <small>Fuerza máxima recomendada para mantener movimiento</small>
+                <small>Fuerza m�xima recomendada para mantener movimiento</small>
               </div>
             </div>
           </div>
@@ -139,7 +139,7 @@
                 <tr>
                   <th>Factor</th>
                   <th>Valor Actual</th>
-                  <th>Límite (RWL)</th>
+                  <th>L�mite (RWL)</th>
                   <th>Estado</th>
                 </tr>
               </thead>
@@ -150,9 +150,9 @@
                   <td>{{ resultado.rwl.inicial }} kg</td>
                   <td>
                     {% if resultado.fuerza_inicial <= resultado.rwl.inicial %}
-                      <span class="badge bg-success">✓ OK</span>
+                      <span class="badge bg-success"> OK</span>
                     {% else %}
-                      <span class="badge bg-danger">✗ EXCEDE</span>
+                      <span class="badge bg-danger"> EXCEDE</span>
                     {% endif %}
                   </td>
                 </tr>
@@ -162,9 +162,9 @@
                   <td>{{ resultado.rwl.sostenida }} kg</td>
                   <td>
                     {% if resultado.fuerza_sostenida <= resultado.rwl.sostenida %}
-                      <span class="badge bg-success">✓ OK</span>
+                      <span class="badge bg-success"> OK</span>
                     {% else %}
-                      <span class="badge bg-danger">✗ EXCEDE</span>
+                      <span class="badge bg-danger"> EXCEDE</span>
                     {% endif %}
                   </td>
                 </tr>
@@ -174,13 +174,13 @@
         </div>
       </div>
       
-      <!-- ══════════════════════════════════════════════════════════════════════════ -->
-      <!-- ÍNDICES PARCIALES -->
-      <!-- ══════════════════════════════════════════════════════════════════════════ -->
+      <!--  -->
+      <!-- �NDICES PARCIALES -->
+      <!--  -->
       
       <div class="card mb-4">
         <div class="card-header bg-light">
-          <h5>🧮 Índices Parciales</h5>
+          <h5> �ndices Parciales</h5>
         </div>
         <div class="card-body">
           <div class="row">
@@ -214,9 +214,9 @@
             <div class="col-md-3 text-center mb-3">
               <div class="card bg-light">
                 <div class="card-body">
-                  <h6>Duración</h6>
+                  <h6>Duraci�n</h6>
                   <h3>{{ resultado.indices.duracion }}</h3>
-                  <small>Factor de duración</small>
+                  <small>Factor de duraci�n</small>
                 </div>
               </div>
             </div>
@@ -224,19 +224,19 @@
         </div>
       </div>
       
-      <!-- ══════════════════════════════════════════════════════════════════════════ -->
+      <!--  -->
       <!-- RECOMENDACIONES -->
-      <!-- ══════════════════════════════════════════════════════════════════════════ -->
+      <!--  -->
       
       <div class="card mb-4" style="border-left: 6px solid {{ resultado.color }};">
         <div class="card-header" style="background-color: {{ resultado.color }}20;">
-          <h5>💡 Recomendaciones</h5>
+          <h5> Recomendaciones</h5>
         </div>
         <div class="card-body">
           <ul class="list-unstyled">
             {% for rec in resultado.recomendaciones %}
             <li class="mb-2">
-              {% if '💪' in rec or '⏱' in rec or '📏' in rec or '🔧' in rec %}
+              {% if '' in rec or '' in rec or '' in rec or '' in rec %}
                 <strong>{{ rec }}</strong>
               {% else %}
                 {{ rec }}
@@ -247,18 +247,18 @@
         </div>
       </div>
       
-      <!-- ══════════════════════════════════════════════════════════════════════════ -->
-      <!-- BOTONES DE ACCIÓN -->
-      <!-- ══════════════════════════════════════════════════════════════════════════ -->
+      <!--  -->
+      <!-- BOTONES DE ACCI�N -->
+      <!--  -->
       
       <div class="d-flex justify-content-between">
-        <button type="button" class="btn btn-outline-secondary" onclick="window.history.back()">← Atrás</button>
+        <button type="button" class="btn btn-outline-secondary" onclick="window.history.back()"> Atr�s</button>
         <div>
           <a href="/" class="btn btn-primary">
-            🏠 Volver al inicio
+             Volver al inicio
           </a>
           <button type="button" class="btn btn-success" onclick="window.print()">
-            📄 Imprimir / Guardar PDF
+             Imprimir / Guardar PDF
           </button>
         </div>
       </div>

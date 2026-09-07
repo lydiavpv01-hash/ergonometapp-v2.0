@@ -178,33 +178,33 @@
 </head>
 <body>
     <div class="navbar">
-        <div class="navbar-title">üìä ErgonometApp</div>
+        <div class="navbar-title"> ErgonometApp</div>
         <div class="navbar-user">
             <span>Bienvenido</span>
-            <button onclick="logout()">Cerrar Sesi√≥n</button>
+            <button onclick="logout()">Cerrar Sesi√n</button>
         </div>
     </div>
     
     <div class="container">
         <div class="welcome">
             <h1>Bienvenido a ErgonometApp</h1>
-            <p>Sistema de evaluaci√≥n ergon√≥mica con 6 m√©todos validados seg√∫n normas mexicanas.</p>
+            <p>Sistema de evaluaci√n ergon√mica con 6 m√todos validados seg√n normas mexicanas.</p>
         </div>
         
         <div class="instructions">
-            <strong>‚ÑπÔ∏è Instrucciones:</strong> Selecciona un m√©todo en la matriz abajo. Cada uno eval√∫a diferentes riesgos ergon√≥micos. Haz clic en el nombre del m√©todo para comenzar.
+            <strong> Instrucciones:</strong> Selecciona un m√todo en la matriz abajo. Cada uno eval√a diferentes riesgos ergon√micos. Haz clic en el nombre del m√todo para comenzar.
         </div>
         
         <div class="matrix-section">
             <div class="matrix-title">
-                üìã Matriz de caracter√≠sticas de m√©todos
-                <span>Haz clic en el m√©todo para comenzar la evaluaci√≥n</span>
+                 Matriz de caracter√sticas de m√todos
+                <span>Haz clic en el m√todo para comenzar la evaluaci√n</span>
             </div>
             
             <table>
                 <thead>
                     <tr>
-                        <th>M√©todo</th>
+                        <th>M√todo</th>
                         <th>Riesgo Evaluado</th>
                         <th>Factores de Riesgo</th>
                         <th>Partes del Cuerpo Evaluadas</th>
@@ -213,7 +213,7 @@
                 <tbody>
                     <tr>
                         <td><span class="method-name" onclick="goTo('/reba/nueva')">REBA</span></td>
-                        <td>Posturas est√°ticas y din√°micas</td>
+                        <td>Posturas est√ticas y din√micas</td>
                         <td>
                             <span class="badge">Posturas</span>
                             <span class="badge">Carga</span>
@@ -224,7 +224,7 @@
                             <span class="badge">Cabeza/Cuello</span>
                             <span class="badge">Tronco</span>
                             <span class="badge">Brazos/Hombro</span>
-                            <span class="badge">Manos/Mu√±eca</span>
+                            <span class="badge">Manos/Mu√eca</span>
                             <span class="badge">Piernas</span>
                         </td>
                     </tr>
@@ -233,7 +233,7 @@
                         <td>Trabajos de pie prolongados</td>
                         <td>
                             <span class="badge">Posturas</span>
-                            <span class="badge">Bipedestaci√≥n</span>
+                            <span class="badge">Bipedestaci√n</span>
                         </td>
                         <td>
                             <span class="badge">Piernas</span>
@@ -253,7 +253,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><span class="method-name" onclick="goTo('/apendice-i/nueva')">Ap√©ndice I</span></td>
+                        <td><span class="method-name" onclick="goTo('/apendice-i/nueva')">Ap√ndice I</span></td>
                         <td>Levantamiento de cargas</td>
                         <td>
                             <span class="badge">Carga</span>
@@ -266,7 +266,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><span class="method-name" onclick="goTo('/apendice-ii/nueva')">Ap√©ndice II</span></td>
+                        <td><span class="method-name" onclick="goTo('/apendice-ii/nueva')">Ap√ndice II</span></td>
                         <td>Empuje y arrastre</td>
                         <td>
                             <span class="badge">Fuerzas</span>
@@ -279,9 +279,9 @@
                     </tr>
                     <tr>
                         <td><span class="method-name" onclick="goTo('/cuestionario-nordico/nueva')">Kuorinka</span></td>
-                        <td>S√≠ntomas musculoesquel√©ticos</td>
+                        <td>S√ntomas musculoesquel√ticos</td>
                         <td>
-                            <span class="badge">S√≠ntomas</span>
+                            <span class="badge">S√ntomas</span>
                             <span class="badge">Dolor</span>
                         </td>
                         <td>
@@ -295,7 +295,7 @@
     
     <script>
         function logout() {
-            if (confirm('¬øDeseas cerrar sesi√≥n?')) {
+            if (confirm('¬Deseas cerrar sesi√n?')) {
                 window.location.href = '/logout';
             }
         }

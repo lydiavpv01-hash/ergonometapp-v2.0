@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REBA v6 - Evaluación Ergonómica Profesional</title>
+    <title>REBA v6 - Evaluaci�n Ergon�mica Profesional</title>
     <style>
         * {
             margin: 0;
@@ -541,46 +541,46 @@
     <div class="layout">
         <!-- SIDEBAR -->
         <aside class="sidebar">
-            <div class="sidebar-title">📋 MIS EVALUACIONES</div>
+            <div class="sidebar-title"> MIS EVALUACIONES</div>
             
             <div class="evaluador-info">
-                <div class="evaluador-nombre">👤 Lydia Peralta</div>
+                <div class="evaluador-nombre"> Lydia Peralta</div>
                 <div style="font-size: 11px; margin-top: 5px;">lydia@concienciaverde.mx</div>
             </div>
             
             <div id="listaEvaluaciones">
                 <div class="evaluacion-item">
-                    <div class="evaluador-nombre">Juan García López</div>
+                    <div class="evaluador-nombre">Juan Garc�a L�pez</div>
                     <div class="evaluacion-fecha">02/09/2026 14:30</div>
                 </div>
             </div>
             
-            <button class="btn-nueva-eval">+ Nueva Evaluación</button>
-            <button class="btn-logout">Cerrar Sesión</button>
+            <button class="btn-nueva-eval">+ Nueva Evaluaci�n</button>
+            <button class="btn-logout">Cerrar Sesi�n</button>
         </aside>
         
         <!-- MAIN -->
         <main class="main-content">
             <div class="header">
-                <h1>📋 REBA v6 - Evaluación Ergonómica</h1>
-                <p>Con Kinovea + Imágenes de referencia + Base de Datos</p>
+                <h1> REBA v6 - Evaluaci�n Ergon�mica</h1>
+                <p>Con Kinovea + Im�genes de referencia + Base de Datos</p>
             </div>
             
             <!-- DATOS PERSONA -->
             <div class="container">
-                <div class="container-title">👤 Datos de la Persona Evaluada</div>
+                <div class="container-title"> Datos de la Persona Evaluada</div>
                 <div class="form-grid">
                     <div class="form-group">
                         <label>Nombre <span class="required">*</span></label>
-                        <input type="text" id="nombre" placeholder="Juan García López" required>
+                        <input type="text" id="nombre" placeholder="Juan Garc�a L�pez" required>
                     </div>
                     <div class="form-group">
                         <label>Puesto <span class="required">*</span></label>
                         <input type="text" id="puesto" placeholder="Operario" required>
                     </div>
                     <div class="form-group">
-                        <label>Área</label>
-                        <input type="text" id="area" placeholder="Producción">
+                        <label>�rea</label>
+                        <input type="text" id="area" placeholder="Producci�n">
                     </div>
                     <div class="form-group">
                         <label>Fecha</label>
@@ -593,73 +593,73 @@
             <div class="main-grid">
                 <!-- KINOVEA -->
                 <div class="kinovea-container">
-                    <div class="kinovea-header">📷 KINOVEA - Imágenes de Referencia <span class="required">*</span></div>
+                    <div class="kinovea-header"> KINOVEA - Im�genes de Referencia <span class="required">*</span></div>
                     
                     <!-- IMAGEN 1: CUELLO -->
                     <div class="imagen-bloque">
-                        <div class="imagen-titulo">① Cuello - Imagen de Referencia <span class="required">*</span></div>
+                        <div class="imagen-titulo"> Cuello - Imagen de Referencia <span class="required">*</span></div>
                         <div class="upload-area required-field" id="area1" onclick="document.getElementById('file1').click()">
-                            📷 Cargar imagen de referencia (Obligatoria)
+                             Cargar imagen de referencia (Obligatoria)
                         </div>
                         <input type="file" id="file1" class="file-input" accept="image/*" onchange="cargarImagen(1, this)">
                         <canvas id="canvas1" width="600" height="400"></canvas>
                         <div class="kinovea-controles" id="controles1">
-                            <button class="btn-kinovea btn-medir" onclick="kinovea1.iniciarMedir()">📏 Medir</button>
-                            <button class="btn-kinovea btn-editar" onclick="kinovea1.iniciarEditar()">✏️ Editar</button>
-                            <button class="btn-kinovea btn-limpiar" onclick="kinovea1.limpiar()">🗑️ Limpiar</button>
+                            <button class="btn-kinovea btn-medir" onclick="kinovea1.iniciarMedir()"> Medir</button>
+                            <button class="btn-kinovea btn-editar" onclick="kinovea1.iniciarEditar()"> Editar</button>
+                            <button class="btn-kinovea btn-limpiar" onclick="kinovea1.limpiar()"> Limpiar</button>
                         </div>
                         <div class="kinovea-info" id="info1"></div>
-                        <div class="error-message" id="error1">⚠️ Debes cargar una imagen de referencia para medir</div>
+                        <div class="error-message" id="error1"> Debes cargar una imagen de referencia para medir</div>
                     </div>
                     
                     <!-- IMAGEN 2: TORSO -->
                     <div class="imagen-bloque">
-                        <div class="imagen-titulo">② Torso - Imagen de Referencia <span class="required">*</span></div>
+                        <div class="imagen-titulo"> Torso - Imagen de Referencia <span class="required">*</span></div>
                         <div class="upload-area required-field" id="area2" onclick="document.getElementById('file2').click()">
-                            📷 Cargar imagen de referencia (Obligatoria)
+                             Cargar imagen de referencia (Obligatoria)
                         </div>
                         <input type="file" id="file2" class="file-input" accept="image/*" onchange="cargarImagen(2, this)">
                         <canvas id="canvas2" width="600" height="400"></canvas>
                         <div class="kinovea-controles" id="controles2">
-                            <button class="btn-kinovea btn-medir" onclick="kinovea2.iniciarMedir()">📏 Medir</button>
-                            <button class="btn-kinovea btn-editar" onclick="kinovea2.iniciarEditar()">✏️ Editar</button>
-                            <button class="btn-kinovea btn-limpiar" onclick="kinovea2.limpiar()">🗑️ Limpiar</button>
+                            <button class="btn-kinovea btn-medir" onclick="kinovea2.iniciarMedir()"> Medir</button>
+                            <button class="btn-kinovea btn-editar" onclick="kinovea2.iniciarEditar()"> Editar</button>
+                            <button class="btn-kinovea btn-limpiar" onclick="kinovea2.limpiar()"> Limpiar</button>
                         </div>
                         <div class="kinovea-info" id="info2"></div>
-                        <div class="error-message" id="error2">⚠️ Debes cargar una imagen de referencia para medir</div>
+                        <div class="error-message" id="error2"> Debes cargar una imagen de referencia para medir</div>
                     </div>
                     
                     <!-- IMAGEN 3: BRAZO -->
                     <div class="imagen-bloque">
-                        <div class="imagen-titulo">③ Brazo y Muñeca - Imagen de Referencia <span class="required">*</span></div>
+                        <div class="imagen-titulo"> Brazo y Mu�eca - Imagen de Referencia <span class="required">*</span></div>
                         <div class="upload-area required-field" id="area3" onclick="document.getElementById('file3').click()">
-                            📷 Cargar imagen de referencia (Obligatoria)
+                             Cargar imagen de referencia (Obligatoria)
                         </div>
                         <input type="file" id="file3" class="file-input" accept="image/*" onchange="cargarImagen(3, this)">
                         <canvas id="canvas3" width="600" height="400"></canvas>
                         <div class="kinovea-controles" id="controles3">
-                            <button class="btn-kinovea btn-medir" onclick="kinovea3.iniciarMedir()">📏 Medir</button>
-                            <button class="btn-kinovea btn-editar" onclick="kinovea3.iniciarEditar()">✏️ Editar</button>
-                            <button class="btn-kinovea btn-limpiar" onclick="kinovea3.limpiar()">🗑️ Limpiar</button>
+                            <button class="btn-kinovea btn-medir" onclick="kinovea3.iniciarMedir()"> Medir</button>
+                            <button class="btn-kinovea btn-editar" onclick="kinovea3.iniciarEditar()"> Editar</button>
+                            <button class="btn-kinovea btn-limpiar" onclick="kinovea3.limpiar()"> Limpiar</button>
                         </div>
                         <div class="kinovea-info" id="info3"></div>
-                        <div class="error-message" id="error3">⚠️ Debes cargar una imagen de referencia para medir</div>
+                        <div class="error-message" id="error3"> Debes cargar una imagen de referencia para medir</div>
                     </div>
                 </div>
                 
                 <!-- INPUTS REBA -->
                 <div class="inputs-container">
-                    <div class="inputs-header">⚙️ REBA - Selecciona Valores</div>
+                    <div class="inputs-header"> REBA - Selecciona Valores</div>
                     
-                    <div class="grupo-titulo">SECCIÓN A: Cuello, Torso, Piernas</div>
+                    <div class="grupo-titulo">SECCI�N A: Cuello, Torso, Piernas</div>
                     <div class="separador-puntaje" style="position: relative;">
                         <div class="separador-label">Puntajes A</div>
                     </div>
                     
                     <div class="opcion-grupo">
                         <div class="opcion-titulo"><span class="opcion-numero">1</span>Cuello</div>
-                        <div class="opcion-item"><input type="radio" name="cuello" value="1" onchange="calcular()"><label>0-20°</label><span class="puntos">+1</span></div>
-                        <div class="opcion-item"><input type="radio" name="cuello" value="2" onchange="calcular()"><label>20°+</label><span class="puntos">+2</span></div>
+                        <div class="opcion-item"><input type="radio" name="cuello" value="1" onchange="calcular()"><label>0-20�</label><span class="puntos">+1</span></div>
+                        <div class="opcion-item"><input type="radio" name="cuello" value="2" onchange="calcular()"><label>20�+</label><span class="puntos">+2</span></div>
                         <div style="margin-top: 6px; padding: 6px; background: #fff3e0; border-radius: 3px;">
                             <div class="opcion-item"><input type="checkbox" id="cuello_t" onchange="calcular()"><label for="cuello_t">Torcido</label><span class="puntos">+1</span></div>
                             <div class="opcion-item"><input type="checkbox" id="cuello_i" onchange="calcular()"><label for="cuello_i">Inclinado</label><span class="puntos">+1</span></div>
@@ -668,9 +668,9 @@
                     
                     <div class="opcion-grupo">
                         <div class="opcion-titulo"><span class="opcion-numero">2</span>Torso</div>
-                        <div class="opcion-item"><input type="radio" name="torso" value="1" onchange="calcular()"><label>0-20°</label><span class="puntos">+1</span></div>
-                        <div class="opcion-item"><input type="radio" name="torso" value="2" onchange="calcular()"><label>20-60°</label><span class="puntos">+2</span></div>
-                        <div class="opcion-item"><input type="radio" name="torso" value="3" onchange="calcular()"><label>>60°</label><span class="puntos">+3</span></div>
+                        <div class="opcion-item"><input type="radio" name="torso" value="1" onchange="calcular()"><label>0-20�</label><span class="puntos">+1</span></div>
+                        <div class="opcion-item"><input type="radio" name="torso" value="2" onchange="calcular()"><label>20-60�</label><span class="puntos">+2</span></div>
+                        <div class="opcion-item"><input type="radio" name="torso" value="3" onchange="calcular()"><label>>60�</label><span class="puntos">+3</span></div>
                         <div style="margin-top: 6px; padding: 6px; background: #fff3e0; border-radius: 3px;">
                             <div class="opcion-item"><input type="checkbox" id="torso_i" onchange="calcular()"><label for="torso_i">Inclinado</label><span class="puntos">+1</span></div>
                         </div>
@@ -682,7 +682,7 @@
                         <div class="opcion-item"><input type="radio" name="piernas" value="2" onchange="calcular()"><label>Una levantada</label><span class="puntos">+2</span></div>
                     </div>
                     
-                    <div class="grupo-titulo">SECCIÓN B: Brazo, Antebrazo, Muñeca</div>
+                    <div class="grupo-titulo">SECCI�N B: Brazo, Antebrazo, Mu�eca</div>
                     <div class="separador-puntaje" style="position: relative;">
                         <div class="separador-label">Puntajes B</div>
                     </div>
@@ -695,17 +695,17 @@
                     
                     <div class="opcion-grupo">
                         <div class="opcion-titulo"><span class="opcion-numero">5</span>Antebrazo</div>
-                        <div class="opcion-item"><input type="radio" name="antebrazo" value="1" onchange="calcular()"><label>60-100°</label><span class="puntos">+1</span></div>
+                        <div class="opcion-item"><input type="radio" name="antebrazo" value="1" onchange="calcular()"><label>60-100�</label><span class="puntos">+1</span></div>
                         <div class="opcion-item"><input type="radio" name="antebrazo" value="2" onchange="calcular()"><label>Resto</label><span class="puntos">+2</span></div>
                     </div>
                     
                     <div class="opcion-grupo">
-                        <div class="opcion-titulo"><span class="opcion-numero">6</span>Muñeca</div>
+                        <div class="opcion-titulo"><span class="opcion-numero">6</span>Mu�eca</div>
                         <div class="opcion-item"><input type="radio" name="muneca" value="1" onchange="calcular()"><label>Neutro</label><span class="puntos">+1</span></div>
-                        <div class="opcion-item"><input type="radio" name="muneca" value="2" onchange="calcular()"><label>±15°</label><span class="puntos">+2</span></div>
+                        <div class="opcion-item"><input type="radio" name="muneca" value="2" onchange="calcular()"><label>�15�</label><span class="puntos">+2</span></div>
                     </div>
                     
-                    <div class="grupo-titulo">SECCIÓN C: Carga y Acoplamiento</div>
+                    <div class="grupo-titulo">SECCI�N C: Carga y Acoplamiento</div>
                     <div class="separador-puntaje" style="position: relative;">
                         <div class="separador-label">Puntajes C</div>
                     </div>
@@ -721,7 +721,7 @@
             
             <!-- RESULTADO -->
             <div class="resultado-container">
-                <div class="resultado-header">📊 Cálculo Automático REBA</div>
+                <div class="resultado-header"> C�lculo Autom�tico REBA</div>
                 
                 <div class="resultado-grid">
                     <div class="resultado-caja">
@@ -739,15 +739,15 @@
                 </div>
                 
                 <div class="puntuacion-final">
-                    <div>🎯 PUNTAJE REBA FINAL</div>
+                    <div> PUNTAJE REBA FINAL</div>
                     <div class="puntuacion-valor" id="puntajeReba">-</div>
                     <div style="font-size: 14px; font-weight: 600;" id="riesgo">-</div>
                 </div>
                 
                 <div class="botones">
-                    <button class="btn btn-guardar" onclick="guardarEvaluacion()">💾 Guardar</button>
-                    <button class="btn btn-pdf" id="btnPDF" disabled onclick="descargarPDF()">📥 PDF</button>
-                    <button class="btn btn-reset" onclick="limpiar()">🔄 Limpiar</button>
+                    <button class="btn btn-guardar" onclick="guardarEvaluacion()"> Guardar</button>
+                    <button class="btn btn-pdf" id="btnPDF" disabled onclick="descargarPDF()"> PDF</button>
+                    <button class="btn btn-reset" onclick="limpiar()"> Limpiar</button>
                 </div>
             </div>
         </main>
@@ -783,7 +783,7 @@
                         this.canvas.height = img.height * scale;
                         this.canvas.style.display = 'block';
                         this.redraw();
-                        document.getElementById(this.infoId).textContent = '✅ Imagen cargada - Haz clic en [📏 Medir]';
+                        document.getElementById(this.infoId).textContent = ' Imagen cargada - Haz clic en [ Medir]';
                     };
                     img.src = e.target.result;
                 };
@@ -798,7 +798,7 @@
                 const btn = controles.querySelector('.btn-medir');
                 if (this.mode === 'measure') {
                     btn.classList.add('active');
-                    document.getElementById(this.infoId).textContent = '🎯 Modo MEDIR: Haz 3 clics (inicio → articulación → fin)';
+                    document.getElementById(this.infoId).textContent = ' Modo MEDIR: Haz 3 clics (inicio  articulaci�n  fin)';
                 } else {
                     btn.classList.remove('active');
                     document.getElementById(this.infoId).textContent = '';
@@ -813,7 +813,7 @@
                 const btn = controles.querySelector('.btn-editar');
                 if (this.mode === 'edit') {
                     btn.classList.add('active');
-                    document.getElementById(this.infoId).textContent = '✏️ Modo EDITAR: Arrastra puntos para ajustar';
+                    document.getElementById(this.infoId).textContent = ' Modo EDITAR: Arrastra puntos para ajustar';
                 } else {
                     btn.classList.remove('active');
                 }
@@ -824,7 +824,7 @@
                 this.mode = 'none';
                 this.updateButtonStates();
                 this.redraw();
-                document.getElementById(this.infoId).textContent = '🗑️ Medición limpiada';
+                document.getElementById(this.infoId).textContent = ' Medici�n limpiada';
             }
             
             updateButtonStates() {
@@ -906,7 +906,7 @@
                 const mag2 = Math.sqrt(v2.x * v2.x + v2.y * v2.y);
                 const cos_a = Math.max(-1, Math.min(1, dot / (mag1 * mag2)));
                 const angulo = Math.acos(cos_a) * 180 / Math.PI;
-                document.getElementById(this.infoId).textContent = `📐 Ángulo: ${angulo.toFixed(1)}°`;
+                document.getElementById(this.infoId).textContent = ` �ngulo: ${angulo.toFixed(1)}�`;
                 return angulo;
             }
             
@@ -956,7 +956,7 @@
         let kinovea2 = new Kinovea('canvas2');
         let kinovea3 = new Kinovea('canvas3');
         
-        // Función para cargar imagen
+        // Funci�n para cargar imagen
         function cargarImagen(num, input) {
             const file = input.files[0];
             if (!file) return;
@@ -973,7 +973,7 @@
             canvas.style.display = 'block';
             controles.classList.add('visible');
             
-            // Actualizar área
+            // Actualizar �rea
             area.classList.add('loaded');
             area.classList.remove('required-field');
         }
@@ -1025,7 +1025,7 @@
             cc = Math.min(12, cc);
             
             let r = cc;
-            let risk = r === 1 ? '✅ Riesgo Mínimo' : r <= 3 ? '⚠️ Riesgo Bajo' : r <= 7 ? '🔴 Riesgo Medio' : r <= 10 ? '🔴🔴 Riesgo Alto' : '🔴🔴🔴 Riesgo Muy Alto';
+            let risk = r === 1 ? ' Riesgo M�nimo' : r <= 3 ? ' Riesgo Bajo' : r <= 7 ? '� Riesgo Medio' : r <= 10 ? '�� Riesgo Alto' : '��� Riesgo Muy Alto';
             
             document.getElementById('resultA').textContent = a;
             document.getElementById('resultB').textContent = b;
@@ -1037,14 +1037,14 @@
         
         function guardarEvaluacion() {
             if (!document.getElementById('nombre').value) {
-                alert('⚠️ Completa nombre');
+                alert(' Completa nombre');
                 return;
             }
-            alert('✅ Evaluación guardada en BD');
+            alert(' Evaluaci�n guardada en BD');
         }
         
         function descargarPDF() {
-            alert('📥 Descargando PDF...');
+            alert(' Descargando PDF...');
         }
         
         function limpiar() {

@@ -238,23 +238,23 @@
 </head>
 <body>
     <div class="container">
-        <h1>üìè REBA Kinovea - Medidor de √Ångulos</h1>
+        <h1> REBA Kinovea - Medidor de √ngulos</h1>
         
         <div class="info">
             <strong>Estado:</strong> 
-            <span id="modeDisplay">üìè Modo MEDIR</span> | 
+            <span id="modeDisplay"> Modo MEDIR</span> | 
             <strong>Puntos:</strong> 
             <span id="pointsDisplay">0/3</span> | 
-            <strong>√Ångulo:</strong> 
-            <span id="angleDisplay">0¬∞</span>
+            <strong>√ngulo:</strong> 
+            <span id="angleDisplay">0¬</span>
         </div>
         
-        <!-- SECCI√ìN DE CARGA DE IMAGEN -->
+        <!-- SECCI√N DE CARGA DE IMAGEN -->
         <div class="upload-section">
-            <h3>üìÅ Cargar Imagen del Trabajador</h3>
+            <h3> Cargar Imagen del Trabajador</h3>
             <div class="file-input-wrapper">
                 <input type="file" id="imageInput" accept="image/*" />
-                <label for="imageInput" class="file-input-label">üì∑ Seleccionar Foto</label>
+                <label for="imageInput" class="file-input-label"> Seleccionar Foto</label>
                 <span class="file-name" id="fileName">Sin imagen seleccionada</span>
             </div>
         </div>
@@ -267,26 +267,26 @@
             
             <!-- PANEL DERECHO -->
             <div class="sidebar">
-                <!-- √ÅNGULO GRANDE -->
+                <!-- √NGULO GRANDE -->
                 <div class="status-box">
-                    <h3>√Ångulo Medido</h3>
-                    <div class="status-value" id="bigAngle">0¬∞</div>
+                    <h3>√ngulo Medido</h3>
+                    <div class="status-value" id="bigAngle">0¬</div>
                 </div>
                 
                 <!-- LISTA DE PUNTOS -->
                 <div class="points-info">
                     <h3>Puntos Dibujados</h3>
                     <div id="pointsList">
-                        <p style="color: #999; font-size: 12px;">Sin puntos a√∫n</p>
+                        <p style="color: #999; font-size: 12px;">Sin puntos a√n</p>
                     </div>
                 </div>
                 
                 <!-- BOTONES -->
                 <div class="buttons">
-                    <button class="btn-draw active" id="btnDraw" onclick="setMode('draw')">üìè Medir (3 clics)</button>
-                    <button class="btn-edit" id="btnEdit" onclick="setMode('edit')">‚úèÔ∏è Editar (arrastra)</button>
-                    <button class="btn-clear" id="btnClear" onclick="clearPoints()">üóëÔ∏è Limpiar</button>
-                    <button class="btn-save" onclick="saveMeasure()">‚úì Guardar Medida</button>
+                    <button class="btn-draw active" id="btnDraw" onclick="setMode('draw')"> Medir (3 clics)</button>
+                    <button class="btn-edit" id="btnEdit" onclick="setMode('edit')"> Editar (arrastra)</button>
+                    <button class="btn-clear" id="btnClear" onclick="clearPoints()"> Limpiar</button>
+                    <button class="btn-save" onclick="saveMeasure()"> Guardar Medida</button>
                 </div>
                 
                 <!-- DEBUG -->
@@ -298,12 +298,12 @@
         
         <!-- INSTRUCCIONES -->
         <div class="instructions">
-            <h3>üìã C√≥mo Usar</h3>
+            <h3> C√mo Usar</h3>
             <p><strong>1. CARGA IMAGEN:</strong> Haz clic en "Seleccionar Foto" para cargar una imagen del trabajador</p>
             <p><strong>2. MEDIR:</strong> Haz 3 clics en el canvas sobre la imagen para crear los puntos</p>
-            <p style="margin-left: 20px;">‚Ä¢ Primer clic: Punto P1 (azul) - inicio de la l√≠nea</p>
-            <p style="margin-left: 20px;">‚Ä¢ Segundo clic: Punto P2 (rojo) - articulaci√≥n/centro (AQU√ç SE MIDE)</p>
-            <p style="margin-left: 20px;">‚Ä¢ Tercer clic: Punto P3 (azul) - fin de la l√≠nea</p>
+            <p style="margin-left: 20px;"> Primer clic: Punto P1 (azul) - inicio de la l√nea</p>
+            <p style="margin-left: 20px;"> Segundo clic: Punto P2 (rojo) - articulaci√n/centro (AQU√ SE MIDE)</p>
+            <p style="margin-left: 20px;"> Tercer clic: Punto P3 (azul) - fin de la l√nea</p>
             <p><strong>3. EDITAR:</strong> Cambia a modo "Editar" y arrastra cualquier punto para ajustar</p>
             <p><strong>4. LIMPIAR:</strong> Borra todos los puntos y empieza de nuevo</p>
         </div>
@@ -331,14 +331,14 @@
                 img.onload = function() {
                     backgroundImage = img;
                     
-                    // Ajustar canvas al tama√±o de la imagen
+                    // Ajustar canvas al tama√o de la imagen
                     const maxWidth = 800;
                     const ratio = maxWidth / img.width;
                     canvas.width = img.width * ratio;
                     canvas.height = img.height * ratio;
                     
-                    addDebug(`‚úì Imagen cargada: ${img.width}x${img.height}`);
-                    document.getElementById('fileName').textContent = `‚úì ${file.name}`;
+                    addDebug(` Imagen cargada: ${img.width}x${img.height}`);
+                    document.getElementById('fileName').textContent = ` ${file.name}`;
                     draw();
                 };
                 img.src = event.target.result;
@@ -372,7 +372,7 @@
                 }
             }
             
-            // Dibujar l√≠neas
+            // Dibujar l√neas
             if (points.length >= 2) {
                 ctx.strokeStyle = '#667eea';
                 ctx.lineWidth = 3;
@@ -409,7 +409,7 @@
                 ctx.lineWidth = 2;
                 ctx.stroke();
                 
-                // N√∫mero
+                // N√mero
                 ctx.fillStyle = 'white';
                 ctx.font = 'bold 16px Arial';
                 ctx.textAlign = 'center';
@@ -418,7 +418,7 @@
             }
         }
         
-        // ===== ARCO DE √ÅNGULO =====
+        // ===== ARCO DE √NGULO =====
         function drawArc() {
             if (points.length !== 3) return;
             
@@ -430,7 +430,7 @@
             const v1 = { x: p1.x - p2.x, y: p1.y - p2.y };
             const v2 = { x: p3.x - p2.x, y: p3.y - p2.y };
             
-            // √Ångulo
+            // √ngulo
             const dot = v1.x * v2.x + v1.y * v2.y;
             const mag1 = Math.sqrt(v1.x * v1.x + v1.y * v1.y);
             const mag2 = Math.sqrt(v2.x * v2.x + v2.y * v2.y);
@@ -440,7 +440,7 @@
             const cos = dot / (mag1 * mag2);
             const angle = Math.acos(Math.max(-1, Math.min(1, cos))) * (180 / Math.PI);
             
-            // √Ångulos en radianes
+            // √ngulos en radianes
             const angle1 = Math.atan2(v1.y, v1.x);
             const angle2 = Math.atan2(v2.y, v2.x);
             
@@ -453,7 +453,7 @@
             ctx.arc(p2.x, p2.y, radius, angle1, angle2, angle2 > angle1 ? false : true);
             ctx.stroke();
             
-            // Texto del √°ngulo
+            // Texto del √ngulo
             const midAngle = (angle1 + angle2) / 2;
             const textX = p2.x + Math.cos(midAngle) * (radius + 35);
             const textY = p2.y + Math.sin(midAngle) * (radius + 35);
@@ -462,11 +462,11 @@
             ctx.font = 'bold 18px Arial';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(Math.round(angle) + '¬∞', textX, textY);
+            ctx.fillText(Math.round(angle) + '¬', textX, textY);
             
             // Actualizar UI
-            document.getElementById('bigAngle').textContent = Math.round(angle) + '¬∞';
-            document.getElementById('angleDisplay').textContent = Math.round(angle) + '¬∞';
+            document.getElementById('bigAngle').textContent = Math.round(angle) + '¬';
+            document.getElementById('angleDisplay').textContent = Math.round(angle) + '¬';
         }
         
         // ===== EVENTOS DEL MOUSE =====
@@ -479,7 +479,7 @@
             
             if (mode === 'draw' && points.length < 3) {
                 points.push({ x, y });
-                addDebug(`‚úì Punto P${points.length} agregado`);
+                addDebug(` Punto P${points.length} agregado`);
                 updateUI();
                 draw();
             }
@@ -500,7 +500,7 @@
                 
                 if (dist < 20) {
                     draggingPoint = i;
-                    addDebug(`‚úì Editando P${i + 1}`);
+                    addDebug(` Editando P${i + 1}`);
                     break;
                 }
             }
@@ -535,11 +535,11 @@
             
             if (mode === 'draw') {
                 btnDraw.classList.add('active');
-                document.getElementById('modeDisplay').textContent = 'üìè Modo MEDIR';
+                document.getElementById('modeDisplay').textContent = ' Modo MEDIR';
                 addDebug('Modo MEDIR - Haz 3 clics');
             } else {
                 btnEdit.classList.add('active');
-                document.getElementById('modeDisplay').textContent = '‚úèÔ∏è Modo EDITAR';
+                document.getElementById('modeDisplay').textContent = ' Modo EDITAR';
                 addDebug('Modo EDITAR - Arrastra los puntos');
             }
         }
@@ -547,11 +547,11 @@
         function clearPoints() {
             points = [];
             draggingPoint = -1;
-            document.getElementById('bigAngle').textContent = '0¬∞';
-            document.getElementById('angleDisplay').textContent = '0¬∞';
+            document.getElementById('bigAngle').textContent = '0¬';
+            document.getElementById('angleDisplay').textContent = '0¬';
             updateUI();
             draw();
-            addDebug('‚úì Canvas limpiado');
+            addDebug(' Canvas limpiado');
         }
         
         function updateUI() {
@@ -578,18 +578,18 @@
                 return;
             }
             const angle = Math.round(parseFloat(document.getElementById('angleDisplay').textContent));
-            alert(`‚úì Medida guardada: ${angle}¬∞`);
+            alert(` Medida guardada: ${angle}¬`);
         }
         
         function addDebug(msg) {
             debugLog.unshift(msg);
             if (debugLog.length > 5) debugLog.pop();
-            document.getElementById('debugInfo').innerHTML = debugLog.map(m => `‚Ä¢ ${m}`).join('<br>');
+            document.getElementById('debugInfo').innerHTML = debugLog.map(m => ` ${m}`).join('<br>');
         }
         
         // INICIAR
         draw();
-        addDebug('‚úì Listo - Carga una imagen primero');
+        addDebug(' Listo - Carga una imagen primero');
     </script>
 </body>
 </html>

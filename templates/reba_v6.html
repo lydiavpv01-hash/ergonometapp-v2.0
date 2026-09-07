@@ -189,7 +189,7 @@
         }
         
         .imagen-bloque {
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             padding-bottom: 20px;
             border-bottom: 2px solid #f0f0f0;
         }
@@ -234,7 +234,7 @@
         canvas {
             border: 2px solid #0288d1;
             border-radius: 5px;
-            display: block;
+            display: none;
             margin: 15px 0;
             background: white;
             width: 100%;
@@ -244,10 +244,14 @@
         }
         
         .kinovea-controles {
-            display: flex;
+            display: none;
             gap: 8px;
             margin: 12px 0;
             flex-wrap: wrap;
+        }
+        
+        .kinovea-controles.visible {
+            display: flex !important;
         }
         
         .btn-kinovea {
@@ -441,13 +445,6 @@
             font-weight: 600;
         }
         
-        .resultado-separador {
-            background: linear-gradient(90deg, transparent, #9c27b0, transparent);
-            height: 2px;
-            margin: 15px 0;
-            border-radius: 1px;
-        }
-        
         .resultado-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -554,7 +551,7 @@
             <div id="listaEvaluaciones">
                 <div class="evaluacion-item">
                     <div class="evaluador-nombre">Juan García López</div>
-                    <div class="evaluacion-fecha">01/09/2026 14:30</div>
+                    <div class="evaluacion-fecha">02/09/2026 14:30</div>
                 </div>
             </div>
             
@@ -565,8 +562,8 @@
         <!-- MAIN -->
         <main class="main-content">
             <div class="header">
-                <h1>📋 REBA v6 - Evaluación Ergonómica Profesional</h1>
-                <p>Con Kinovea integrado + Imágenes de referencia requeridas + BD</p>
+                <h1>📋 REBA v6 - Evaluación Ergonómica</h1>
+                <p>Con Kinovea + Imágenes de referencia + Base de Datos</p>
             </div>
             
             <!-- DATOS PERSONA -->
@@ -605,8 +602,8 @@
                             📷 Cargar imagen de referencia (Obligatoria)
                         </div>
                         <input type="file" id="file1" class="file-input" accept="image/*" onchange="cargarImagen(1, this)">
-                        <canvas id="canvas1" width="600" height="400" style="display:none;"></canvas>
-                        <div class="kinovea-controles" id="controles1" style="display:none;">
+                        <canvas id="canvas1" width="600" height="400"></canvas>
+                        <div class="kinovea-controles" id="controles1">
                             <button class="btn-kinovea btn-medir" onclick="kinovea1.iniciarMedir()">📏 Medir</button>
                             <button class="btn-kinovea btn-editar" onclick="kinovea1.iniciarEditar()">✏️ Editar</button>
                             <button class="btn-kinovea btn-limpiar" onclick="kinovea1.limpiar()">🗑️ Limpiar</button>
@@ -622,8 +619,8 @@
                             📷 Cargar imagen de referencia (Obligatoria)
                         </div>
                         <input type="file" id="file2" class="file-input" accept="image/*" onchange="cargarImagen(2, this)">
-                        <canvas id="canvas2" width="600" height="400" style="display:none;"></canvas>
-                        <div class="kinovea-controles" id="controles2" style="display:none;">
+                        <canvas id="canvas2" width="600" height="400"></canvas>
+                        <div class="kinovea-controles" id="controles2">
                             <button class="btn-kinovea btn-medir" onclick="kinovea2.iniciarMedir()">📏 Medir</button>
                             <button class="btn-kinovea btn-editar" onclick="kinovea2.iniciarEditar()">✏️ Editar</button>
                             <button class="btn-kinovea btn-limpiar" onclick="kinovea2.limpiar()">🗑️ Limpiar</button>
@@ -639,8 +636,8 @@
                             📷 Cargar imagen de referencia (Obligatoria)
                         </div>
                         <input type="file" id="file3" class="file-input" accept="image/*" onchange="cargarImagen(3, this)">
-                        <canvas id="canvas3" width="600" height="400" style="display:none;"></canvas>
-                        <div class="kinovea-controles" id="controles3" style="display:none;">
+                        <canvas id="canvas3" width="600" height="400"></canvas>
+                        <div class="kinovea-controles" id="controles3">
                             <button class="btn-kinovea btn-medir" onclick="kinovea3.iniciarMedir()">📏 Medir</button>
                             <button class="btn-kinovea btn-editar" onclick="kinovea3.iniciarEditar()">✏️ Editar</button>
                             <button class="btn-kinovea btn-limpiar" onclick="kinovea3.limpiar()">🗑️ Limpiar</button>
@@ -740,8 +737,6 @@
                         <div class="resultado-valor" id="resultC">-</div>
                     </div>
                 </div>
-                
-                <div class="resultado-separador"></div>
                 
                 <div class="puntuacion-final">
                     <div>🎯 PUNTAJE REBA FINAL</div>
@@ -956,33 +951,32 @@
             }
         }
         
-        let kinovea1, kinovea2, kinovea3;
+        // Instancias Kinovea
+        let kinovea1 = new Kinovea('canvas1');
+        let kinovea2 = new Kinovea('canvas2');
+        let kinovea3 = new Kinovea('canvas3');
         
+        // Función para cargar imagen
         function cargarImagen(num, input) {
             const file = input.files[0];
             if (!file) return;
             
-            if (!window['kinovea' + num]) {
-                window['kinovea' + num] = new Kinovea('canvas' + num);
-            }
-            
-            window['kinovea' + num].cargarImagen(file);
-            
             const canvas = document.getElementById('canvas' + num);
             const controles = document.getElementById('controles' + num);
             const area = document.getElementById('area' + num);
-            const error = document.getElementById('error' + num);
+            const kinovea = window['kinovea' + num];
             
-            canvas.style.display = 'block';           // ✅ MOSTRAR CANVAS
-            controles.style.display = 'flex';         // ✅ MOSTRAR BOTONES
+            // Cargar imagen en Kinovea
+            kinovea.cargarImagen(file);
+            
+            // Mostrar canvas y controles
+            canvas.style.display = 'block';
+            controles.classList.add('visible');
+            
+            // Actualizar área
             area.classList.add('loaded');
             area.classList.remove('required-field');
-            error.style.display = 'none';
         }
-        
-        kinovea1 = new Kinovea('canvas1');
-        kinovea2 = new Kinovea('canvas2');
-        kinovea3 = new Kinovea('canvas3');
         
         // Tablas REBA
         const tablaA = [

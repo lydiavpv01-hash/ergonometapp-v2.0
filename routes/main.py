@@ -53,6 +53,18 @@ def dashboard():
     """Dashboard principal"""
     return render_template('dashboard.html', usuario=session.get('usuario'))
 
+@bp_main.route('/evaluaciones')
+@login_required
+def evaluaciones_guardadas():
+    """Listado de evaluaciones REBA guardadas para el usuario activo."""
+    from models.reba_evaluation import RebaEvaluation
+    usuario = session.get('usuario', '')
+    evaluaciones = (RebaEvaluation.query
+                    .filter_by(usuario=usuario)
+                    .order_by(RebaEvaluation.created_at.desc())
+                    .all())
+    return render_template('evaluaciones_guardadas.html', usuario=usuario, evaluaciones=evaluaciones)
+
 @bp_main.route('/metodos')
 @login_required
 def metodos():

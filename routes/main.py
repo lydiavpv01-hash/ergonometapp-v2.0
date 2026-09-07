@@ -35,9 +35,19 @@ def _evaluaciones():
     from models.reba_evaluation import RebaEvaluation
     return RebaEvaluation.query.filter_by(usuario=session.get('usuario','')).order_by(RebaEvaluation.created_at.desc()).all()
 
+def _nom_evaluaciones():
+    from models.generic_evaluation import GenericEvaluation
+    rows=GenericEvaluation.query.filter_by(usuario=session.get('usuario','')).order_by(GenericEvaluation.created_at.desc()).all()
+    return {
+        'APENDICE_I':[e for e in rows if e.metodo=='APENDICE_I'],
+        'APENDICE_II':[e for e in rows if e.metodo=='APENDICE_II'],
+        'KUORINKA':[e for e in rows if e.metodo=='KUORINKA'],
+    }
+
 @bp_main.route('/evaluaciones')
 @login_required
-def evaluaciones_guardadas(): return render_template('evaluaciones_guardadas.html', usuario=session.get('usuario'), evaluaciones=_evaluaciones())
+def evaluaciones_guardadas():
+    return render_template('evaluaciones_guardadas.html', usuario=session.get('usuario'), evaluaciones=_evaluaciones(), nom=_nom_evaluaciones())
 
 @bp_main.route('/reportes')
 @login_required
@@ -62,6 +72,16 @@ def evaluacion_detalle(evaluation_id):
     if not e: return jsonify({'status':'error','message':'No autorizado'}),403
     payload,result=_json_data(e)
     return render_template('evaluacion_detalle.html',usuario=session.get('usuario'),e=e,payload=payload,result=result)
+
+@bp_main.route('/evaluaciones/nom/<int:evaluation_id>')
+@login_required
+def evaluacion_nom_detalle(evaluation_id):
+    from models.generic_evaluation import GenericEvaluation
+    e=GenericEvaluation.query.get_or_404(evaluation_id)
+    if e.usuario != session.get('usuario',''):
+        return jsonify({'status':'error','message':'No autorizado'}),403
+    payload,result=_json_data(e)
+    return render_template('evaluacion_nom_detalle.html',usuario=session.get('usuario'),e=e,payload=payload,result=result)
 
 @bp_main.route('/evaluaciones/<int:evaluation_id>/reporte')
 @login_required

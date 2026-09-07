@@ -1,7 +1,6 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from config import DevelopmentConfig, ProductionConfig
-from build_reba_sprite import build_reba_sprite
 import os
 
 # Inicializar DB
@@ -15,12 +14,6 @@ if os.environ.get('FLASK_ENV') == 'production':
     app.config.from_object(ProductionConfig)
 else:
     app.config.from_object(DevelopmentConfig)
-
-# Generar referencias REBA de alta resolución a partir de los PNG originales.
-try:
-    build_reba_sprite(force=True)
-except Exception as exc:
-    print(f'⚠️ No se pudo generar el sprite REBA HQ: {exc}')
 
 # Inicializar extensiones
 db.init_app(app)
@@ -58,13 +51,26 @@ with app.app_context():
 
 @app.after_request
 def after_request(response):
-    """Mantener UTF-8 y evitar HTML obsoleto durante el desarrollo."""
+    """Mantener UTF-8, evitar caché y servir las referencias REBA originales en alta resolución."""
     if response.mimetype.startswith('text/'):
         response.headers['Content-Type'] = f'{response.mimetype}; charset=utf-8'
+
     if response.mimetype == 'text/html':
         response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
         response.headers['Pragma'] = 'no-cache'
         response.headers['Expires'] = '0'
+
+        # El workspace REBA antiguo recortaba un sprite rasterizado. Sustituimos ese
+        # recorte por los 24 PNG originales para que el navegador reduzca desde la
+        # resolución fuente y conserve líneas/textos nítidos.
+        if request.path == '/reba/nueva':
+            html = response.get_data(as_text=True)
+            old_style = "background-image:url('${SPRITE}');background-size:400% 600%;background-position:${col*100/3}% ${row*100/5}%"
+            new_style = "background-image:url('/static/img/reba/${img}.png?v=original-hq');background-size:contain;background-position:center;background-repeat:no-repeat"
+            if old_style in html:
+                html = html.replace(old_style, new_style)
+                response.set_data(html)
+
     return response
 
 

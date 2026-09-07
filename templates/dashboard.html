@@ -181,30 +181,30 @@
         <div class="navbar-title"> ErgonometApp</div>
         <div class="navbar-user">
             <span>Bienvenido</span>
-            <button onclick="logout()">Cerrar SesiÃn</button>
+            <button onclick="logout()">Cerrar Sesión</button>
         </div>
     </div>
     
     <div class="container">
         <div class="welcome">
             <h1>Bienvenido a ErgonometApp</h1>
-            <p>Sistema de evaluaciÃn ergonÃmica con 6 mÃtodos validados segÃn normas mexicanas.</p>
+            <p>Sistema de evaluación ergonómica con 6 métodos validados según normas mexicanas.</p>
         </div>
         
         <div class="instructions">
-            <strong> Instrucciones:</strong> Selecciona un mÃtodo en la matriz abajo. Cada uno evalÃa diferentes riesgos ergonÃmicos. Haz clic en el nombre del mÃtodo para comenzar.
+            <strong>ℹ️ Instrucciones:</strong> Selecciona un método en la matriz abajo. Cada uno evalúa diferentes riesgos ergonómicos. Haz clic en el nombre del método para comenzar.
         </div>
         
         <div class="matrix-section">
             <div class="matrix-title">
-                 Matriz de caracterÃsticas de mÃtodos
-                <span>Haz clic en el mÃtodo para comenzar la evaluaciÃn</span>
+                 Matriz de características de métodos
+                <span>Haz clic en el método para comenzar la evaluación</span>
             </div>
             
             <table>
                 <thead>
                     <tr>
-                        <th>MÃtodo</th>
+                        <th>Método</th>
                         <th>Riesgo Evaluado</th>
                         <th>Factores de Riesgo</th>
                         <th>Partes del Cuerpo Evaluadas</th>
@@ -213,7 +213,7 @@
                 <tbody>
                     <tr>
                         <td><span class="method-name" onclick="goTo('/reba/nueva')">REBA</span></td>
-                        <td>Posturas estÃticas y dinÃmicas</td>
+                        <td>Posturas estáticas y dinámicas</td>
                         <td>
                             <span class="badge">Posturas</span>
                             <span class="badge">Carga</span>
@@ -224,7 +224,7 @@
                             <span class="badge">Cabeza/Cuello</span>
                             <span class="badge">Tronco</span>
                             <span class="badge">Brazos/Hombro</span>
-                            <span class="badge">Manos/MuÃeca</span>
+                            <span class="badge">Manos/Muñeca</span>
                             <span class="badge">Piernas</span>
                         </td>
                     </tr>
@@ -233,7 +233,7 @@
                         <td>Trabajos de pie prolongados</td>
                         <td>
                             <span class="badge">Posturas</span>
-                            <span class="badge">BipedestaciÃn</span>
+                            <span class="badge">Bipedestación</span>
                         </td>
                         <td>
                             <span class="badge">Piernas</span>
@@ -253,7 +253,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><span class="method-name" onclick="goTo('/apendice-i/nueva')">ApÃndice I</span></td>
+                        <td><span class="method-name" onclick="goTo('/apendice-i/nueva')">Apéndice I</span></td>
                         <td>Levantamiento de cargas</td>
                         <td>
                             <span class="badge">Carga</span>
@@ -266,7 +266,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><span class="method-name" onclick="goTo('/apendice-ii/nueva')">ApÃndice II</span></td>
+                        <td><span class="method-name" onclick="goTo('/apendice-ii/nueva')">Apéndice II</span></td>
                         <td>Empuje y arrastre</td>
                         <td>
                             <span class="badge">Fuerzas</span>
@@ -279,9 +279,9 @@
                     </tr>
                     <tr>
                         <td><span class="method-name" onclick="goTo('/cuestionario-nordico/nueva')">Kuorinka</span></td>
-                        <td>SÃntomas musculoesquelÃticos</td>
+                        <td>Síntomas musculoesqueléticos</td>
                         <td>
-                            <span class="badge">SÃntomas</span>
+                            <span class="badge">Síntomas</span>
                             <span class="badge">Dolor</span>
                         </td>
                         <td>
@@ -295,7 +295,7 @@
     
     <script>
         function logout() {
-            if (confirm('ÂDeseas cerrar sesiÃn?')) {
+            if (confirm('¿Deseas cerrar sesión?')) {
                 window.location.href = '/logout';
             }
         }

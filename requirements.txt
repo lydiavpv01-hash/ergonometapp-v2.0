@@ -17,6 +17,9 @@ openpyxl==3.1.2
 reportlab==4.0.7
 PyPDF2==3.0.1
 
+# Imágenes / referencias REBA
+Pillow==10.4.0
+
 # Herramientas
 python-dotenv==1.0.0
 click==8.1.7

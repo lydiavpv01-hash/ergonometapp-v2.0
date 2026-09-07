@@ -60,5 +60,6 @@ AI5_ENHANCEMENT = r"""
 def nueva():
     html = render_template('apendice_i_workspace.html')
     intro = render_template('apendice_i_intro.html')
+    refinements = render_template('apendice_i_refinements_v3.html')
     html = html.replace("<div class='tabs'>", intro + "<div class='tabs'>", 1)
-    return html.replace('</body>', AI5_ENHANCEMENT + '</body>')
+    return html.replace('</body>', AI5_ENHANCEMENT + refinements + '</body>')

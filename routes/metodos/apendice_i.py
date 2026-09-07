@@ -59,4 +59,6 @@ AI5_ENHANCEMENT = r"""
 @bp_apendice_i.route('/nueva', methods=['GET'])
 def nueva():
     html = render_template('apendice_i_workspace.html')
+    intro = render_template('apendice_i_intro.html')
+    html = html.replace("<div class='tabs'>", intro + "<div class='tabs'>", 1)
     return html.replace('</body>', AI5_ENHANCEMENT + '</body>')

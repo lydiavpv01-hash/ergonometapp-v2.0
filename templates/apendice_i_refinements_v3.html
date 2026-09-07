@@ -1,0 +1,105 @@
+<style>
+/* Refinamientos V3: precisión visual y normativa sin alterar la estructura existente */
+#nom-ref-panel,.refs,.scorebox .refs{display:none!important}
+.nom-mass-card{border:1px solid #dfe6d8;background:#fbfcfa;border-radius:12px;padding:13px;margin:8px 0 16px}.nom-mass-card h4{margin:0 0 7px;font-size:12px;color:#536d25}.nom-mass-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.nom-mass-grid label{font-size:10px}.mass-status{margin-top:9px;padding:9px 10px;border-radius:8px;font-size:11px;font-weight:800}.mass-ok{background:#eaf3df;color:#466326}.mass-warn{background:#fde5e2;color:#9c342d}.mass-neutral{background:#f1f3f1;color:#707872}.interp-card{margin-top:10px;border:1px solid #dfe6d8;background:#f7faf3;border-radius:10px;padding:10px}.interp-title{font-size:11px;font-weight:850;color:#536d25;margin-bottom:6px}.interp-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.interp-grid input,.interp-grid select{padding:9px}.interp-result{margin-top:8px;font-size:11px;line-height:1.5}.band-preview{display:inline-flex;align-items:center;gap:6px;padding:5px 8px;border-radius:999px;font-size:10px;font-weight:900}.band-preview::before{content:'';width:10px;height:10px;border-radius:3px;background:currentColor}.bp-green{background:#eaf3df;color:#3f6f25}.bp-orange{background:#fff0d8;color:#a66000}.bp-red{background:#fde5e2;color:#a02f28}.bp-purple{background:#eee5f7;color:#6d3f8c}.ai5-table td.bandcell{font-weight:900}.ai5-table td.bandcell-green{background:#5eb44b;color:#fff}.ai5-table td.bandcell-orange{background:#f0a11b;color:#241600}.ai5-table td.bandcell-red{background:#e93b35;color:#fff}.ai5-table td.bandcell-purple{background:#5d3e99;color:#fff}.moderate-note{font-size:10px;color:#6d756f;margin-top:7px;line-height:1.45}
+@media(max-width:700px){.nom-mass-grid,.interp-grid{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+function after(el,html){if(!el)return;el.insertAdjacentHTML('afterend',html)}
+function qs(s,r=document){return r.querySelector(s)}
+function qsa(s,r=document){return Array.from(r.querySelectorAll(s))}
+
+/* 1) Datos generales: edad y género + Tabla 1 */
+const dataRows=qsa('.body > .row');
+if(dataRows.length){
+ const first=dataRows[0];
+ after(first,`<div class="row" id="demographicRow"><div><label>Género</label><select id="genero"><option value="">Selecciona</option><option value="F">Femenino</option><option value="M">Masculino</option></select></div><div><label>Edad (años)</label><input id="edad" type="number" min="14" max="100" step="1" placeholder="Ej. 32"></div></div>
+ <div class="nom-mass-card"><h4>Tabla 1 · Masa máxima por edad y género</h4><div class="nom-mass-grid"><div><label>Masa máxima aplicable</label><div id="massMax" style="font-size:22px;font-family:Georgia">— kg</div></div><div><label>Peso registrado</label><div id="massCurrent" style="font-size:22px;font-family:Georgia">— kg</div></div><div><label>Verificación</label><div id="massStatus" class="mass-status mass-neutral">Completa género, edad y peso.</div></div></div><div style="font-size:10px;color:#6d756f;line-height:1.45;margin-top:7px">La masa máxima real deberá considerar además frecuencia, distancia, posición, agarre, masa acumulada y otros factores, sin rebasar el límite de la Tabla 1. Para mayores de 45 años aplica la consideración de aptitud física médica prevista por la NOM.</div></div>`);
+}
+function maxMass(){
+ const g=(qs('#genero')||{}).value, age=Number((qs('#edad')||{}).value);
+ if(!g||!age)return null;
+ if(age<18)return 7;
+ if(g==='F'&&age>45)return 15;
+ if(g==='F'&&age>=18&&age<=45)return 20;
+ if(g==='M'&&age>45)return 20;
+ if(g==='M'&&age>=18&&age<=45)return 25;
+ return null;
+}
+function updateMass(){
+ const limit=maxMass();
+ const w=Number((qs('#pesoAI2')||{}).value || (qs('#peso')||{}).value || 0);
+ const maxEl=qs('#massMax'), cur=qs('#massCurrent'), st=qs('#massStatus');
+ if(maxEl)maxEl.textContent=limit?limit+' kg':'— kg';
+ if(cur)cur.textContent=w?w.toFixed(1)+' kg':'— kg';
+ if(!st)return;
+ if(!limit||!w){st.className='mass-status mass-neutral';st.textContent='Completa género, edad y peso.';return}
+ if(w>limit){st.className='mass-status mass-warn';st.textContent='No cumple: supera la masa máxima de Tabla 1.'}
+ else {st.className='mass-status mass-ok';st.textContent='Dentro del límite máximo de Tabla 1.'}
+}
+qsa('#genero,#edad,#pesoAI2,#peso').forEach(x=>x.addEventListener('input',updateMass));
+
+/* 2) Interpolación digital de la gráfica AI.2. La NOM no publica una ecuación; se digitalizan los nodos visibles de la gráfica oficial y se interpola linealmente entre ellos. */
+const xNodes=[0.125,2,12,30,60,250,400,720];
+const greenMax=[23,19,17,15,14,13,12,9];
+const orangeMax=[43,39,38,34,30,22,19,16];
+const redMax=[50,50,50,50,47,32,29,24];
+function interp(xs,ys,x){
+ if(x<=xs[0])return ys[0]; if(x>=xs[xs.length-1])return ys[ys.length-1];
+ for(let i=0;i<xs.length-1;i++){if(x>=xs[i]&&x<=xs[i+1]){const t=(x-xs[i])/(xs[i+1]-xs[i]);return ys[i]+t*(ys[i+1]-ys[i])}}
+ return ys[ys.length-1];
+}
+function perHour(count,interval,unit){
+ count=Number(count);interval=Number(interval);if(!(count>0)||!(interval>0))return null;
+ const seconds={segundos:1,minutos:60,horas:3600,dias:28800}[unit]||60; // día laboral de 8 h
+ return count*3600/(interval*seconds);
+}
+function classifyGraph(weight,fph){
+ if(!(weight>=0)||!(fph>0))return null;
+ const g=interp(xNodes,greenMax,fph),o=interp(xNodes,orangeMax,fph),r=interp(xNodes,redMax,fph);
+ if(weight<=g)return {value:0,color:'Verde',cls:'bp-green',limits:[g,o,r]};
+ if(weight<=o)return {value:4,color:'Naranja',cls:'bp-orange',limits:[g,o,r]};
+ if(weight<=r)return {value:6,color:'Rojo',cls:'bp-red',limits:[g,o,r]};
+ return {value:10,color:'Morado',cls:'bp-purple',limits:[g,o,r]};
+}
+const ai2Weight=qs('#pesoAI2');
+if(ai2Weight){
+ const oldFreq=qs('#frecuencia'); if(oldFreq) oldFreq.closest('div').style.display='none';
+ const choices=qs('[data-factor="ai2_peso"]'); if(choices)choices.style.display='none';
+ const parent=ai2Weight.closest('.factor-layout')?.querySelector('div');
+ if(parent) parent.insertAdjacentHTML('beforeend',`<div class="interp-card"><div class="interp-title">Interpolación automática de la gráfica</div><div class="interp-grid"><div><label>Número de levantamientos</label><input id="liftCount" type="number" min="0" step="0.01" value="1"></div><div><label>Cada cuánto tiempo</label><input id="liftInterval" type="number" min="0" step="0.01" placeholder="Ej. 30"></div><div><label>Unidad de tiempo</label><select id="liftUnit"><option value="segundos">Segundos</option><option value="minutos" selected>Minutos</option><option value="horas">Horas</option><option value="dias">Días / jornada de 8 h</option></select></div></div><div id="interpResult" class="interp-result">Ingresa peso y frecuencia para ubicar el punto en la gráfica.</div></div>`);
+}
+function applyGraph(){
+ const w=Number((qs('#pesoAI2')||{}).value), f=perHour((qs('#liftCount')||{}).value,(qs('#liftInterval')||{}).value,(qs('#liftUnit')||{}).value);
+ const res=classifyGraph(w,f), out=qs('#interpResult');
+ if(!res){if(out)out.textContent='Ingresa peso y frecuencia para ubicar el punto en la gráfica.';return}
+ if(window.vals&&vals.ai2){vals.ai2.ai2_peso=res.value}
+ if(out)out.innerHTML=`Frecuencia normalizada: <b>${f.toFixed(2)} levantamientos/hora</b><br><span class="band-preview ${res.cls}">${res.color} · Valor ${res.value}</span><br><span style="color:#6d756f">Límites interpolados a esta frecuencia: Verde ≤ ${res.limits[0].toFixed(1)} kg · Naranja ≤ ${res.limits[1].toFixed(1)} kg · Rojo ≤ ${res.limits[2].toFixed(1)} kg.</span>`;
+ if(typeof calc==='function')calc(); updateMass();
+}
+qsa('#pesoAI2,#liftCount,#liftInterval,#liftUnit').forEach(x=>x.addEventListener('input',applyGraph));
+
+/* 3) Mayor precisión en opciones que comparten valor. Distancia horizontal AI.2/AI.3/AI.4 tiene dos escenarios moderados distintos según las figuras oficiales. */
+function precisionDistance(key){
+ const box=qs(`[data-factor="${key}"]`); if(!box)return;
+ box.innerHTML=`<div class="choice" data-v="0">Cerca: brazos alineados verticalmente y torso erguido · 0</div><div class="choice" data-v="3">Moderado: los brazos se alejan del cuerpo · 3</div><div class="choice" data-v="3">Moderado: torso inclinado hacia adelante · 3</div><div class="choice" data-v="6">Lejos: brazos fuera del cuerpo y torso inclinado hacia adelante · 6</div>`;
+ box.insertAdjacentHTML('afterend','<div class="moderate-note">Las dos condiciones moderadas conservan el mismo valor normativo, pero se registran por separado para documentar con precisión cuál condición fue observada.</div>');
+ qsa('.choice',box).forEach(c=>c.addEventListener('click',()=>{qsa('.choice',box).forEach(x=>x.classList.remove('active'));c.classList.add('active');const sec=key.slice(0,3);if(window.vals&&vals[sec])vals[sec][key]=Number(c.dataset.v);if(typeof calc==='function')calc()}));
+}
+['ai2_distancia','ai3_distancia','ai4_distancia'].forEach(precisionDistance);
+
+/* 4) AI.5: la celda Color se pinta realmente y conserva el nombre del color. Se aplica después de cada render. */
+function paintAI5(){
+ qsa('#ai5 .band').forEach(b=>{
+   const td=b.closest('td'); if(!td)return;
+   td.classList.remove('bandcell','bandcell-green','bandcell-orange','bandcell-red','bandcell-purple');
+   const t=b.textContent.trim().toLowerCase();
+   if(['verde','naranja','rojo','morado'].includes(t)){td.classList.add('bandcell','bandcell-'+t);td.textContent=t.charAt(0).toUpperCase()+t.slice(1)}
+ });
+}
+const mo=new MutationObserver(()=>paintAI5()); const ai5=qs('#ai5'); if(ai5)mo.observe(ai5,{childList:true,subtree:true});
+qsa('.tab').forEach(t=>t.addEventListener('click',()=>setTimeout(paintAI5,0)));
+setTimeout(()=>{applyGraph();updateMass();paintAI5()},0);
+})();
+</script>

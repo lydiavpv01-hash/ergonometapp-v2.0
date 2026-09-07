@@ -1,0 +1,54 @@
+<style>
+/* Apéndice I · lectura vertical por factor.
+   La decisión se toma primero y la figura oficial se consulta completa debajo,
+   respetando su proporción y tamaño natural hasta el ancho disponible. */
+#ai2 .factor-layout,
+#ai3 .factor-layout,
+#ai4 .factor-layout{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:14px!important;
+  align-items:stretch!important;
+}
+#ai2 .factor-layout>div:first-child,
+#ai3 .factor-layout>div:first-child,
+#ai4 .factor-layout>div:first-child{
+  width:100%!important;
+  min-width:0!important;
+}
+#ai2 .ref-card,
+#ai3 .ref-card,
+#ai4 .ref-card{
+  width:100%!important;
+  max-width:none!important;
+  padding:12px!important;
+  background:#fafbf9!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+}
+#ai2 .ref-card img,
+#ai3 .ref-card img,
+#ai4 .ref-card img{
+  width:auto!important;
+  max-width:100%!important;
+  height:auto!important;
+  max-height:none!important;
+  object-fit:contain!important;
+  display:block!important;
+  margin:0 auto!important;
+  border-radius:8px!important;
+}
+#ai2 .ref-card small,
+#ai3 .ref-card small,
+#ai4 .ref-card small{
+  width:100%!important;
+  margin-top:9px!important;
+  text-align:left!important;
+}
+/* Evita que una figura pequeña sea estirada artificialmente: se conserva su
+   resolución original; sólo se reduce si excede el ancho útil del factor. */
+@media(min-width:1000px){
+  #ai2 .factor,#ai3 .factor,#ai4 .factor{padding:16px 18px!important}
+}
+</style>

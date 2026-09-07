@@ -2,7 +2,6 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ErgonometApp - Dashboard</title>
     <style>
@@ -179,7 +178,7 @@
 </head>
 <body>
     <div class="navbar">
-        <div class="navbar-title"> ErgonometApp</div>
+        <div class="navbar-title">📊 ErgonometApp</div>
         <div class="navbar-user">
             <span>Bienvenido</span>
             <button onclick="logout()">Cerrar Sesión</button>
@@ -198,7 +197,7 @@
         
         <div class="matrix-section">
             <div class="matrix-title">
-                 Matriz de características de métodos
+                📋 Matriz de características de métodos
                 <span>Haz clic en el método para comenzar la evaluación</span>
             </div>
             
@@ -209,6 +208,7 @@
                         <th>Riesgo Evaluado</th>
                         <th>Factores de Riesgo</th>
                         <th>Partes del Cuerpo Evaluadas</th>
+                        <th>Complejidad</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -228,6 +228,7 @@
                             <span class="badge">Manos/Muñeca</span>
                             <span class="badge">Piernas</span>
                         </td>
+                        <td><span class="complexity high">Alta</span></td>
                     </tr>
                     <tr>
                         <td><span class="method-name" onclick="goTo('/ley-silla/nueva')">Ley SILLA</span></td>
@@ -240,6 +241,7 @@
                             <span class="badge">Piernas</span>
                             <span class="badge">Espalda</span>
                         </td>
+                        <td><span class="complexity low">Baja</span></td>
                     </tr>
                     <tr>
                         <td><span class="method-name" onclick="goTo('/lest/nueva')">LEST</span></td>
@@ -252,6 +254,7 @@
                         <td>
                             <span class="badge">Todo el cuerpo</span>
                         </td>
+                        <td><span class="complexity medium">Media</span></td>
                     </tr>
                     <tr>
                         <td><span class="method-name" onclick="goTo('/apendice-i/nueva')">Apéndice I</span></td>
@@ -265,6 +268,7 @@
                             <span class="badge">Espalda</span>
                             <span class="badge">Brazos</span>
                         </td>
+                        <td><span class="complexity high">Alta</span></td>
                     </tr>
                     <tr>
                         <td><span class="method-name" onclick="goTo('/apendice-ii/nueva')">Apéndice II</span></td>
@@ -277,6 +281,7 @@
                             <span class="badge">Brazos</span>
                             <span class="badge">Espalda</span>
                         </td>
+                        <td><span class="complexity medium">Media</span></td>
                     </tr>
                     <tr>
                         <td><span class="method-name" onclick="goTo('/cuestionario-nordico/nueva')">Kuorinka</span></td>
@@ -288,6 +293,7 @@
                         <td>
                             <span class="badge">Todo el cuerpo</span>
                         </td>
+                        <td><span class="complexity low">Baja</span></td>
                     </tr>
                 </tbody>
             </table>

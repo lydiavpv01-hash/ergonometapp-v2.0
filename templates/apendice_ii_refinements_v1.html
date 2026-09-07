@@ -1,0 +1,51 @@
+<style>
+.aii-guide{background:#fff;border:1px solid #e3e8df;border-radius:16px;margin-top:22px;overflow:hidden}.aii-guide-head{padding:17px 19px;border-bottom:1px solid #e3e8df}.aii-guide-head h2{font:500 21px Georgia;margin:0}.aii-guide-body{padding:18px}.aii-guide-intro{font-size:11px;line-height:1.65;color:#56605a;margin:0 0 14px}.aii-mode-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px}.aii-mode-card{border:1px solid #dfe5db;border-radius:11px;padding:12px;background:#fafbf9}.aii-mode-card b{display:block;color:#536d25;font-size:12px;margin-bottom:5px}.aii-mode-card span{font-size:10px;color:#68716b;line-height:1.5}.factor .norm-help{margin:8px 0 11px;padding:10px 11px;background:#f7faf3;border-left:4px solid #536d25;border-radius:8px;font-size:10px;line-height:1.55;color:#58625c}.factor .norm-help b{color:#536d25}.factor-evidence{margin-top:14px;padding-top:12px;border-top:1px dashed #dfe5db}.factor-evidence-title{font-size:11px;font-weight:850;color:#536d25;margin-bottom:8px}.factor-evidence-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.factor-evidence label{font-size:10px;color:#677069;display:block;margin-bottom:5px;font-weight:700}.factor-evidence textarea{width:100%;min-height:82px;resize:vertical;border:1px solid #dfe5db;border-radius:9px;padding:9px;font:12px Inter,Segoe UI,Arial;background:#fff}.factor-evidence input[type=file]{width:100%;border:1px solid #dfe5db;border-radius:9px;padding:9px;background:#fff;font-size:11px}.factor-evidence-note{font-size:9px;color:#7a837d;line-height:1.4;margin-top:5px}.factor-photo-preview{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:8px}.factor-photo-preview img{width:100%;height:82px;object-fit:cover;border:1px solid #e1e6df;border-radius:8px;background:#f5f7f4}.aii-breakdown{margin-top:16px;border-top:1px solid #e3e8df;padding-top:14px}.aii-breakdown h3{font-size:12px;color:#536d25;margin:0 0 9px}.aii-table-wrap{overflow:auto;border:1px solid #e3e8df;border-radius:10px}.aii-table{width:100%;border-collapse:collapse;min-width:520px;font-size:10px}.aii-table th,.aii-table td{padding:8px 9px;border-bottom:1px solid #e7ebe4;text-align:left}.aii-table th{background:#f7f9f5;color:#68716b;text-transform:uppercase;font-size:9px}.aii-color{font-weight:900;text-align:center!important}.aii-green{background:#00ff00!important;color:#000!important}.aii-yellow{background:#ffff00!important;color:#000!important}.aii-red{background:#ff0000!important;color:#fff!important}.aii-magenta{background:#ff00ff!important;color:#fff!important}.aii-auto{margin-top:8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}.aii-auto-badge{padding:5px 9px;border-radius:999px;font-size:10px;font-weight:900;border:1px solid rgba(0,0,0,.08)}@media(max-width:700px){.aii-mode-cards,.factor-evidence-grid{grid-template-columns:1fr}.factor-photo-preview{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+<script>
+(function(){
+ function qsa(s,r=document){return Array.from(r.querySelectorAll(s))}
+ function safeKey(text){return (text||'factor').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'').slice(0,70)}
+ const grid=document.querySelector('main.wrap > .grid');
+ if(grid && !document.querySelector('.aii-guide')){
+   grid.insertAdjacentHTML('beforebegin',`<section class="aii-guide"><div class="aii-guide-head"><h2>Antes de comenzar la evaluación</h2></div><div class="aii-guide-body"><p class="aii-guide-intro">Identifica primero si la actividad de empuje, jalado o arrastre se realiza <b>sin equipo auxiliar</b> o <b>con equipo auxiliar</b>. Evalúa cada factor observando la forma habitual de trabajo y conserva evidencia de la condición seleccionada. Si existen diferentes actividades o condiciones, documenta cada una por separado.</p><div class="aii-mode-cards"><div class="aii-mode-card"><b>Sin equipo auxiliar</b><span>Se considera el tipo de desplazamiento de la carga: rodar, girar sobre su base o arrastrar/jalar/deslizar; posteriormente se analizan postura, agarre, patrón, distancia, superficie, obstáculos y otros factores.</span></div><div class="aii-mode-card"><b>Con equipo auxiliar</b><span>Se considera el tipo de equipo y el peso total movido; además se evalúan postura, agarre, patrón, distancia, condición del equipo, superficie, obstáculos y otros factores. La capacidad nominal del equipo debe respetarse.</span></div></div></div></section>`);
+ }
+ const helps={
+  '1. Peso / tipo de desplazamiento':'La puntuación inicial depende del peso total movido y del tipo de desplazamiento o del tamaño del equipo auxiliar. El valor se calcula automáticamente con los límites definidos para cada caso. Si se utiliza equipo y la carga excede su capacidad nominal, la condición se considera inaceptable.',
+  '2. Postura':'Observa la posición del tronco, hombros, brazos y manos durante el empuje, jalado o arrastre. Una postura más alejada de la posición neutra incrementa el valor del factor.',
+  '3. Acoplamiento mano-carga':'Valora qué tan adecuado es el contacto de las manos con la carga, asas, manijas o elementos de sujeción. Un agarre estable, cómodo y diseñado para la tarea reduce el riesgo.',
+  '4. Patrón de trabajo':'Considera la repetición de la actividad, la frecuencia de los recorridos y si existen pausas, recuperación o rotación suficientes durante la jornada.',
+  '5. Distancia por viaje':'Registra la distancia que se recorre en cada desplazamiento. La distancia aplicable cambia según se trate de una tarea sin equipo auxiliar o con equipo auxiliar.',
+  '6. Condición del equipo auxiliar':'Revisa ruedas, rodajes, frenos, dirección, mantenimiento y cualquier condición que incremente la fuerza necesaria o dificulte el control del equipo.',
+  'Superficie de trabajo':'Considera si la superficie es firme, regular, limpia, seca y con pendiente adecuada. Irregularidades, contaminación o pendientes incrementan la exigencia.',
+  'Obstáculos':'Identifica desniveles, escalones, rampas, puertas, espacios estrechos u otros elementos que interfieran con la ruta de desplazamiento.',
+  'Otros factores':'Considera condiciones adicionales que dificulten la tarea, por ejemplo carga inestable, visibilidad obstruida, iluminación deficiente, temperaturas extremas, corrientes de aire o EPP que interfiera.'
+ };
+ qsa('.factor').forEach((factor,index)=>{
+   const h=factor.querySelector('h3'); if(!h)return;
+   const title=h.textContent.trim();
+   if(helps[title]&&!factor.querySelector('.norm-help'))h.insertAdjacentHTML('afterend',`<div class="norm-help"><b>Qué debes observar:</b> ${helps[title]}</div>`);
+   if(factor.querySelector('.factor-evidence'))return;
+   const choices=factor.querySelector('.choices[data-factor]');
+   const key=safeKey((choices&&choices.dataset.factor)||title||('factor_'+index));
+   const wrap=document.createElement('div');wrap.className='factor-evidence';
+   wrap.innerHTML=`<div class="factor-evidence-title">Evidencia y justificación del criterio seleccionado</div><div class="factor-evidence-grid"><div><label for="just_${key}">Justificación de la selección</label><textarea id="just_${key}" name="justificacion_${key}" aria-label="Justificación · ${title}" placeholder="Describe qué observaste y por qué corresponde a la condición seleccionada."></textarea><div class="factor-evidence-note">La justificación quedará conservada en el expediente.</div></div><div><label for="foto_${key}">Fotografías de evidencia</label><input id="foto_${key}" name="evidencia_${key}" type="file" accept="image/*" multiple aria-label="Fotografías · ${title}"><div class="factor-evidence-note">Puedes adjuntar una o varias fotografías asociadas a este factor.</div><div class="factor-photo-preview" id="prev_${key}"></div></div></div>`;
+   factor.appendChild(wrap);
+   const input=wrap.querySelector('input[type=file]'), preview=wrap.querySelector('.factor-photo-preview');
+   input.addEventListener('change',()=>{preview.innerHTML='';Array.from(input.files||[]).forEach(file=>{if(!file.type.startsWith('image/'))return;const img=document.createElement('img');img.alt=file.name;img.src=URL.createObjectURL(file);preview.appendChild(img)})});
+ });
+ function colorFor(v){v=Number(v)||0;if(v===0)return ['Verde','aii-green'];if(v<=2)return ['Amarillo','aii-yellow'];if(v<=6)return ['Rojo','aii-red'];return ['Morado','aii-magenta']}
+ const aside=document.querySelector('.scorebox .body');
+ if(aside&&!document.getElementById('aiiBreakdown'))aside.insertAdjacentHTML('beforeend',`<div class="aii-breakdown" id="aiiBreakdown"><h3>Registro de color y valor por factor</h3><div class="aii-table-wrap"><table class="aii-table"><thead><tr><th>Factor</th><th>Color</th><th>Valor</th></tr></thead><tbody id="aiiBreakdownBody"></tbody></table></div></div>`);
+ function renderBreakdown(){
+  const body=document.getElementById('aiiBreakdownBody');if(!body||typeof vals==='undefined')return;
+  const labels={weight:'Peso / tipo de desplazamiento',postura:'Postura',agarre:'Acoplamiento mano-carga',patron:'Patrón de trabajo',distancia:'Distancia por viaje',equipoCond:'Condición del equipo auxiliar',superficie:'Superficie de trabajo',obstaculos:'Obstáculos',otros:'Otros factores'};
+  body.innerHTML='';Object.keys(labels).forEach(k=>{if(k==='equipoCond'&&document.getElementById('modo')&&modo.value!=='con')return;const v=Object.prototype.hasOwnProperty.call(vals,k)?vals[k]:null;if(v===null)return;const c=colorFor(v);body.insertAdjacentHTML('beforeend',`<tr><td>${labels[k]}</td><td class="aii-color ${c[1]}">${c[0]}</td><td>${v}</td></tr>`)});
+  const card=document.getElementById('weightCard');if(card){const c=colorFor(vals.weight||0);card.innerHTML=`Valor automático: <b>${vals.weight||0}</b> <span class="aii-auto-badge ${c[1]}">${c[0]}</span>`}
+ }
+ const oldCalc=window.calc; if(typeof oldCalc==='function')window.calc=function(){oldCalc();renderBreakdown()};
+ const oldCW=window.calcWeight; if(typeof oldCW==='function')window.calcWeight=function(){oldCW();renderBreakdown()};
+ document.addEventListener('click',e=>{if(e.target.closest('.choice'))setTimeout(renderBreakdown,0)});
+ document.getElementById('modo')?.addEventListener('change',()=>setTimeout(renderBreakdown,0));
+ setTimeout(renderBreakdown,0);
+})();
+</script>

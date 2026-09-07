@@ -3,213 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ErgonometApp - Login</title>
+    <title>ErgonometApp - Iniciar sesión</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        
-        .login-container {
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            width: 100%;
-            max-width: 400px;
-            padding: 40px;
-        }
-        
-        .logo-section {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        .logo {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-size: 40px;
-            font-weight: bold;
-        }
-        
-        .logo-text {
-            color: #333;
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-        
-        .logo-subtitle {
-            color: #666;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        .error-message {
-            background: #fee;
-            border: 1px solid #fcc;
-            color: #c33;
-            padding: 12px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 500;
-            font-size: 14px;
-        }
-        
-        .form-group input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 14px;
-            transition: border-color 0.3s;
-        }
-        
-        .form-group input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-        
-        .password-toggle {
-            position: relative;
-        }
-        
-        .password-toggle input {
-            padding-right: 40px;
-        }
-        
-        .password-toggle-btn {
-            position: absolute;
-            right: 12px;
-            top: 38px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #999;
-            font-size: 18px;
-        }
-        
-        .login-btn {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            margin-top: 20px;
-        }
-        
-        .login-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-        
-        .demo-info {
-            background: #f0f4ff;
-            border: 1px solid #d0d8ff;
-            color: #333;
-            padding: 15px;
-            border-radius: 5px;
-            margin-top: 20px;
-            font-size: 13px;
-            line-height: 1.6;
-        }
-        
-        .demo-info strong {
-            color: #667eea;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: "Segoe UI", Arial, sans-serif; min-height: 100vh; display: grid; place-items: center; padding: 24px; background: linear-gradient(135deg,#eef3fb,#dbe5f4); color:#263238; }
+        .login-shell { width: min(430px,100%); }
+        .brand { text-align:center; margin-bottom:22px; }
+        .logo { width:78px; height:78px; margin:0 auto 14px; border-radius:24px; display:grid; place-items:center; color:#fff; font-size:30px; font-weight:800; background:linear-gradient(135deg,#667eea,#764ba2); box-shadow:0 12px 30px rgba(86,91,184,.28); }
+        .brand h1 { font-size:27px; }
+        .brand p { margin-top:5px; color:#64748b; font-size:13px; letter-spacing:.08em; text-transform:uppercase; }
+        .card { background:#fff; border:1px solid #e2e8f0; border-radius:18px; padding:30px; box-shadow:0 18px 50px rgba(15,23,42,.10); }
+        .card h2 { font-size:20px; margin-bottom:6px; }
+        .intro { color:#64748b; font-size:14px; margin-bottom:24px; }
+        .field { margin-bottom:18px; }
+        label { display:block; font-weight:650; font-size:14px; margin-bottom:7px; }
+        input { width:100%; border:1px solid #cbd5e1; border-radius:10px; padding:12px 13px; font-size:15px; outline:none; }
+        input:focus { border-color:#667eea; box-shadow:0 0 0 3px rgba(102,126,234,.13); }
+        .password-wrap { position:relative; }
+        .password-wrap input { padding-right:76px; }
+        .toggle { position:absolute; right:9px; top:8px; border:0; background:#eef2ff; color:#4f46e5; border-radius:7px; padding:6px 9px; cursor:pointer; font-size:12px; }
+        .submit { width:100%; margin-top:7px; border:0; border-radius:10px; padding:13px; color:#fff; font-size:15px; font-weight:750; cursor:pointer; background:linear-gradient(135deg,#667eea,#764ba2); }
+        .error { margin-bottom:18px; padding:11px 13px; border-radius:9px; background:#fff1f2; border:1px solid #fecdd3; color:#be123c; font-size:14px; }
+        .footer { text-align:center; color:#94a3b8; font-size:12px; margin-top:18px; }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <div class="logo-section">
-            <div class="logo">RT</div>
-            <div class="logo-text">ErgonometApp</div>
-            <div class="logo-subtitle">Evaluación Ergonómica</div>
+    <main class="login-shell">
+        <div class="brand">
+            <div class="logo">EA</div>
+            <h1>ErgonometApp</h1>
+            <p>Evaluación ergonómica profesional</p>
         </div>
-        
-        {% if error %}
-        <div class="error-message">{{ error }}</div>
-        {% endif %}
-        
-        <form method="POST" action="/login">
-            <div class="form-group">
-                <label for="usuario">Usuario</label>
-                <input 
-                    type="text" 
-                    id="usuario" 
-                    name="usuario" 
-                    placeholder="Ingrese su usuario"
-                    required
-                    autofocus
-                >
-            </div>
-            
-            <div class="form-group password-toggle">
-                <label for="password">Contraseña</label>
-                <input 
-                    type="password" 
-                    id="password" 
-                    name="password" 
-                    placeholder="Ingrese su contraseña"
-                    required
-                >
-                <button type="button" class="password-toggle-btn" onclick="togglePassword()">
-                    
-                </button>
-            </div>
-            
-            <button type="submit" class="login-btn">Entrar</button>
-        </form>
-        
-        <div class="demo-info">
-            <strong>Datos de prueba:</strong><br>
-            Usuario: <strong>admin</strong><br>
-            Contraseña: <strong>password123</strong><br><br>
-            Usuario: <strong>lydia</strong><br>
-            Contraseña: <strong>ergonometapp2025</strong>
-        </div>
-    </div>
-    
+        <section class="card">
+            <h2>Iniciar sesión</h2>
+            <p class="intro">Accede al panel de métodos y evaluaciones ergonómicas.</p>
+            {% if error %}<div class="error">{{ error }}</div>{% endif %}
+            <form method="POST" action="/login">
+                <div class="field">
+                    <label for="usuario">Usuario</label>
+                    <input type="text" id="usuario" name="usuario" autocomplete="username" placeholder="Ingresa tu usuario" required autofocus>
+                </div>
+                <div class="field">
+                    <label for="password">Contraseña</label>
+                    <div class="password-wrap">
+                        <input type="password" id="password" name="password" autocomplete="current-password" placeholder="Ingresa tu contraseña" required>
+                        <button class="toggle" type="button" onclick="togglePassword()">Mostrar</button>
+                    </div>
+                </div>
+                <button class="submit" type="submit">Entrar a ErgonometApp</button>
+            </form>
+        </section>
+        <p class="footer">ErgonometApp · Suite de herramientas de evaluación ergonómica</p>
+    </main>
     <script>
         function togglePassword() {
             const input = document.getElementById('password');
-            const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
-            input.setAttribute('type', type);
+            const button = document.querySelector('.toggle');
+            const showing = input.type === 'text';
+            input.type = showing ? 'password' : 'text';
+            button.textContent = showing ? 'Mostrar' : 'Ocultar';
         }
     </script>
 </body>

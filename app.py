@@ -15,6 +15,16 @@ if os.environ.get('FLASK_ENV') == 'production':
 else:
     app.config.from_object(DevelopmentConfig)
 
+# Flask-SQLAlchemy resuelve rutas SQLite relativas dentro de instance/.
+# En Render esa carpeta puede no existir en un deploy limpio, provocando
+# sqlite3.OperationalError: unable to open database file.
+db_uri = app.config.get('SQLALCHEMY_DATABASE_URI', '')
+if db_uri.startswith('sqlite:///') and not db_uri.startswith('sqlite:////'):
+    relative_db = db_uri.replace('sqlite:///', '', 1)
+    db_parent = os.path.dirname(os.path.join(app.instance_path, relative_db))
+    if db_parent:
+        os.makedirs(db_parent, exist_ok=True)
+
 # Inicializar extensiones
 db.init_app(app)
 

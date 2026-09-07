@@ -76,8 +76,13 @@ def after_request(response):
             if old_style in html:
                 html = html.replace(old_style, new_style)
 
+        if request.path == '/apendice-i/nueva':
+            refinement = render_template('apendice_i_refinements_v6.html')
+            if 'factor-evidence-title' not in html:
+                html = html.replace('</body>', refinement + '</body>')
+
         if request.path in ('/apendice-i/nueva','/apendice-ii/nueva','/cuestionario-nordico/nueva'):
-            script = '<script src="/static/js/nom_persistence.js?v=1"></script>'
+            script = '<script src="/static/js/nom_persistence.js?v=2"></script>'
             if script not in html:
                 html = html.replace('</body>', script + '</body>')
 

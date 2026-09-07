@@ -51,9 +51,13 @@ with app.app_context():
 
 @app.after_request
 def after_request(response):
-    """Mantener UTF-8 en respuestas de texto sin romper respuestas JSON."""
+    """Mantener UTF-8 y evitar HTML obsoleto durante el desarrollo."""
     if response.mimetype.startswith('text/'):
         response.headers['Content-Type'] = f'{response.mimetype}; charset=utf-8'
+    if response.mimetype == 'text/html':
+        response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '0'
     return response
 
 

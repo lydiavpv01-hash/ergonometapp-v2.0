@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from config import DevelopmentConfig, ProductionConfig
+from build_reba_sprite import build_reba_sprite
 import os
 
 # Inicializar DB
@@ -14,6 +15,12 @@ if os.environ.get('FLASK_ENV') == 'production':
     app.config.from_object(ProductionConfig)
 else:
     app.config.from_object(DevelopmentConfig)
+
+# Generar referencias REBA de alta resolución a partir de los PNG originales.
+try:
+    build_reba_sprite(force=True)
+except Exception as exc:
+    print(f'⚠️ No se pudo generar el sprite REBA HQ: {exc}')
 
 # Inicializar extensiones
 db.init_app(app)

@@ -1,7 +1,7 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, render_template
 
 bp_kuorinka = Blueprint('kuorinka', __name__, url_prefix='/cuestionario-nordico')
 
-@bp_kuorinka.route('/nueva', methods=['GET', 'POST'])
+@bp_kuorinka.route('/nueva', methods=['GET'])
 def nueva():
-    return jsonify({'método': 'Kuorinka', 'estado': 'en desarrollo'})
+    return render_template('kuorinka_workspace.html')

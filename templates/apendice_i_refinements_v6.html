@@ -1,0 +1,83 @@
+<style>
+/* Colores de las tablas AI.5 conforme a la presentación de la NOM */
+#ai5 .ai5-norm-green{background:#00ff00!important;color:#000!important}
+#ai5 .ai5-norm-yellow{background:#ffff00!important;color:#000!important}
+#ai5 .ai5-norm-red{background:#ff0000!important;color:#fff!important}
+#ai5 .ai5-norm-magenta{background:#ff00ff!important;color:#fff!important}
+#ai5 .ai5-actions tbody tr.ai5-norm-green td,
+#ai5 .ai5-actions tbody tr.ai5-norm-yellow td,
+#ai5 .ai5-actions tbody tr.ai5-norm-red td,
+#ai5 .ai5-actions tbody tr.ai5-norm-magenta td{background:inherit!important;color:inherit!important}
+#ai5 .ai5-actions tbody tr.ai5-norm-red td,
+#ai5 .ai5-actions tbody tr.ai5-norm-magenta td{color:#fff!important}
+#ai5 .ai5-actions tbody tr.ai5-norm-green td,
+#ai5 .ai5-actions tbody tr.ai5-norm-yellow td{color:#000!important}
+
+/* Evidencia y justificación por factor */
+.factor-evidence{margin-top:14px;padding-top:12px;border-top:1px dashed #dfe5db}
+.factor-evidence-title{font-size:11px;font-weight:850;color:#536d25;margin-bottom:8px}
+.factor-evidence-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.factor-evidence label{font-size:10px;color:#677069;display:block;margin-bottom:5px;font-weight:700}
+.factor-evidence textarea{width:100%;min-height:82px;resize:vertical;border:1px solid #dfe5db;border-radius:9px;padding:9px;font:12px Inter,Segoe UI,Arial;background:#fff}
+.factor-evidence input[type=file]{width:100%;border:1px solid #dfe5db;border-radius:9px;padding:9px;background:#fff;font-size:11px}
+.factor-evidence-note{font-size:9px;color:#7a837d;line-height:1.4;margin-top:5px}
+.factor-photo-preview{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:8px}
+.factor-photo-preview img{width:100%;height:82px;object-fit:cover;border:1px solid #e1e6df;border-radius:8px;background:#f5f7f4}
+@media(max-width:700px){.factor-evidence-grid{grid-template-columns:1fr}.factor-photo-preview{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+<script>
+(function(){
+  function qsa(s,r=document){return Array.from(r.querySelectorAll(s))}
+  function safeKey(text){return (text||'factor').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'').slice(0,70)}
+
+  function applyNormativeColors(){
+    const host=document.getElementById('ai5'); if(!host)return;
+    const tables=qsa('table.ai5-actions',host);
+    tables.forEach(table=>{
+      qsa('tbody tr',table).forEach((tr,i)=>{
+        tr.classList.remove('ai5-norm-green','ai5-norm-yellow','ai5-norm-red','ai5-norm-magenta');
+        const cls=['ai5-norm-green','ai5-norm-yellow','ai5-norm-red','ai5-norm-magenta'][i];
+        if(cls)tr.classList.add(cls);
+      });
+    });
+  }
+
+  function addEvidence(sectionId){
+    const section=document.getElementById(sectionId); if(!section)return;
+    qsa('.factor',section).forEach((factor,index)=>{
+      if(factor.querySelector('.factor-evidence'))return;
+      const choice=factor.querySelector('.choices[data-factor]');
+      const factorKey=(choice&&choice.dataset.factor)||`${sectionId}_factor_${index+1}`;
+      const h=factor.querySelector('h3');
+      const title=h?h.textContent.trim():`Factor ${index+1}`;
+      const key=safeKey(factorKey||title);
+      const wrap=document.createElement('div');
+      wrap.className='factor-evidence';
+      wrap.innerHTML=`<div class="factor-evidence-title">Evidencia y justificación del criterio seleccionado</div>
+        <div class="factor-evidence-grid">
+          <div><label for="just_${key}">Justificación de la selección</label><textarea id="just_${key}" name="justificacion_${key}" aria-label="Justificación · ${title}" placeholder="Describe por qué la condición observada corresponde a la opción seleccionada, por ejemplo postura, distancia, agarre, superficie o condición ambiental."></textarea><div class="factor-evidence-note">La justificación quedará conservada en el expediente de la evaluación.</div></div>
+          <div><label for="foto_${key}">Fotografías de evidencia</label><input id="foto_${key}" name="evidencia_${key}" type="file" accept="image/*" multiple aria-label="Fotografías · ${title}"><div class="factor-evidence-note">Puedes adjuntar una o varias fotografías asociadas específicamente a este factor.</div><div class="factor-photo-preview" id="prev_${key}"></div></div>
+        </div>`;
+      factor.appendChild(wrap);
+      const input=wrap.querySelector('input[type=file]');
+      const preview=wrap.querySelector('.factor-photo-preview');
+      input.addEventListener('change',()=>{
+        preview.innerHTML='';
+        Array.from(input.files||[]).forEach(file=>{
+          if(!file.type.startsWith('image/'))return;
+          const img=document.createElement('img');
+          img.alt=file.name;
+          img.src=URL.createObjectURL(file);
+          preview.appendChild(img);
+        });
+      });
+    });
+  }
+
+  ['ai2','ai3','ai4'].forEach(addEvidence);
+  applyNormativeColors();
+  const ai5=document.getElementById('ai5');
+  if(ai5)new MutationObserver(()=>requestAnimationFrame(applyNormativeColors)).observe(ai5,{childList:true,subtree:true});
+  document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{if(t.dataset.sec==='ai5')setTimeout(applyNormativeColors,0)}));
+})();
+</script>

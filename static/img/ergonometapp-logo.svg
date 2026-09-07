@@ -1,5 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 827 387" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 360" role="img" aria-labelledby="title desc">
   <title id="title">ErgonometApp</title>
-  <desc id="desc">Logo oficial de ErgonometApp proporcionado por la propietaria del proyecto.</desc>
-  <image href="data:image/jpeg;base64,REPLACE_B64" x="0" y="0" width="827" height="387" preserveAspectRatio="xMidYMid meet"/>
+  <desc id="desc">Identidad visual vectorial de ErgonometApp basada en el logotipo proporcionado.</desc>
+  <rect width="1040" height="360" fill="#ffffff"/>
+  <g transform="translate(34 28)">
+    <circle cx="22" cy="236" r="12" fill="#111111"/>
+    <path d="M22 236 L474 234" stroke="#111111" stroke-width="8" stroke-linecap="round"/>
+    <path d="M22 236 L438 34" stroke="#111111" stroke-width="8" stroke-linecap="round"/>
+    <path d="M79 135 A116 116 0 0 1 143 276" fill="none" stroke="#b4b4b4" stroke-width="7"/>
+    <text x="190" y="190" font-family="Arial, Helvetica, sans-serif" font-size="92" font-weight="800" letter-spacing="-5" fill="#151515">Ergonometapp</text>
+    <g transform="translate(515 203)">
+      <text x="0" y="42" font-family="Georgia, 'Times New Roman', serif" font-size="38" font-style="italic" fill="#6f7d29">RTranquillité</text>
+      <text x="74" y="60" font-family="Arial, Helvetica, sans-serif" font-size="7" fill="#4f4f4f">Competencia Verde y Laboral, S.C.</text>
+      <path d="M212 13 C236 -12 270 -5 294 2 C278 24 253 39 218 32 C230 18 245 9 264 5 C244 7 229 14 212 29 Z" fill="#71a832"/>
+      <path d="M214 14 C207 -4 212 -19 222 -31 C231 -13 229 0 219 17 Z" fill="#a7c83c"/>
+      <path d="M207 13 C201 5 197 -2 196 -10" stroke="#638c2c" stroke-width="3" fill="none"/>
+      <circle cx="199" cy="-15" r="4" fill="#79b9e8"/>
+      <circle cx="210" cy="-21" r="4" fill="#79b9e8"/>
+    </g>
+  </g>
 </svg>

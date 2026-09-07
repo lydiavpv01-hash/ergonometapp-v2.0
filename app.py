@@ -16,8 +16,6 @@ else:
     app.config.from_object(DevelopmentConfig)
 
 # Flask-SQLAlchemy resuelve rutas SQLite relativas dentro de instance/.
-# En Render esa carpeta puede no existir en un deploy limpio, provocando
-# sqlite3.OperationalError: unable to open database file.
 db_uri = app.config.get('SQLALCHEMY_DATABASE_URI', '')
 if db_uri.startswith('sqlite:///') and not db_uri.startswith('sqlite:////'):
     relative_db = db_uri.replace('sqlite:///', '', 1)
@@ -33,6 +31,7 @@ with app.app_context():
     try:
         from routes.main import bp_main
         from routes.dashboard import bp_dashboard
+        from routes.generic_evaluations import bp_generic_evaluations
         from routes.metodos.reba import bp_reba
         from routes.metodos.ley_silla import bp_ley_silla
         from routes.metodos.lest import bp_lest
@@ -42,6 +41,7 @@ with app.app_context():
 
         app.register_blueprint(bp_main)
         app.register_blueprint(bp_dashboard)
+        app.register_blueprint(bp_generic_evaluations)
         app.register_blueprint(bp_reba)
         app.register_blueprint(bp_ley_silla)
         app.register_blueprint(bp_lest)
@@ -61,7 +61,6 @@ with app.app_context():
 
 @app.after_request
 def after_request(response):
-    """Mantener UTF-8, evitar caché y servir las referencias REBA originales en alta resolución."""
     if response.mimetype.startswith('text/'):
         response.headers['Content-Type'] = f'{response.mimetype}; charset=utf-8'
 
@@ -69,17 +68,20 @@ def after_request(response):
         response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
         response.headers['Pragma'] = 'no-cache'
         response.headers['Expires'] = '0'
+        html = response.get_data(as_text=True)
 
-        # El workspace REBA antiguo recortaba un sprite rasterizado. Sustituimos ese
-        # recorte por los 24 PNG originales para que el navegador reduzca desde la
-        # resolución fuente y conserve líneas/textos nítidos.
         if request.path == '/reba/nueva':
-            html = response.get_data(as_text=True)
             old_style = "background-image:url('${SPRITE}');background-size:400% 600%;background-position:${col*100/3}% ${row*100/5}%"
             new_style = "background-image:url('/static/img/reba/${img}.png?v=original-hq');background-size:contain;background-position:center;background-repeat:no-repeat"
             if old_style in html:
                 html = html.replace(old_style, new_style)
-                response.set_data(html)
+
+        if request.path in ('/apendice-i/nueva','/apendice-ii/nueva','/cuestionario-nordico/nueva'):
+            script = '<script src="/static/js/nom_persistence.js?v=1"></script>'
+            if script not in html:
+                html = html.replace('</body>', script + '</body>')
+
+        response.set_data(html)
 
     return response
 

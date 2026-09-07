@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REBA - Evaluaci√n Ergon√mica Completa</title>
+    <title>REBA - Evaluaci√Én Ergon√Émica Completa</title>
     <style>
         * {
             margin: 0;
@@ -116,7 +116,7 @@
             gap: 30px;
         }
         
-        /* ===== SECCI√N C√LCULO (ARRIBA) ===== */
+        /* ===== SECCI√ÉN C√ÉLCULO (ARRIBA) ===== */
         .results-section {
             background: white;
             border-radius: 10px;
@@ -216,7 +216,7 @@
         .risk-level.muy-alto { background: #c62828; }
         .risk-level.empty { display: none; }
         
-        /* ===== SECCI√N INPUTS (ABAJO IZQUIERDA) ===== */
+        /* ===== SECCI√ÉN INPUTS (ABAJO IZQUIERDA) ===== */
         .inputs-section {
             background: white;
             border-radius: 10px;
@@ -313,7 +313,7 @@
             font-weight: 700;
         }
         
-        /* ===== COLUMNA DERECHA: IM√GENES ===== */
+        /* ===== COLUMNA DERECHA: IM√ÉGENES ===== */
         .images-section {
             background: white;
             border-radius: 10px;
@@ -510,8 +510,8 @@
     <div class="container">
         <!-- HEADER -->
         <div class="header">
-            <h1> REBA - Evaluaci√n Ergon√mica Completa</h1>
-            <p>Ingresa datos b√sicos, selecciona valores, carga im√genes y obt√n resultado autom√tico</p>
+            <h1> REBA - Evaluaci√Én Ergon√Émica Completa</h1>
+            <p>Ingresa datos b√Ésicos, selecciona valores, carga im√Égenes y obt√Én resultado autom√Ético</p>
         </div>
         
         <!-- DATOS DE LA PERSONA EVALUADA -->
@@ -520,39 +520,39 @@
             <div class="datos-grid">
                 <div class="form-group">
                     <label for="nombre">Nombre del Trabajador *</label>
-                    <input type="text" id="nombre" placeholder="Ej: Juan Garc√a L√pez" required>
+                    <input type="text" id="nombre" placeholder="Ej: Juan Garc√Éa L√Épez" required>
                 </div>
                 <div class="form-group">
                     <label for="puesto">Puesto / Cargo *</label>
                     <input type="text" id="puesto" placeholder="Ej: Operario de Empaque" required>
                 </div>
                 <div class="form-group">
-                    <label for="area">√rea de Trabajo</label>
-                    <input type="text" id="area" placeholder="Ej: Producci√n / Almac√n">
+                    <label for="area">√Érea de Trabajo</label>
+                    <input type="text" id="area" placeholder="Ej: Producci√Én / Almac√Én">
                 </div>
                 <div class="form-group">
                     <label for="evaluador">Evaluador *</label>
                     <input type="text" id="evaluador" placeholder="Ej: Lydia Peralta" required>
                 </div>
                 <div class="form-group">
-                    <label for="fecha">Fecha de Evaluaci√n</label>
+                    <label for="fecha">Fecha de Evaluaci√Én</label>
                     <input type="date" id="fecha">
                 </div>
                 <div class="form-group">
-                    <label for="tarea">Descripci√n de la Tarea</label>
+                    <label for="tarea">Descripci√Én de la Tarea</label>
                     <input type="text" id="tarea" placeholder="Ej: Levantamiento y empaque de productos">
                 </div>
             </div>
         </div>
         
-        <!-- CONTENIDO PRINCIPAL: C√lculo + Im√genes -->
+        <!-- CONTENIDO PRINCIPAL: C√Élculo + Im√Égenes -->
         <div class="main-content">
-            <!-- COLUMNA IZQUIERDA: C√lculo + Inputs -->
+            <!-- COLUMNA IZQUIERDA: C√Élculo + Inputs -->
             <div class="left-column">
                 
-                <!-- SECCI√N C√LCULO (ARRIBA) -->
+                <!-- SECCI√ÉN C√ÉLCULO (ARRIBA) -->
                 <div class="results-section">
-                    <div class="results-header"> C√lculo Autom√tico en Vivo</div>
+                    <div class="results-header"> C√Élculo Autom√Ético en Vivo</div>
                     
                     <div class="result-row">
                         <div class="result-box">
@@ -563,7 +563,7 @@
                         <div class="result-box">
                             <div class="result-label">Puntaje B</div>
                             <div class="result-value empty" id="resultB">-</div>
-                            <div style="font-size: 11px; color: #999; margin-top: 5px;">(Brazo + Antebrazo + Mu√eca)</div>
+                            <div style="font-size: 11px; color: #999; margin-top: 5px;">(Brazo + Antebrazo + Mu√Éeca)</div>
                         </div>
                         <div class="result-box">
                             <div class="result-label">Puntaje Tabla C</div>
@@ -579,32 +579,32 @@
                     </div>
                 </div>
                 
-                <!-- SECCI√N INPUTS (ABAJO) -->
+                <!-- SECCI√ÉN INPUTS (ABAJO) -->
                 <div class="inputs-section">
                     <div class="inputs-header"> Selecciona Valores REBA</div>
                     
                     <!-- GRUPO A -->
-                    <div class="group-title">A. An√lisis de Cuello, Torso y Piernas</div>
+                    <div class="group-title">A. An√Élisis de Cuello, Torso y Piernas</div>
                     
                     <!-- PASO 1 -->
                     <div class="option-group">
                         <div class="option-title">
                             <span class="option-number">1</span>
-                            Posici√n de Cuello
+                            Posici√Én de Cuello
                         </div>
                         <div class="option-item">
                             <input type="radio" name="cuello" value="1" id="cuello1" onchange="calcular()">
-                            <label for="cuello1">0-20¬</label>
+                            <label for="cuello1">0-20√Ç</label>
                             <span class="option-points">+1</span>
                         </div>
                         <div class="option-item">
                             <input type="radio" name="cuello" value="2" id="cuello2" onchange="calcular()">
-                            <label for="cuello2">20¬+</label>
+                            <label for="cuello2">20√Ç+</label>
                             <span class="option-points">+2</span>
                         </div>
                         <div class="option-item">
                             <input type="radio" name="cuello" value="2" id="cuello3" onchange="calcular()">
-                            <label for="cuello3">En extensi√n</label>
+                            <label for="cuello3">En extensi√Én</label>
                             <span class="option-points">+2</span>
                         </div>
                         <div style="margin-top: 8px; padding: 8px; background: #e3f2fd; border-radius: 3px;">
@@ -625,31 +625,31 @@
                     <div class="option-group">
                         <div class="option-title">
                             <span class="option-number">2</span>
-                            Posici√n de Torso
+                            Posici√Én de Torso
                         </div>
                         <div class="option-item">
                             <input type="radio" name="torso" value="1" id="torso1" onchange="calcular()">
-                            <label for="torso1">0¬</label>
+                            <label for="torso1">0√Ç</label>
                             <span class="option-points">+1</span>
                         </div>
                         <div class="option-item">
                             <input type="radio" name="torso" value="1" id="torso2" onchange="calcular()">
-                            <label for="torso2">0-20¬</label>
+                            <label for="torso2">0-20√Ç</label>
                             <span class="option-points">+1</span>
                         </div>
                         <div class="option-item">
                             <input type="radio" name="torso" value="2" id="torso3" onchange="calcular()">
-                            <label for="torso3">20-60¬</label>
+                            <label for="torso3">20-60√Ç</label>
                             <span class="option-points">+2</span>
                         </div>
                         <div class="option-item">
                             <input type="radio" name="torso" value="3" id="torso4" onchange="calcular()">
-                            <label for="torso4">>60¬</label>
+                            <label for="torso4">>60√Ç</label>
                             <span class="option-points">+3</span>
                         </div>
                         <div class="option-item">
                             <input type="radio" name="torso" value="3" id="torso5" onchange="calcular()">
-                            <label for="torso5">En extensi√n >20¬</label>
+                            <label for="torso5">En extensi√Én >20√Ç</label>
                             <span class="option-points">+3</span>
                         </div>
                         <div style="margin-top: 8px; padding: 8px; background: #e3f2fd; border-radius: 3px;">
@@ -670,7 +670,7 @@
                     <div class="option-group">
                         <div class="option-title">
                             <span class="option-number">3</span>
-                            Posici√n de Piernas
+                            Posici√Én de Piernas
                         </div>
                         <div class="option-item">
                             <input type="radio" name="piernas" value="1" id="piernas1" onchange="calcular()">
@@ -685,22 +685,22 @@
                     </div>
                     
                     <!-- GRUPO B -->
-                    <div class="group-title">B. An√lisis de Brazo y Mu√eca</div>
+                    <div class="group-title">B. An√Élisis de Brazo y Mu√Éeca</div>
                     
                     <!-- PASO 4 -->
                     <div class="option-group">
                         <div class="option-title">
                             <span class="option-number">4</span>
-                            Posici√n de Brazo
+                            Posici√Én de Brazo
                         </div>
                         <div class="option-item">
                             <input type="radio" name="brazo" value="0" id="brazo1" onchange="calcular()">
-                            <label for="brazo1">20-20¬ (neutro)</label>
+                            <label for="brazo1">20-20√Ç (neutro)</label>
                             <span class="option-points">0</span>
                         </div>
                         <div class="option-item">
                             <input type="radio" name="brazo" value="1" id="brazo2" onchange="calcular()">
-                            <label for="brazo2">Resto de √ngulos</label>
+                            <label for="brazo2">Resto de √Éngulos</label>
                             <span class="option-points">+1</span>
                         </div>
                         <div style="margin-top: 8px; padding: 8px; background: #e3f2fd; border-radius: 3px;">
@@ -711,7 +711,7 @@
                             </div>
                             <div class="option-item">
                                 <input type="checkbox" id="brazo_abduccion" onchange="calcular()">
-                                <label for="brazo_abduccion">Brazo en abducci√n</label>
+                                <label for="brazo_abduccion">Brazo en abducci√Én</label>
                                 <span class="option-points">+1</span>
                             </div>
                             <div class="option-item">
@@ -726,16 +726,16 @@
                     <div class="option-group">
                         <div class="option-title">
                             <span class="option-number">5</span>
-                            Posici√n de Antebrazo
+                            Posici√Én de Antebrazo
                         </div>
                         <div class="option-item">
                             <input type="radio" name="antebrazo" value="0" id="antebrazo1" onchange="calcular()">
-                            <label for="antebrazo1">60-100¬</label>
+                            <label for="antebrazo1">60-100√Ç</label>
                             <span class="option-points">0</span>
                         </div>
                         <div class="option-item">
                             <input type="radio" name="antebrazo" value="1" id="antebrazo2" onchange="calcular()">
-                            <label for="antebrazo2">Resto de √ngulos (<60¬ o >100¬)</label>
+                            <label for="antebrazo2">Resto de √Éngulos (<60√Ç o >100√Ç)</label>
                             <span class="option-points">+1</span>
                         </div>
                     </div>
@@ -744,27 +744,27 @@
                     <div class="option-group">
                         <div class="option-title">
                             <span class="option-number">6</span>
-                            Posici√n de Mu√eca
+                            Posici√Én de Mu√Éeca
                         </div>
                         <div class="option-item">
                             <input type="radio" name="muneca" value="0" id="muneca1" onchange="calcular()">
-                            <label for="muneca1">0¬ (neutro)</label>
+                            <label for="muneca1">0√Ç (neutro)</label>
                             <span class="option-points">0</span>
                         </div>
                         <div class="option-item">
                             <input type="radio" name="muneca" value="1" id="muneca2" onchange="calcular()">
-                            <label for="muneca2">¬15¬</label>
+                            <label for="muneca2">√Ç15√Ç</label>
                             <span class="option-points">+1</span>
                         </div>
                         <div class="option-item">
                             <input type="radio" name="muneca" value="2" id="muneca3" onchange="calcular()">
-                            <label for="muneca3">>15¬</label>
+                            <label for="muneca3">>15√Ç</label>
                             <span class="option-points">+2</span>
                         </div>
                         <div style="margin-top: 8px; padding: 8px; background: #e3f2fd; border-radius: 3px;">
                             <div class="option-item">
                                 <input type="checkbox" id="muneca_torcida" onchange="calcular()">
-                                <label for="muneca_torcida">Mu√eca torcida o desviada</label>
+                                <label for="muneca_torcida">Mu√Éeca torcida o desviada</label>
                                 <span class="option-points">+1</span>
                             </div>
                         </div>
@@ -830,7 +830,7 @@
                         <div style="padding: 8px; background: #fff3e0; border-radius: 3px;">
                             <div class="option-item">
                                 <input type="checkbox" id="actividad_estatica" onchange="calcular()">
-                                <label for="actividad_estatica">Una o m√s partes >1 minuto (est√ticas)</label>
+                                <label for="actividad_estatica">Una o m√És partes >1 minuto (est√Éticas)</label>
                                 <span class="option-points">+1</span>
                             </div>
                             <div class="option-item">
@@ -840,7 +840,7 @@
                             </div>
                             <div class="option-item">
                                 <input type="checkbox" id="actividad_cambios" onchange="calcular()">
-                                <label for="actividad_cambios">Cambios r√pidos/base inestable</label>
+                                <label for="actividad_cambios">Cambios r√Épidos/base inestable</label>
                                 <span class="option-points">+1</span>
                             </div>
                         </div>
@@ -848,16 +848,16 @@
                 </div>
             </div>
             
-            <!-- COLUMNA DERECHA: IM√GENES CON KINOVEA -->
+            <!-- COLUMNA DERECHA: IM√ÉGENES CON KINOVEA -->
             <div class="images-section">
-                <div class="images-header"> Carga Im√genes + Medici√n Kinovea</div>
+                <div class="images-header"> Carga Im√Égenes + Medici√Én Kinovea</div>
                 
                 <!-- GRUPO A -->
-                <div class="group-title">A. An√lisis de Cuello, Torso y Piernas</div>
+                <div class="group-title">A. An√Élisis de Cuello, Torso y Piernas</div>
                 
                 <!-- PASO 1 -->
                 <div class="image-group" id="imagen1">
-                    <div class="image-group-title">  Posici√n de Cuello</div>
+                    <div class="image-group-title">  Posici√Én de Cuello</div>
                     <div class="upload-area" onclick="document.getElementById('file1').click()">
                         <div></div>
                         <div class="upload-text">Haz clic o arrastra para cargar</div>
@@ -868,7 +868,7 @@
                 
                 <!-- PASO 2 -->
                 <div class="image-group" id="imagen2">
-                    <div class="image-group-title"> Posici√n de Torso</div>
+                    <div class="image-group-title"> Posici√Én de Torso</div>
                     <div class="upload-area" onclick="document.getElementById('file2').click()">
                         <div></div>
                         <div class="upload-text">Haz clic o arrastra para cargar</div>
@@ -879,7 +879,7 @@
                 
                 <!-- PASO 3 -->
                 <div class="image-group" id="imagen3">
-                    <div class="image-group-title"> Posici√n de Piernas</div>
+                    <div class="image-group-title"> Posici√Én de Piernas</div>
                     <div class="upload-area" onclick="document.getElementById('file3').click()">
                         <div></div>
                         <div class="upload-text">Haz clic o arrastra para cargar</div>
@@ -889,11 +889,11 @@
                 </div>
                 
                 <!-- GRUPO B -->
-                <div class="group-title">B. An√lisis de Brazo y Mu√eca</div>
+                <div class="group-title">B. An√Élisis de Brazo y Mu√Éeca</div>
                 
                 <!-- PASO 4 -->
                 <div class="image-group" id="imagen4">
-                    <div class="image-group-title"> Posici√n de Brazo</div>
+                    <div class="image-group-title"> Posici√Én de Brazo</div>
                     <div class="upload-area" onclick="document.getElementById('file4').click()">
                         <div></div>
                         <div class="upload-text">Haz clic o arrastra para cargar</div>
@@ -904,7 +904,7 @@
                 
                 <!-- PASO 5 -->
                 <div class="image-group" id="imagen5">
-                    <div class="image-group-title"> Posici√n de Antebrazo</div>
+                    <div class="image-group-title"> Posici√Én de Antebrazo</div>
                     <div class="upload-area" onclick="document.getElementById('file5').click()">
                         <div></div>
                         <div class="upload-text">Haz clic o arrastra para cargar</div>
@@ -915,7 +915,7 @@
                 
                 <!-- PASO 6 -->
                 <div class="image-group" id="imagen6">
-                    <div class="image-group-title"> Posici√n de Mu√eca</div>
+                    <div class="image-group-title"> Posici√Én de Mu√Éeca</div>
                     <div class="upload-area" onclick="document.getElementById('file6').click()">
                         <div></div>
                         <div class="upload-text">Haz clic o arrastra para cargar</div>
@@ -928,8 +928,8 @@
         
         <!-- BOTONES FINALES -->
         <div class="buttons">
-            <button class="btn btn-save" onclick="guardarEvaluacion()"> Guardar Evaluaci√n</button>
-            <button class="btn btn-reset" onclick="limpiarFormulario()"> Nueva Evaluaci√n</button>
+            <button class="btn btn-save" onclick="guardarEvaluacion()"> Guardar Evaluaci√Én</button>
+            <button class="btn btn-reset" onclick="limpiarFormulario()"> Nueva Evaluaci√Én</button>
         </div>
     </div>
     
@@ -1027,19 +1027,19 @@
             let colorRiesgo = '';
             
             if (puntajeReba === 1) {
-                riesgo = ' Riesgo M√nimo';
+                riesgo = ' Riesgo M√Énimo';
                 colorRiesgo = 'minimo';
             } else if (puntajeReba <= 3) {
                 riesgo = ' Riesgo Bajo';
                 colorRiesgo = 'bajo';
             } else if (puntajeReba <= 7) {
-                riesgo = '¥ Riesgo Medio';
+                riesgo = '¬¥ Riesgo Medio';
                 colorRiesgo = 'medio';
             } else if (puntajeReba <= 10) {
-                riesgo = '¥¥ Riesgo Alto';
+                riesgo = '¬¥¬¥ Riesgo Alto';
                 colorRiesgo = 'alto';
             } else {
-                riesgo = '¥¥¥ Riesgo Muy Alto';
+                riesgo = '¬¥¬¥¬¥ Riesgo Muy Alto';
                 colorRiesgo = 'muy-alto';
             }
             
@@ -1084,7 +1084,7 @@
                         <button class="kinovea-btn kinovea-editar" onclick="editarKinovea(${paso}, this)"> Editar</button>
                         <button class="kinovea-btn kinovea-limpiar" onclick="limpiarKinovea(${paso})"> Limpiar</button>
                     </div>
-                    <div class="kinovea-info" id="info${paso}">Carga la imagen para medir √ngulos</div>
+                    <div class="kinovea-info" id="info${paso}">Carga la imagen para medir √Éngulos</div>
                     <button class="remove-image" onclick="eliminarImagen(${paso})"> Eliminar</button>
                 `;
             };
@@ -1092,11 +1092,11 @@
         }
         
         function activarKinovea(paso, btn) {
-            alert(' Herramienta Kinovea para Paso ' + paso + ' - Pr√xima versi√n integrada\n\n1. Haz 3 clics en la imagen para crear un √ngulo\n2. El sistema calcular√ autom√ticamente los grados');
+            alert(' Herramienta Kinovea para Paso ' + paso + ' - Pr√Éxima versi√Én integrada\n\n1. Haz 3 clics en la imagen para crear un √Éngulo\n2. El sistema calcular√É autom√Éticamente los grados');
         }
         
         function editarKinovea(paso, btn) {
-            alert(' Modo editar - Arrastra los puntos para ajustar el √ngulo');
+            alert(' Modo editar - Arrastra los puntos para ajustar el √Éngulo');
         }
         
         function limpiarKinovea(paso) {
@@ -1124,7 +1124,7 @@
                 return;
             }
             
-            alert(' Evaluaci√n guardada\n\n' +
+            alert(' Evaluaci√Én guardada\n\n' +
                   ' ' + nombre + '\n' +
                   ' ' + puesto + '\n' +
                   ' Puntaje REBA: ' + puntaje + '\n' +

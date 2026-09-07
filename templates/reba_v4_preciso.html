@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REBA - Evaluaci√n Ergon√mica Completa</title>
+    <title>REBA - Evaluaci√Én Ergon√Émica Completa</title>
     <style>
         * {
             margin: 0;
@@ -513,8 +513,8 @@
     <div class="container">
         <!-- HEADER -->
         <div class="header">
-            <h1> REBA - Evaluaci√n Ergon√mica Completa</h1>
-            <p>Kinovea v4: Medici√n precisa con edici√n suave de puntos</p>
+            <h1> REBA - Evaluaci√Én Ergon√Émica Completa</h1>
+            <p>Kinovea v4: Medici√Én precisa con edici√Én suave de puntos</p>
         </div>
         
         <!-- DATOS DE LA PERSONA EVALUADA -->
@@ -523,26 +523,26 @@
             <div class="datos-grid">
                 <div class="form-group">
                     <label for="nombre">Nombre del Trabajador *</label>
-                    <input type="text" id="nombre" placeholder="Ej: Juan Garc√a L√pez" required>
+                    <input type="text" id="nombre" placeholder="Ej: Juan Garc√Éa L√Épez" required>
                 </div>
                 <div class="form-group">
                     <label for="puesto">Puesto / Cargo *</label>
                     <input type="text" id="puesto" placeholder="Ej: Operario de Empaque" required>
                 </div>
                 <div class="form-group">
-                    <label for="area">√rea de Trabajo</label>
-                    <input type="text" id="area" placeholder="Ej: Producci√n / Almac√n">
+                    <label for="area">√Érea de Trabajo</label>
+                    <input type="text" id="area" placeholder="Ej: Producci√Én / Almac√Én">
                 </div>
                 <div class="form-group">
                     <label for="evaluador">Evaluador *</label>
                     <input type="text" id="evaluador" placeholder="Ej: Lydia Peralta" required>
                 </div>
                 <div class="form-group">
-                    <label for="fecha">Fecha de Evaluaci√n</label>
+                    <label for="fecha">Fecha de Evaluaci√Én</label>
                     <input type="date" id="fecha">
                 </div>
                 <div class="form-group">
-                    <label for="tarea">Descripci√n de la Tarea</label>
+                    <label for="tarea">Descripci√Én de la Tarea</label>
                     <input type="text" id="tarea" placeholder="Ej: Levantamiento y empaque de productos">
                 </div>
             </div>
@@ -553,9 +553,9 @@
             <!-- COLUMNA IZQUIERDA -->
             <div class="left-column">
                 
-                <!-- C√LCULO -->
+                <!-- C√ÉLCULO -->
                 <div class="results-section">
-                    <div class="results-header"> C√lculo Autom√tico en Vivo</div>
+                    <div class="results-header"> C√Élculo Autom√Ético en Vivo</div>
                     
                     <div class="result-row">
                         <div class="result-box">
@@ -566,7 +566,7 @@
                         <div class="result-box">
                             <div class="result-label">Puntaje B</div>
                             <div class="result-value empty" id="resultB">-</div>
-                            <div style="font-size: 11px; color: #999; margin-top: 5px;">(Brazo + Antebrazo + Mu√eca)</div>
+                            <div style="font-size: 11px; color: #999; margin-top: 5px;">(Brazo + Antebrazo + Mu√Éeca)</div>
                         </div>
                         <div class="result-box">
                             <div class="result-label">Puntaje Tabla C</div>
@@ -586,27 +586,27 @@
                 <div class="inputs-section">
                     <div class="inputs-header"> Selecciona Valores REBA</div>
                     
-                    <div class="group-title">A. An√lisis de Cuello, Torso y Piernas</div>
+                    <div class="group-title">A. An√Élisis de Cuello, Torso y Piernas</div>
                     
                     <!-- PASO 1 -->
                     <div class="option-group">
                         <div class="option-title">
                             <span class="option-number">1</span>
-                            Posici√n de Cuello
+                            Posici√Én de Cuello
                         </div>
                         <div class="option-item">
                             <input type="radio" name="cuello" value="1" id="cuello1" onchange="calcular()">
-                            <label for="cuello1">0-20¬</label>
+                            <label for="cuello1">0-20√Ç</label>
                             <span class="option-points">+1</span>
                         </div>
                         <div class="option-item">
                             <input type="radio" name="cuello" value="2" id="cuello2" onchange="calcular()">
-                            <label for="cuello2">20¬+</label>
+                            <label for="cuello2">20√Ç+</label>
                             <span class="option-points">+2</span>
                         </div>
                         <div class="option-item">
                             <input type="radio" name="cuello" value="2" id="cuello3" onchange="calcular()">
-                            <label for="cuello3">En extensi√n</label>
+                            <label for="cuello3">En extensi√Én</label>
                             <span class="option-points">+2</span>
                         </div>
                     </div>
@@ -615,21 +615,21 @@
                     <div class="option-group">
                         <div class="option-title">
                             <span class="option-number">2</span>
-                            Posici√n de Torso
+                            Posici√Én de Torso
                         </div>
                         <div class="option-item">
                             <input type="radio" name="torso" value="1" id="torso1" onchange="calcular()">
-                            <label for="torso1">0¬</label>
+                            <label for="torso1">0√Ç</label>
                             <span class="option-points">+1</span>
                         </div>
                         <div class="option-item">
                             <input type="radio" name="torso" value="2" id="torso3" onchange="calcular()">
-                            <label for="torso3">20-60¬</label>
+                            <label for="torso3">20-60√Ç</label>
                             <span class="option-points">+2</span>
                         </div>
                         <div class="option-item">
                             <input type="radio" name="torso" value="3" id="torso4" onchange="calcular()">
-                            <label for="torso4">>60¬</label>
+                            <label for="torso4">>60√Ç</label>
                             <span class="option-points">+3</span>
                         </div>
                     </div>
@@ -638,7 +638,7 @@
                     <div class="option-group">
                         <div class="option-title">
                             <span class="option-number">3</span>
-                            Posici√n de Piernas
+                            Posici√Én de Piernas
                         </div>
                         <div class="option-item">
                             <input type="radio" name="piernas" value="1" id="piernas1" onchange="calcular()">
@@ -652,13 +652,13 @@
                         </div>
                     </div>
                     
-                    <div class="group-title">B. An√lisis de Brazo y Mu√eca</div>
+                    <div class="group-title">B. An√Élisis de Brazo y Mu√Éeca</div>
                     
                     <!-- PASO 4-9 (simplificado) -->
                     <div class="option-group">
                         <div class="option-title">
                             <span class="option-number">4</span>
-                            Posici√n de Brazo
+                            Posici√Én de Brazo
                         </div>
                         <div class="option-item">
                             <input type="radio" name="brazo" value="0" id="brazo1" onchange="calcular()">
@@ -667,7 +667,7 @@
                         </div>
                         <div class="option-item">
                             <input type="radio" name="brazo" value="1" id="brazo2" onchange="calcular()">
-                            <label for="brazo2">Resto de √ngulos</label>
+                            <label for="brazo2">Resto de √Éngulos</label>
                             <span class="option-points">+1</span>
                         </div>
                     </div>
@@ -675,11 +675,11 @@
                     <div class="option-group">
                         <div class="option-title">
                             <span class="option-number">5</span>
-                            Posici√n de Antebrazo
+                            Posici√Én de Antebrazo
                         </div>
                         <div class="option-item">
                             <input type="radio" name="antebrazo" value="0" id="antebrazo1" onchange="calcular()">
-                            <label for="antebrazo1">60-100¬</label>
+                            <label for="antebrazo1">60-100√Ç</label>
                             <span class="option-points">0</span>
                         </div>
                         <div class="option-item">
@@ -692,21 +692,21 @@
                     <div class="option-group">
                         <div class="option-title">
                             <span class="option-number">6</span>
-                            Posici√n de Mu√eca
+                            Posici√Én de Mu√Éeca
                         </div>
                         <div class="option-item">
                             <input type="radio" name="muneca" value="0" id="muneca1" onchange="calcular()">
-                            <label for="muneca1">0¬ (neutro)</label>
+                            <label for="muneca1">0√Ç (neutro)</label>
                             <span class="option-points">0</span>
                         </div>
                         <div class="option-item">
                             <input type="radio" name="muneca" value="1" id="muneca2" onchange="calcular()">
-                            <label for="muneca2">¬15¬</label>
+                            <label for="muneca2">√Ç15√Ç</label>
                             <span class="option-points">+1</span>
                         </div>
                         <div class="option-item">
                             <input type="radio" name="muneca" value="2" id="muneca3" onchange="calcular()">
-                            <label for="muneca3">>15¬</label>
+                            <label for="muneca3">>15√Ç</label>
                             <span class="option-points">+2</span>
                         </div>
                     </div>
@@ -763,7 +763,7 @@
                         <div style="padding: 8px; background: #fff3e0; border-radius: 3px;">
                             <div class="option-item">
                                 <input type="checkbox" id="actividad_estatica" onchange="calcular()">
-                                <label for="actividad_estatica">Est√tica >1 min</label>
+                                <label for="actividad_estatica">Est√Ética >1 min</label>
                                 <span class="option-points">+1</span>
                             </div>
                             <div class="option-item">
@@ -776,15 +776,15 @@
                 </div>
             </div>
             
-            <!-- COLUMNA DERECHA: IM√GENES CON KINOVEA -->
+            <!-- COLUMNA DERECHA: IM√ÉGENES CON KINOVEA -->
             <div class="images-section">
-                <div class="images-header"> Medici√n Kinovea Precisa</div>
+                <div class="images-header"> Medici√Én Kinovea Precisa</div>
                 
-                <div class="group-title">A. An√lisis de Cuello, Torso y Piernas</div>
+                <div class="group-title">A. An√Élisis de Cuello, Torso y Piernas</div>
                 
                 <!-- PASO 1 -->
                 <div class="image-group" id="imagen1">
-                    <div class="image-group-title"> Posici√n de Cuello</div>
+                    <div class="image-group-title"> Posici√Én de Cuello</div>
                     <div class="upload-area" onclick="document.getElementById('file1').click()">
                         <div></div>
                         <div class="upload-text">Haz clic o arrastra para cargar</div>
@@ -795,7 +795,7 @@
                 
                 <!-- PASO 2 -->
                 <div class="image-group" id="imagen2">
-                    <div class="image-group-title"> Posici√n de Torso</div>
+                    <div class="image-group-title"> Posici√Én de Torso</div>
                     <div class="upload-area" onclick="document.getElementById('file2').click()">
                         <div></div>
                         <div class="upload-text">Haz clic o arrastra para cargar</div>
@@ -806,7 +806,7 @@
                 
                 <!-- PASO 3 -->
                 <div class="image-group" id="imagen3">
-                    <div class="image-group-title"> Posici√n de Piernas</div>
+                    <div class="image-group-title"> Posici√Én de Piernas</div>
                     <div class="upload-area" onclick="document.getElementById('file3').click()">
                         <div></div>
                         <div class="upload-text">Haz clic o arrastra para cargar</div>
@@ -815,11 +815,11 @@
                     <div class="image-preview" id="preview3"></div>
                 </div>
                 
-                <div class="group-title">B. An√lisis de Brazo y Mu√eca</div>
+                <div class="group-title">B. An√Élisis de Brazo y Mu√Éeca</div>
                 
                 <!-- PASO 4 -->
                 <div class="image-group" id="imagen4">
-                    <div class="image-group-title"> Posici√n de Brazo</div>
+                    <div class="image-group-title"> Posici√Én de Brazo</div>
                     <div class="upload-area" onclick="document.getElementById('file4').click()">
                         <div></div>
                         <div class="upload-text">Haz clic o arrastra para cargar</div>
@@ -830,7 +830,7 @@
                 
                 <!-- PASO 5 -->
                 <div class="image-group" id="imagen5">
-                    <div class="image-group-title"> Posici√n de Antebrazo</div>
+                    <div class="image-group-title"> Posici√Én de Antebrazo</div>
                     <div class="upload-area" onclick="document.getElementById('file5').click()">
                         <div></div>
                         <div class="upload-text">Haz clic o arrastra para cargar</div>
@@ -841,7 +841,7 @@
                 
                 <!-- PASO 6 -->
                 <div class="image-group" id="imagen6">
-                    <div class="image-group-title"> Posici√n de Mu√eca</div>
+                    <div class="image-group-title"> Posici√Én de Mu√Éeca</div>
                     <div class="upload-area" onclick="document.getElementById('file6').click()">
                         <div></div>
                         <div class="upload-text">Haz clic o arrastra para cargar</div>
@@ -854,8 +854,8 @@
         
         <!-- BOTONES -->
         <div class="buttons">
-            <button class="btn btn-save" onclick="guardarEvaluacion()"> Guardar Evaluaci√n</button>
-            <button class="btn btn-reset" onclick="limpiarFormulario()"> Nueva Evaluaci√n</button>
+            <button class="btn btn-save" onclick="guardarEvaluacion()"> Guardar Evaluaci√Én</button>
+            <button class="btn btn-reset" onclick="limpiarFormulario()"> Nueva Evaluaci√Én</button>
         </div>
     </div>
     
@@ -920,7 +920,7 @@
                     this.calculateAngle();
                     this.draw();
                 } else if (this.mode === 'edit') {
-                    // Cambiar cursor si est√ sobre un punto
+                    // Cambiar cursor si est√É sobre un punto
                     const pos = this.getMousePos(e);
                     let overPoint = false;
                     for (let i = 0; i < this.points.length; i++) {
@@ -970,7 +970,7 @@
                 
                 const cos = dot / (mag1 * mag2);
                 this.angle = Math.round(Math.acos(Math.max(-1, Math.min(1, cos))) * 180 / Math.PI);
-                document.getElementById('info' + this.paso).textContent = ` √ngulo: ${this.angle}¬ | Haz clic en "Editar" para ajustar`;
+                document.getElementById('info' + this.paso).textContent = ` √Éngulo: ${this.angle}√Ç | Haz clic en "Editar" para ajustar`;
             }
             
             draw() {
@@ -980,7 +980,7 @@
                     this.ctx.drawImage(this.image, 0, 0);
                 }
                 
-                // L√neas
+                // L√Éneas
                 if (this.points.length > 1) {
                     this.ctx.strokeStyle = '#0288d1';
                     this.ctx.lineWidth = 3;
@@ -1008,7 +1008,7 @@
                     this.ctx.arc(this.points[1].x, this.points[1].y, 50, angle1, angle2);
                     this.ctx.stroke();
                     
-                    // Texto del √ngulo
+                    // Texto del √Éngulo
                     const midAngle = (angle1 + angle2) / 2;
                     const textX = this.points[1].x + Math.cos(midAngle) * 80;
                     const textY = this.points[1].y + Math.sin(midAngle) * 80;
@@ -1017,7 +1017,7 @@
                     this.ctx.font = 'bold 18px Arial';
                     this.ctx.textAlign = 'center';
                     this.ctx.textBaseline = 'middle';
-                    this.ctx.fillText(`${this.angle}¬`, textX, textY);
+                    this.ctx.fillText(`${this.angle}√Ç`, textX, textY);
                 }
                 
                 // Puntos
@@ -1033,7 +1033,7 @@
                     this.ctx.lineWidth = 2;
                     this.ctx.stroke();
                     
-                    // N√mero
+                    // N√Émero
                     this.ctx.fillStyle = 'white';
                     this.ctx.font = 'bold 14px Arial';
                     this.ctx.textAlign = 'center';
@@ -1048,7 +1048,7 @@
                 this.mode = 'none';
                 this.canvas.style.cursor = 'crosshair';
                 this.draw();
-                document.getElementById('info' + this.paso).textContent = ' Medida limpiada. Haz clic en "Medir" para nueva medici√n';
+                document.getElementById('info' + this.paso).textContent = ' Medida limpiada. Haz clic en "Medir" para nueva medici√Én';
             }
         }
         
@@ -1099,12 +1099,12 @@
         
         function activarEditar(paso) {
             if (!kinovea[paso] || kinovea[paso].points.length < 3) {
-                alert(' Primero mide un √ngulo completando los 3 clics');
+                alert(' Primero mide un √Éngulo completando los 3 clics');
                 return;
             }
             kinovea[paso].mode = 'edit';
             kinovea[paso].canvas.style.cursor = 'grab';
-            document.getElementById('info' + paso).textContent = ' Modo EDITAR: Arrastra los puntos para ajustar el √ngulo';
+            document.getElementById('info' + paso).textContent = ' Modo EDITAR: Arrastra los puntos para ajustar el √Éngulo';
             
             document.getElementById('btn-medir-' + paso).classList.remove('active');
             document.getElementById('btn-editar-' + paso).classList.add('active');
@@ -1195,19 +1195,19 @@
             let colorRiesgo = '';
             
             if (puntajeReba === 1) {
-                riesgo = ' Riesgo M√nimo';
+                riesgo = ' Riesgo M√Énimo';
                 colorRiesgo = 'minimo';
             } else if (puntajeReba <= 3) {
                 riesgo = ' Riesgo Bajo';
                 colorRiesgo = 'bajo';
             } else if (puntajeReba <= 7) {
-                riesgo = '¥ Riesgo Medio';
+                riesgo = '¬¥ Riesgo Medio';
                 colorRiesgo = 'medio';
             } else if (puntajeReba <= 10) {
-                riesgo = '¥¥ Riesgo Alto';
+                riesgo = '¬¥¬¥ Riesgo Alto';
                 colorRiesgo = 'alto';
             } else {
-                riesgo = '¥¥¥ Muy Alto';
+                riesgo = '¬¥¬¥¬¥ Muy Alto';
                 colorRiesgo = 'muy-alto';
             }
             
@@ -1253,7 +1253,7 @@
                 return;
             }
             
-            alert(' Evaluaci√n guardada\n' +
+            alert(' Evaluaci√Én guardada\n' +
                   ' ' + nombre + '\n' +
                   ' ' + puesto + '\n' +
                   ' Puntaje REBA: ' + puntaje);

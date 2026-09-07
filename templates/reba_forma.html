@@ -238,18 +238,18 @@
 </head>
 <body>
     <div class="container">
-        <h1> REBA Kinovea - Medidor de Ãngulos</h1>
+        <h1> REBA Kinovea - Medidor de Ãƒngulos</h1>
         
         <div class="info">
             <strong>Estado:</strong> 
             <span id="modeDisplay"> Modo MEDIR</span> | 
             <strong>Puntos:</strong> 
             <span id="pointsDisplay">0/3</span> | 
-            <strong>Ãngulo:</strong> 
-            <span id="angleDisplay">0Â</span>
+            <strong>Ãƒngulo:</strong> 
+            <span id="angleDisplay">0Ã‚</span>
         </div>
         
-        <!-- SECCIÃN DE CARGA DE IMAGEN -->
+        <!-- SECCIÃƒN DE CARGA DE IMAGEN -->
         <div class="upload-section">
             <h3> Cargar Imagen del Trabajador</h3>
             <div class="file-input-wrapper">
@@ -267,17 +267,17 @@
             
             <!-- PANEL DERECHO -->
             <div class="sidebar">
-                <!-- ÃNGULO GRANDE -->
+                <!-- ÃƒNGULO GRANDE -->
                 <div class="status-box">
-                    <h3>Ãngulo Medido</h3>
-                    <div class="status-value" id="bigAngle">0Â</div>
+                    <h3>Ãƒngulo Medido</h3>
+                    <div class="status-value" id="bigAngle">0Ã‚</div>
                 </div>
                 
                 <!-- LISTA DE PUNTOS -->
                 <div class="points-info">
                     <h3>Puntos Dibujados</h3>
                     <div id="pointsList">
-                        <p style="color: #999; font-size: 12px;">Sin puntos aÃn</p>
+                        <p style="color: #999; font-size: 12px;">Sin puntos aÃƒn</p>
                     </div>
                 </div>
                 
@@ -298,12 +298,12 @@
         
         <!-- INSTRUCCIONES -->
         <div class="instructions">
-            <h3> CÃmo Usar</h3>
+            <h3> CÃƒmo Usar</h3>
             <p><strong>1. CARGA IMAGEN:</strong> Haz clic en "Seleccionar Foto" para cargar una imagen del trabajador</p>
             <p><strong>2. MEDIR:</strong> Haz 3 clics en el canvas sobre la imagen para crear los puntos</p>
-            <p style="margin-left: 20px;"> Primer clic: Punto P1 (azul) - inicio de la lÃnea</p>
-            <p style="margin-left: 20px;"> Segundo clic: Punto P2 (rojo) - articulaciÃn/centro (AQUÃ SE MIDE)</p>
-            <p style="margin-left: 20px;"> Tercer clic: Punto P3 (azul) - fin de la lÃnea</p>
+            <p style="margin-left: 20px;"> Primer clic: Punto P1 (azul) - inicio de la lÃƒnea</p>
+            <p style="margin-left: 20px;"> Segundo clic: Punto P2 (rojo) - articulaciÃƒn/centro (AQUÃƒ SE MIDE)</p>
+            <p style="margin-left: 20px;"> Tercer clic: Punto P3 (azul) - fin de la lÃƒnea</p>
             <p><strong>3. EDITAR:</strong> Cambia a modo "Editar" y arrastra cualquier punto para ajustar</p>
             <p><strong>4. LIMPIAR:</strong> Borra todos los puntos y empieza de nuevo</p>
         </div>
@@ -331,7 +331,7 @@
                 img.onload = function() {
                     backgroundImage = img;
                     
-                    // Ajustar canvas al tamaÃo de la imagen
+                    // Ajustar canvas al tamaÃƒo de la imagen
                     const maxWidth = 800;
                     const ratio = maxWidth / img.width;
                     canvas.width = img.width * ratio;
@@ -372,7 +372,7 @@
                 }
             }
             
-            // Dibujar lÃneas
+            // Dibujar lÃƒneas
             if (points.length >= 2) {
                 ctx.strokeStyle = '#667eea';
                 ctx.lineWidth = 3;
@@ -409,7 +409,7 @@
                 ctx.lineWidth = 2;
                 ctx.stroke();
                 
-                // NÃmero
+                // NÃƒmero
                 ctx.fillStyle = 'white';
                 ctx.font = 'bold 16px Arial';
                 ctx.textAlign = 'center';
@@ -418,7 +418,7 @@
             }
         }
         
-        // ===== ARCO DE ÃNGULO =====
+        // ===== ARCO DE ÃƒNGULO =====
         function drawArc() {
             if (points.length !== 3) return;
             
@@ -430,7 +430,7 @@
             const v1 = { x: p1.x - p2.x, y: p1.y - p2.y };
             const v2 = { x: p3.x - p2.x, y: p3.y - p2.y };
             
-            // Ãngulo
+            // Ãƒngulo
             const dot = v1.x * v2.x + v1.y * v2.y;
             const mag1 = Math.sqrt(v1.x * v1.x + v1.y * v1.y);
             const mag2 = Math.sqrt(v2.x * v2.x + v2.y * v2.y);
@@ -440,7 +440,7 @@
             const cos = dot / (mag1 * mag2);
             const angle = Math.acos(Math.max(-1, Math.min(1, cos))) * (180 / Math.PI);
             
-            // Ãngulos en radianes
+            // Ãƒngulos en radianes
             const angle1 = Math.atan2(v1.y, v1.x);
             const angle2 = Math.atan2(v2.y, v2.x);
             
@@ -453,7 +453,7 @@
             ctx.arc(p2.x, p2.y, radius, angle1, angle2, angle2 > angle1 ? false : true);
             ctx.stroke();
             
-            // Texto del Ãngulo
+            // Texto del Ãƒngulo
             const midAngle = (angle1 + angle2) / 2;
             const textX = p2.x + Math.cos(midAngle) * (radius + 35);
             const textY = p2.y + Math.sin(midAngle) * (radius + 35);
@@ -462,11 +462,11 @@
             ctx.font = 'bold 18px Arial';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(Math.round(angle) + 'Â', textX, textY);
+            ctx.fillText(Math.round(angle) + 'Ã‚', textX, textY);
             
             // Actualizar UI
-            document.getElementById('bigAngle').textContent = Math.round(angle) + 'Â';
-            document.getElementById('angleDisplay').textContent = Math.round(angle) + 'Â';
+            document.getElementById('bigAngle').textContent = Math.round(angle) + 'Ã‚';
+            document.getElementById('angleDisplay').textContent = Math.round(angle) + 'Ã‚';
         }
         
         // ===== EVENTOS DEL MOUSE =====
@@ -547,8 +547,8 @@
         function clearPoints() {
             points = [];
             draggingPoint = -1;
-            document.getElementById('bigAngle').textContent = '0Â';
-            document.getElementById('angleDisplay').textContent = '0Â';
+            document.getElementById('bigAngle').textContent = '0Ã‚';
+            document.getElementById('angleDisplay').textContent = '0Ã‚';
             updateUI();
             draw();
             addDebug(' Canvas limpiado');
@@ -578,7 +578,7 @@
                 return;
             }
             const angle = Math.round(parseFloat(document.getElementById('angleDisplay').textContent));
-            alert(` Medida guardada: ${angle}Â`);
+            alert(` Medida guardada: ${angle}Ã‚`);
         }
         
         function addDebug(msg) {

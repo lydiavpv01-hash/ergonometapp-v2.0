@@ -48,6 +48,13 @@ with app.app_context():
         db.create_all()
         print("✅ Base de datos inicializada")
     except Exception as e:
+        print(f"⚠️ Error creando tablas: {e}")
+
+# Forzar UTF-8 en todas las respuestas
+@app.after_request
+def after_request(response):
+    response.headers['Content-Type'] = 'text/html; charset=utf-8'
+    return response
         print(f"⚠️ Error en BD: {e}")
 
 @app.errorhandler(404)

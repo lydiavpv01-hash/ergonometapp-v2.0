@@ -72,9 +72,8 @@ def descargar_excel(evaluation_id):
         result = json.loads(row.result_json or '{}')
     except Exception:
         result = {}
-    # Se reutiliza exactamente el mismo armado de datos que alimenta la matriz imprimible.
     from routes.main import _generic_matrix
-    from services.matrix_excel import export_nom_excel
+    from services.matrix_excel_sgc import export_nom_excel
     matrix = _generic_matrix(row, payload, result)
     stream, filename = export_nom_excel(matrix, payload)
     return send_file(

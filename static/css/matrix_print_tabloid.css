@@ -1,5 +1,20 @@
 /* Impresión de matrices ErgonometApp en doble carta / Tabloid (17 x 11 in), horizontal.
    El objetivo es conservar la misma composición visual de la vista en pantalla. */
+
+/* Tipografía de la matriz: incremento real de aproximadamente 2 pt respecto
+   a los tamaños previos definidos en px dentro de matriz_imprimible.html. */
+.doc-title{font-size:12pt!important}
+.section-title{font-size:9.5pt!important}
+.info{font-size:9pt!important}
+.photo-empty{font-size:8.75pt!important}
+.matrix{font-size:8.2pt!important}
+.risk-table{font-size:8.2pt!important}
+.justify{font-size:8.2pt!important}
+.small{font-size:8pt!important}
+.reba-card{font-size:8.75pt!important}
+.reba-card b{font-size:9.5pt!important}
+.page-footer{font-size:7.85pt!important}
+
 @media print {
   html, body {
     width: 17in !important;

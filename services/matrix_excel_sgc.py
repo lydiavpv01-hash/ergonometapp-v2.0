@@ -9,9 +9,9 @@ from PIL import Image as PILImage
 from services.matrix_excel import export_nom_excel as _base_export
 
 
-NAVY = '153D63'          # Encabezados y bordes
-STRONG_BLUE = '215E99'   # Código del documento / encabezado secundario
-SKY = 'A5C9EB'           # Subencabezados
+NAVY = '153D63'
+STRONG_BLUE = '215E99'
+SKY = 'A5C9EB'
 WHITE = 'FFFFFF'
 BLACK = '000000'
 GREEN = '00FF00'
@@ -146,9 +146,8 @@ def _style_sections(ws):
 
 
 def _set_general_information(ws, payload):
-    # La estructura base de las matrices coloca estos campos en las filas 3–9.
-    ws['A3'] = 'Empresa:'
-    ws['B3'] = _field_value(payload, 'empresa')
+    ws['A3'] = 'Razón Social:'
+    ws['B3'] = _field_value(payload, 'razón social', 'razon social', 'empresa')
     ws['A4'] = 'Área:'
     ws['B4'] = _field_value(payload, 'area', 'área')
     ws['A5'] = 'Subárea:'
@@ -184,8 +183,6 @@ def _title_and_logos(ws, payload, filename):
     _style_merged_range(ws, 'AA1:AF1', WHITE, BLACK, False, 8)
     _add_logo(ws, _upload(payload, 'logo_cliente'), 'A1')
     _add_logo(ws, _upload(payload, 'logo_rfranyutti'), 'AA1')
-
-    # Código de documento alineado a la paleta SGC (#215E99).
     code = 'Fo-NSTPS-61' if '61_' in filename else ('Fo-NSTPS-63' if '63_' in filename else 'Fo-NSTPS-62')
     try:
         ws.merge_cells('AA2:AF2')
@@ -209,7 +206,6 @@ def _normative_actions(ws):
             key = 'bajo'
         if not key:
             continue
-        # En la tabla normativa de acciones la descripción inicia en K.
         if ws[f'K{r}'].value is not None:
             ws[f'K{r}'] = NORM_ACTIONS[key]
             ws[f'K{r}'].alignment = Alignment(horizontal='left', vertical='center', wrap_text=True)
@@ -228,7 +224,6 @@ def _risk_colors(ws):
         if not key:
             continue
         fill, font_color = colors[key]
-        # Sólo colorea la tabla normativa cuando existe una acción en K.
         if ws[f'K{r}'].value is None:
             continue
         for c in ws[r]:
@@ -240,7 +235,7 @@ def _risk_colors(ws):
 
 
 def _footer(ws):
-    left = 'Aptos 11- Documento original'
+    left = 'Documento original'
     right = 'Página &P I &N'
     ws.oddFooter.left.text = left
     ws.oddFooter.right.text = right
@@ -256,7 +251,6 @@ def export_nom_excel(matrix, payload):
     stream, filename = _base_export(matrix, payload)
     wb = load_workbook(stream)
     ws = wb.active
-
     _title_and_logos(ws, payload, filename)
     _set_general_information(ws, payload)
     _style_sections(ws)
@@ -264,15 +258,12 @@ def export_nom_excel(matrix, payload):
     _risk_colors(ws)
     _apply_border_palette(ws)
     _footer(ws)
-
-    # Presentación SGC y configuración de impresión.
     ws.sheet_view.showGridLines = False
     ws.print_options.horizontalCentered = True
     ws.page_setup.orientation = 'landscape'
     ws.page_setup.fitToWidth = 1
     ws.page_setup.fitToHeight = 0
     ws.sheet_properties.pageSetUpPr.fitToPage = True
-
     out = BytesIO()
     wb.save(out)
     out.seek(0)

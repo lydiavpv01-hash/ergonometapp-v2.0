@@ -50,8 +50,6 @@ def install_matrix_enrichment(main_module):
         _, by_name, by_label = _snapshot_fields(payload)
         meta = payload.get('meta') or {}
 
-        # La matriz debe recuperar los datos reales capturados. Se priorizan los
-        # nombres de campo estables y después las etiquetas visibles.
         matrix_meta = matrix.setdefault('meta', {})
         matrix_meta.update({
             'empresa': _value_from(by_name, by_label, 'empresa', 'razon_social', 'Razón Social', 'Empresa', 'Empresa:'),
@@ -64,8 +62,8 @@ def install_matrix_enrichment(main_module):
             'descripcion': _value_from(by_name, by_label, 'descripcion', 'Descripción', 'Descripción de actividad', 'Descripcion de actividad'),
         })
 
-        # En la tabla de fundamento se agrega el contexto completo de la
-        # puntuación: condición, nivel, color y valor, sin tocar el cálculo.
+        # La condición seleccionada se presenta con contexto completo de la
+        # puntuación sin alterar ningún valor calculado por el método.
         for item in matrix.get('justification_rows') or []:
             color = item.get('color') or ''
             if not color:
@@ -83,9 +81,12 @@ def install_matrix_enrichment(main_module):
                     item['color_class'] = color_class
                 except Exception:
                     color = ''
-            item['color'] = color
-            item['risk_level'] = _band_from_color(color)
-            item['condition_detail'] = item.get('condition') or '—'
+            risk_level = _band_from_color(color)
+            raw_condition = item.get('condition') or '—'
+            item['color'] = color or '—'
+            item['risk_level'] = risk_level
+            item['condition_detail'] = raw_condition
+            item['condition'] = f"{raw_condition} · Nivel: {risk_level} · Color: {color or '—'}"
 
         return matrix
 

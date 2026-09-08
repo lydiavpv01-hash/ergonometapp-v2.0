@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, session, redirect
+from flask import Blueprint, request, jsonify, session, redirect, send_file
 from functools import wraps
 import json
 from app import db
@@ -49,3 +49,37 @@ def guardar():
     except Exception as exc:
         db.session.rollback()
         return jsonify({'status':'error','message':str(exc)}), 500
+
+
+@bp_generic_evaluations.route('/<int:evaluation_id>/excel', methods=['GET'])
+@login_required
+def descargar_excel(evaluation_id):
+    """Descarga la matriz cliente ya llenada con los datos guardados.
+
+    El Excel es únicamente una salida documental: reutiliza los resultados
+    persistidos y no vuelve a ejecutar ni modifica el motor de cálculo.
+    """
+    row = GenericEvaluation.query.get_or_404(evaluation_id)
+    if row.usuario != session.get('usuario',''):
+        return jsonify({'status':'error','message':'No autorizado'}), 403
+    if row.metodo not in ('APENDICE_I','APENDICE_II'):
+        return jsonify({'status':'error','message':'Este método todavía no tiene plantilla Excel configurada'}), 400
+    try:
+        payload = json.loads(row.payload_json or '{}')
+    except Exception:
+        payload = {}
+    try:
+        result = json.loads(row.result_json or '{}')
+    except Exception:
+        result = {}
+    # Se reutiliza exactamente el mismo armado de datos que alimenta la matriz imprimible.
+    from routes.main import _generic_matrix
+    from services.matrix_excel import export_nom_excel
+    matrix = _generic_matrix(row, payload, result)
+    stream, filename = export_nom_excel(matrix, payload)
+    return send_file(
+        stream,
+        as_attachment=True,
+        download_name=filename,
+        mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )

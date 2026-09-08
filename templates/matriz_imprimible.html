@@ -1,1 +1,1 @@
-{% include 'matriz_imprimible_v2.html' %}
+{% if matrix.interpolation is not defined %}{{ matrix.update({'interpolation': {'color':'','value':none,'color_class':'c-empty','count':'','interval':'','unit':''}}) or '' }}{% endif %}{% if matrix.mass_check is not defined %}{{ matrix.update({'mass_check': none}) or '' }}{% endif %}{% include 'matriz_imprimible_v2.html' %}

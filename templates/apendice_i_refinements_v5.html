@@ -3,61 +3,13 @@
 </style>
 <script>
 (function(){
- function qs(s,r=document){return r.querySelector(s)}
- function qsa(s,r=document){return Array.from(r.querySelectorAll(s))}
- /* AI.3 a) Peso de la carga y frecuencia de transporte.
-    La NOM publica una gráfica, no una ecuación. Se digitalizan sus puntos de cambio visibles
-    y se interpola linealmente entre ellos para ubicar automáticamente peso/frecuencia. */
- const xNodes=[0.125,2,12,30,60,300]; // traslados por hora: 1 por jornada de 8h, 30 min, 5 min, 2 min, 1 min, 12 s
- const greenMax=[25,19,19,19,19,15];
- const orangeMax=[44,38,32,30,30,25];
- const redMax=[50,50,48,41,41,35];
- function interp(xs,ys,x){
-   if(x<=xs[0])return ys[0];
-   if(x>=xs[xs.length-1])return ys[ys.length-1];
-   for(let i=0;i<xs.length-1;i++){
-     if(x>=xs[i]&&x<=xs[i+1]){
-       const t=(x-xs[i])/(xs[i+1]-xs[i]);
-       return ys[i]+t*(ys[i+1]-ys[i]);
-     }
-   }
-   return ys[ys.length-1];
- }
- function perHour(count,interval,unit){
-   count=Number(count); interval=Number(interval);
-   if(!(count>0)||!(interval>0))return null;
-   const seconds={segundos:1,minutos:60,horas:3600,dias:28800}[unit]||60;
-   return count*3600/(interval*seconds);
- }
- function classify(weight,fph){
-   if(!(weight>=0)||!(fph>0))return null;
-   const g=interp(xNodes,greenMax,fph),o=interp(xNodes,orangeMax,fph),r=interp(xNodes,redMax,fph);
-   if(weight<=g)return {value:0,color:'Verde',cls:'ai3-green',limits:[g,o,r]};
-   if(weight<=o)return {value:4,color:'Naranja',cls:'ai3-orange',limits:[g,o,r]};
-   if(weight<=r)return {value:6,color:'Rojo',cls:'ai3-red',limits:[g,o,r]};
-   return {value:10,color:'Morado',cls:'ai3-purple',limits:[g,o,r]};
- }
- const weight=qs('#pesoAI3');
- if(weight){
-   const old=qs('#frecuenciaAI3'); if(old&&old.closest('div'))old.closest('div').style.display='none';
-   const choices=qs('[data-factor="ai3_peso"]'); if(choices)choices.style.display='none';
-   const factor=weight.closest('.factor');
-   const left=factor&&factor.querySelector('.factor-layout > div:first-child');
-   if(left&&!qs('#ai3TransportInterp',left)){
-     left.insertAdjacentHTML('beforeend',`<div class="ai3-interp-card" id="ai3TransportInterp"><div class="ai3-interp-title">Interpolación automática · gráfica para operaciones de transporte</div><div class="ai3-interp-grid"><div><label>Número de transportes</label><input id="ai3TripCount" type="number" min="0" step="0.01" value="1"></div><div><label>Cada cuánto tiempo</label><input id="ai3TripInterval" type="number" min="0" step="0.01" placeholder="Ej. 30"></div><div><label>Unidad de tiempo</label><select id="ai3TripUnit"><option value="segundos">Segundos</option><option value="minutos" selected>Minutos</option><option value="horas">Horas</option><option value="dias">Días / jornada de 8 h</option></select></div></div><div id="ai3InterpResult" class="ai3-interp-result">Ingresa peso y frecuencia de transporte para ubicar el punto en la gráfica.</div><div class="ai3-interp-note">La frecuencia se normaliza a traslados por hora. Para valores entre marcas de la gráfica se aplica interpolación lineal entre los puntos digitalizados de la gráfica oficial.</div></div>`);
-   }
- }
- function applyAI3(){
-   const w=Number((qs('#pesoAI3')||{}).value);
-   const f=perHour((qs('#ai3TripCount')||{}).value,(qs('#ai3TripInterval')||{}).value,(qs('#ai3TripUnit')||{}).value);
-   const res=classify(w,f),out=qs('#ai3InterpResult');
-   if(!res){if(out)out.textContent='Ingresa peso y frecuencia de transporte para ubicar el punto en la gráfica.';return}
-   if(window.vals&&vals.ai3)vals.ai3.ai3_peso=res.value;
-   if(out)out.innerHTML=`Frecuencia normalizada: <b>${f.toFixed(2)} traslados/hora</b><br><span class="ai3-band-preview ${res.cls}">${res.color} · Valor ${res.value}</span><br><span style="color:#6d756f">Límites interpolados a esta frecuencia: Verde ≤ ${res.limits[0].toFixed(1)} kg · Naranja ≤ ${res.limits[1].toFixed(1)} kg · Rojo ≤ ${res.limits[2].toFixed(1)} kg.</span>`;
-   if(typeof calc==='function')calc();
- }
- qsa('#pesoAI3,#ai3TripCount,#ai3TripInterval,#ai3TripUnit').forEach(x=>x.addEventListener('input',applyAI3));
- document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{if(t.dataset.sec==='ai3')setTimeout(applyAI3,0)}));
- setTimeout(applyAI3,0);
+ function qs(s,r=document){return r.querySelector(s)}function qsa(s,r=document){return Array.from(r.querySelectorAll(s))}
+ const xNodes=[0.125,2,12,30,60,300],greenMax=[25,19,19,19,19,15],orangeMax=[44,38,32,30,30,25],redMax=[50,50,48,41,41,35];
+ function interp(xs,ys,x){if(x<=xs[0])return ys[0];if(x>=xs[xs.length-1])return ys[ys.length-1];for(let i=0;i<xs.length-1;i++){if(x>=xs[i]&&x<=xs[i+1]){const t=(x-xs[i])/(xs[i+1]-xs[i]);return ys[i]+t*(ys[i+1]-ys[i])}}return ys[ys.length-1]}
+ function perHour(count,interval,unit){count=Number(count);interval=Number(interval);if(!(count>0)||!(interval>0))return null;const seconds={segundos:1,minutos:60}[unit]||60;return count*3600/(interval*seconds)}
+ function classify(weight,fph){if(!(weight>=0)||!(fph>0))return null;const g=interp(xNodes,greenMax,fph),o=interp(xNodes,orangeMax,fph),r=interp(xNodes,redMax,fph);if(weight<=g)return{value:0,color:'Verde',cls:'ai3-green',limits:[g,o,r]};if(weight<=o)return{value:4,color:'Naranja',cls:'ai3-orange',limits:[g,o,r]};if(weight<=r)return{value:6,color:'Rojo',cls:'ai3-red',limits:[g,o,r]};return{value:10,color:'Morado',cls:'ai3-purple',limits:[g,o,r]}}
+ const weight=qs('#pesoAI3');if(weight){const old=qs('#frecuenciaAI3');if(old&&old.closest('div'))old.closest('div').style.display='none';const choices=qs('[data-factor="ai3_peso"]');if(choices)choices.style.display='none';const factor=weight.closest('.factor'),left=factor&&factor.querySelector('.factor-layout > div:first-child');if(left&&!qs('#ai3TransportInterp',left)){left.insertAdjacentHTML('beforeend',`<div class="ai3-interp-card" id="ai3TransportInterp"><div class="ai3-interp-title">Interpolación automática · gráfica para operaciones de transporte</div><div class="ai3-interp-grid"><div><label>Número de transportes</label><input id="ai3TripCount" name="numero_transportes" type="number" min="0" step="0.01" value="1"></div><div><label>Cada cuánto tiempo</label><input id="ai3TripInterval" name="cada_cuanto_transporte" type="number" min="0" step="0.01" placeholder="Ej. 30"></div><div><label>Unidad de tiempo</label><select id="ai3TripUnit" name="unidad_tiempo_transporte"><option value="segundos">seg</option><option value="minutos" selected>min</option></select></div></div><div id="ai3InterpResult" class="ai3-interp-result">Ingresa peso y frecuencia de transporte para ubicar el punto en la gráfica.</div><div class="ai3-interp-note">La frecuencia se normaliza a traslados por hora. Para valores entre marcas de la gráfica se aplica interpolación lineal entre los puntos digitalizados de la gráfica oficial.</div></div>`)}}
+ function applyAI3(){const w=Number((qs('#pesoAI3')||{}).value),f=perHour((qs('#ai3TripCount')||{}).value,(qs('#ai3TripInterval')||{}).value,(qs('#ai3TripUnit')||{}).value),res=classify(w,f),out=qs('#ai3InterpResult');if(!res){if(out)out.textContent='Ingresa peso y frecuencia de transporte para ubicar el punto en la gráfica.';return}if(window.vals&&vals.ai3)vals.ai3.ai3_peso=res.value;if(out){out.dataset.interpValue=String(res.value);out.dataset.interpColor=res.color;out.innerHTML=`Frecuencia normalizada: <b>${f.toFixed(2)} traslados/hora</b><br><span class="ai3-band-preview ${res.cls}">${res.color} · Valor ${res.value}</span><br><span style="color:#6d756f">Límites interpolados a esta frecuencia: Verde ≤ ${res.limits[0].toFixed(1)} kg · Naranja ≤ ${res.limits[1].toFixed(1)} kg · Rojo ≤ ${res.limits[2].toFixed(1)} kg.</span>`}if(typeof calc==='function')calc()}
+ qsa('#pesoAI3,#ai3TripCount,#ai3TripInterval,#ai3TripUnit').forEach(x=>x.addEventListener('input',applyAI3));document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{if(t.dataset.sec==='ai3')setTimeout(applyAI3,0)}));setTimeout(applyAI3,0)
 })();
 </script>

@@ -1,1 +1,17 @@
 {% if matrix.interpolation is not defined %}{% if matrix.kind=='APENDICE_I' and matrix.factor_rows %}{% set ic=matrix.factor_rows[0].cells[0] %}{% set ns=namespace(count='',interval='',unit='') %}{% set cond=ic.condition or '' %}{% if 'levantamientos=' in cond %}{% for part in cond.split('|') %}{% set p=part.strip() %}{% if p.startswith('levantamientos=') %}{% set ns.count=p.split('=',1)[1] %}{% elif p.startswith('intervalo=') %}{% set ns.interval=p.split('=',1)[1] %}{% elif p.startswith('unidad=') %}{% set ns.unit=p.split('=',1)[1] %}{% endif %}{% endfor %}{% endif %}{{ matrix.update({'interpolation': {'color':ic.color,'value':ic.value,'color_class':ic.color_class,'count':ns.count,'interval':ns.interval,'unit':ns.unit}}) or '' }}{% else %}{{ matrix.update({'interpolation': {'color':'','value':none,'color_class':'c-empty','count':'','interval':'','unit':''}}) or '' }}{% endif %}{% endif %}{% if matrix.mass_check is not defined %}{{ matrix.update({'mass_check': none}) or '' }}{% endif %}{% include 'matriz_imprimible_v2.html' %}
+<style>
+/* Ajuste solicitado: 4 evidencias representativas, más anchas y en una sola fila.
+   Se reserva altura suficiente para que la matriz, puntuación, nivel de riesgo y
+   tablas normativas permanezcan en la primera hoja doble carta. */
+.photos{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:5px!important;padding:5px!important}
+.photos .photo:nth-child(n+5){display:none!important}
+.photo{height:94px!important}
+@media print{
+  .paper:first-of-type .photos{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:3px!important;padding:3px!important}
+  .paper:first-of-type .photos .photo:nth-child(n+5){display:none!important}
+  .paper:first-of-type .photo{height:78px!important}
+  .paper:first-of-type .matrix{margin-top:3px!important}
+  .paper:first-of-type .risk-grid{margin-top:3px!important;gap:4px!important}
+  .paper:first-of-type .paper-content{padding-bottom:.18in!important}
+}
+</style>

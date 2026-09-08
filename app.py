@@ -29,6 +29,7 @@ db.init_app(app)
 # Registrar blueprints
 with app.app_context():
     try:
+        import routes.main as main_routes
         from routes.main import bp_main
         from routes.dashboard import bp_dashboard
         from routes.generic_evaluations import bp_generic_evaluations
@@ -38,6 +39,9 @@ with app.app_context():
         from routes.metodos.apendice_i import bp_apendice_i
         from routes.metodos.apendice_ii import bp_apendice_ii
         from routes.metodos.kuorinka import bp_kuorinka
+        from services.matrix_enrichment import install_matrix_enrichment
+
+        install_matrix_enrichment(main_routes)
 
         app.register_blueprint(bp_main)
         app.register_blueprint(bp_dashboard)

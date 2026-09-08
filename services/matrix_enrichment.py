@@ -94,9 +94,6 @@ def install_matrix_enrichment(main_module):
         })
 
         if matrix.get('kind') == 'APENDICE_I':
-            # La matriz original toma principalmente values. Los factores automáticos
-            # de peso/frecuencia también quedan registrados como selección activa.
-            # Se usa esa selección como respaldo para no perder color ni valor.
             key_by_title = {}
             for label, k2, k3, k4 in AI1_KEYS:
                 key_by_title[(label, 'AI2')] = k2
@@ -118,7 +115,11 @@ def install_matrix_enrichment(main_module):
                     if not cell.get('condition') and sel.get('selection'):
                         cell['condition'] = sel.get('selection')
                     if value is not None:
-                        color, color_class = main_module._color_for(key, value, 'APENDICE_I')
+                        if key.endswith('_peso'):
+                            color = 'Verde' if value == 0 else 'Naranja' if value == 4 else 'Rojo' if value == 6 else 'Morado'
+                            color_class = 'c-verde' if value == 0 else 'c-naranja' if value == 4 else 'c-rojo' if value == 6 else 'c-morado'
+                        else:
+                            color, color_class = main_module._color_for(key, value, 'APENDICE_I')
                         cell['color'] = color
                         cell['color_class'] = color_class
 
@@ -137,13 +138,20 @@ def install_matrix_enrichment(main_module):
                         item['value'] = value
                 if (not item.get('condition')) and sel:
                     item['condition'] = sel.get('selection', '')
-                color, color_class = main_module._color_for(key or '', value, 'APENDICE_I') if value is not None else ('', 'c-empty')
+                if key and key.endswith('_peso') and value is not None:
+                    color = 'Verde' if value == 0 else 'Naranja' if value == 4 else 'Rojo' if value == 6 else 'Morado'
+                    color_class = 'c-verde' if value == 0 else 'c-naranja' if value == 4 else 'c-rojo' if value == 6 else 'c-morado'
+                else:
+                    color, color_class = main_module._color_for(key or '', value, 'APENDICE_I') if value is not None else ('', 'c-empty')
                 item['color'] = color or '—'
                 item['color_class'] = color_class
                 item['risk_level'] = _band_from_color(color)
                 raw_condition = item.get('condition') or '—'
                 item['condition_detail'] = raw_condition
                 item['condition'] = f"{raw_condition} · Nivel: {item['risk_level']} · Color: {color or '—'}"
+                if key:
+                    sk = _safe_key(key)
+                    item['conclusion'] = _value_from(by_name, by_label, 'conclusion_' + sk, 'Conclusión · ' + label, 'Conclusión del inciso')
 
         else:
             for item in matrix.get('justification_rows') or []:

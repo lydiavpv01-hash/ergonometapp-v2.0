@@ -1,0 +1,93 @@
+/* Impresión de matrices ErgonometApp en doble carta / Tabloid (17 x 11 in), horizontal.
+   El objetivo es conservar la misma composición visual de la vista en pantalla. */
+@media print {
+  html, body {
+    width: 17in !important;
+    min-width: 17in !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .toolbar {
+    display: none !important;
+  }
+
+  .paper {
+    width: 16.45in !important;
+    min-width: 16.45in !important;
+    max-width: 16.45in !important;
+    min-height: 10.45in !important;
+    height: auto !important;
+    margin: 0 auto !important;
+    padding: .28in .32in .42in !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+    break-inside: avoid-page !important;
+    page-break-inside: avoid !important;
+    break-after: page !important;
+    page-break-after: always !important;
+  }
+
+  .paper:last-child {
+    break-after: auto !important;
+    page-break-after: auto !important;
+  }
+
+  .paper-content {
+    padding-bottom: .32in !important;
+  }
+
+  .break {
+    margin-top: 0 !important;
+    break-before: page !important;
+    page-break-before: always !important;
+  }
+
+  .page-footer {
+    left: .32in !important;
+    right: .32in !important;
+    bottom: .12in !important;
+  }
+
+  /* Evita que los bloques principales se fragmenten entre hojas. */
+  .doc-head,
+  .info,
+  .photos,
+  .matrix,
+  .risk-grid,
+  .risk-table,
+  .justify,
+  .reba-grid,
+  .finalbox {
+    break-inside: avoid-page !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* Mantener exactamente los colores SGC y los colores normativos. */
+  .doc-title,
+  .section-title,
+  .matrix th,
+  .matrix td,
+  .risk-table th,
+  .risk-table td,
+  .justify th,
+  .justify td,
+  .c-verde,
+  .c-amarillo,
+  .c-naranja,
+  .c-rojo,
+  .c-morado,
+  .c-magenta,
+  .risk-result {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  @page {
+    size: 17in 11in;
+    margin: .18in;
+  }
+}

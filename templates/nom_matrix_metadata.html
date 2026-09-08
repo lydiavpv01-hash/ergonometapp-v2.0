@@ -10,17 +10,17 @@
   const anchor=firstSection||firstFactor;
   const card=document.createElement('div');
   card.className='matrix-meta-card'; card.id='matrixClientData';
-  card.innerHTML=`<h3>Datos para la matriz de entrega</h3><p>Esta información se conserva con la evaluación y se vacía automáticamente en el Excel descargable. Los logotipos se colocan en la fila de título de la matriz.</p>
+  card.innerHTML=`<h3>Datos para la matriz de entrega</h3><p>Esta información se conserva con la evaluación y se vacía automáticamente en la matriz imprimible y en el Excel descargable. Los logotipos se colocan en la fila de título.</p>
     <div class="matrix-meta-grid">
-      <div><label for="empresa">Empresa</label><input id="empresa" name="empresa" placeholder="Nombre o razón social del cliente"></div>
+      <div><label for="empresa">Razón Social</label><input id="empresa" name="empresa" placeholder="Razón social del cliente"></div>
       <div><label for="area">Área</label><input id="area" name="area" placeholder="Área evaluada"></div>
       <div><label for="subarea">Subárea</label><input id="subarea" name="subarea" placeholder="Subárea / ubicación específica"></div>
       <div><label for="actividad">Actividad/tarea</label><input id="actividad" name="actividad" placeholder="Actividad o tarea evaluada"></div>
       <div class="full"><label for="descripcion">Descripción</label><textarea id="descripcion" name="descripcion" placeholder="Describe brevemente la actividad, secuencia o condición evaluada."></textarea></div>
     </div>
     <div class="matrix-logo-grid">
-      <div class="matrix-logo-field"><label for="logo_cliente">Logo del cliente · esquina superior izquierda</label><input id="logo_cliente" name="logo_cliente" type="file" accept="image/png,image/jpeg,image/webp"><div class="matrix-logo-help">Preferentemente PNG o JPG horizontal, con buena resolución.</div><div class="matrix-logo-preview" id="preview_logo_cliente"></div></div>
-      <div class="matrix-logo-field"><label for="logo_rfranyutti">Logo de RFranyutti · esquina superior derecha</label><input id="logo_rfranyutti" name="logo_rfranyutti" type="file" accept="image/png,image/jpeg,image/webp"><div class="matrix-logo-help">El archivo se guardará con la evaluación para utilizarlo en la matriz Excel.</div><div class="matrix-logo-preview" id="preview_logo_rfranyutti"></div></div>
+      <div class="matrix-logo-field"><label for="logo_cliente">Logo del cliente · esquina superior izquierda</label><input id="logo_cliente" name="logo_cliente" type="file" accept="image/png,image/jpeg,image/webp"><div class="matrix-logo-help">Preferentemente PNG o JPG con buena resolución y fondo limpio.</div><div class="matrix-logo-preview" id="preview_logo_cliente"></div></div>
+      <div class="matrix-logo-field"><label for="logo_rfranyutti">Logo de RFranyutti · esquina superior derecha</label><input id="logo_rfranyutti" name="logo_rfranyutti" type="file" accept="image/png,image/jpeg,image/webp"><div class="matrix-logo-help">El archivo se conserva con la evaluación para utilizarlo en la matriz.</div><div class="matrix-logo-preview" id="preview_logo_rfranyutti"></div></div>
     </div>`;
   if(anchor)body.insertBefore(card,anchor);else body.prepend(card);
   ['logo_cliente','logo_rfranyutti'].forEach(id=>{

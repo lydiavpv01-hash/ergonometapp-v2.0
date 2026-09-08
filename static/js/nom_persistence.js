@@ -1,4 +1,10 @@
 (function(){
+  const SAVE_TIMEOUT_MS=45000;
+  const MAX_IMAGE_SIDE=1600;
+  const JPEG_QUALITY=0.82;
+  const MAX_SINGLE_UPLOAD_BYTES=12*1024*1024;
+  const MAX_ENCODED_PAYLOAD_CHARS=18*1024*1024;
+
   function textOf(el){return el ? (el.value || el.textContent || '').trim() : ''}
   function firstInputs(){return Array.from(document.querySelectorAll('input')).filter(x=>x.type!=='checkbox'&&x.type!=='radio'&&x.type!=='file')}
   function riskFromScore(t){if(t>=21)return 'Muy Alto · Inaceptable';if(t>=13)return 'Alto · Significativo';if(t>=5)return 'Medio · Posible';return 'Bajo · Aceptable'}
@@ -32,28 +38,96 @@
     });
     return {fields,selections};
   }
-  async function collectUploads(){
+
+  function readAsDataURL(file){
+    return new Promise((resolve,reject)=>{
+      const r=new FileReader();
+      r.onload=()=>resolve(r.result);
+      r.onerror=()=>reject(new Error('No se pudo leer '+file.name));
+      r.readAsDataURL(file);
+    });
+  }
+
+  function loadImage(src){
+    return new Promise((resolve,reject)=>{
+      const img=new Image();
+      img.onload=()=>resolve(img);
+      img.onerror=()=>reject(new Error('No se pudo procesar la imagen'));
+      img.src=src;
+    });
+  }
+
+  async function optimizedImage(file,field){
+    if(file.size>MAX_SINGLE_UPLOAD_BYTES)throw new Error('La imagen "'+file.name+'" excede 12 MB. Reduce su tamaño antes de guardar.');
+    const raw=await readAsDataURL(file);
+    if(!String(file.type||'').startsWith('image/'))return {field,name:file.name,type:file.type,size:file.size,data:raw};
+
+    /* Los logos pequeños se conservan sin recomprimir para no degradar texto o transparencias. */
+    const isLogo=/logo_/i.test(field||'');
+    if(isLogo && file.size<=1500000)return {field,name:file.name,type:file.type,size:file.size,data:raw};
+
+    try{
+      const img=await loadImage(raw);
+      const scale=Math.min(1,MAX_IMAGE_SIDE/Math.max(img.naturalWidth||img.width,img.naturalHeight||img.height));
+      const w=Math.max(1,Math.round((img.naturalWidth||img.width)*scale));
+      const h=Math.max(1,Math.round((img.naturalHeight||img.height)*scale));
+      const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;
+      const ctx=canvas.getContext('2d');
+      if(!ctx)return {field,name:file.name,type:file.type,size:file.size,data:raw};
+      /* Fondo blanco evita fondo negro al pasar imágenes transparentes a JPEG. */
+      ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h);ctx.drawImage(img,0,0,w,h);
+      const data=canvas.toDataURL('image/jpeg',JPEG_QUALITY);
+      return {field,name:file.name.replace(/\.[^.]+$/,'')+'.jpg',type:'image/jpeg',size:Math.round(data.length*0.75),data,original_name:file.name,original_size:file.size};
+    }catch(_){
+      return {field,name:file.name,type:file.type,size:file.size,data:raw};
+    }
+  }
+
+  async function collectUploads(button){
     const files=[];
-    const inputs=Array.from(document.querySelectorAll('input[type=file]'));
-    for(const inp of inputs){
-      for(const file of Array.from(inp.files||[])){
-        const data=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(file)});
-        files.push({field:inp.name||inp.id||'archivo',name:file.name,type:file.type,size:file.size,data});
-      }
+    const tasks=[];
+    Array.from(document.querySelectorAll('input[type=file]')).forEach(inp=>{
+      const field=inp.name||inp.id||'archivo';
+      Array.from(inp.files||[]).forEach(file=>tasks.push({field,file}));
+    });
+    for(let i=0;i<tasks.length;i++){
+      if(button)button.textContent='Preparando imágenes '+(i+1)+'/'+tasks.length+'…';
+      files.push(await optimizedImage(tasks[i].file,tasks[i].field));
+      await new Promise(r=>setTimeout(r,0));
     }
     return files;
   }
+
   async function persist(payload,button){
-    const old=button.textContent; button.disabled=true; button.textContent='Guardando…';
+    if(button.dataset.saving==='1')return;
+    const old=button.textContent;
+    button.dataset.saving='1';button.disabled=true;button.textContent='Preparando datos…';
+    let timer=null;
     try{
       payload.snapshot=collectSnapshot();
-      payload.uploads=await collectUploads();
-      const r=await fetch('/api/evaluaciones',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
-      const j=await r.json();
+      payload.uploads=await collectUploads(button);
+      button.textContent='Guardando…';
+      const body=JSON.stringify(payload);
+      if(body.length>MAX_ENCODED_PAYLOAD_CHARS){
+        throw new Error('La evaluación contiene demasiadas imágenes para enviarse en una sola operación. Reduce la cantidad o tamaño de fotografías y vuelve a guardar.');
+      }
+      const controller=new AbortController();
+      timer=setTimeout(()=>controller.abort(),SAVE_TIMEOUT_MS);
+      const r=await fetch('/api/evaluaciones',{method:'POST',headers:{'Content-Type':'application/json'},body,signal:controller.signal});
+      clearTimeout(timer);timer=null;
+      let j={};
+      try{j=await r.json()}catch(_){throw new Error('El servidor respondió sin un resultado válido. No se confirmó el guardado.');}
       if(!r.ok||j.status!=='success')throw new Error(j.message||'No se pudo guardar');
       button.textContent='Guardado ✓';
       setTimeout(()=>{window.location.href='/evaluaciones'},550);
-    }catch(e){button.disabled=false;button.textContent=old;alert('Error al guardar: '+e.message)}
+    }catch(e){
+      if(timer)clearTimeout(timer);
+      button.disabled=false;button.dataset.saving='0';button.textContent=old;
+      const msg=e&&e.name==='AbortError'
+        ?'El guardado superó 45 segundos y se canceló para evitar que la pantalla quede bloqueada. Revisa Evaluaciones guardadas antes de intentarlo otra vez. Si no aparece, reduce las fotografías o vuelve a guardar.'
+        :(e.message||'No se pudo guardar la evaluación.');
+      alert('Error al guardar: '+msg);
+    }
   }
   function appendixI(){
     const button=document.querySelector('.save'); if(!button)return;

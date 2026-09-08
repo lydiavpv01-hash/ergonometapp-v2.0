@@ -1,0 +1,31 @@
+<style>
+.matrix-meta-card{border:1px solid #dfe6d8;background:#fbfcfa;border-radius:12px;padding:14px;margin:0 0 16px}.matrix-meta-card h3{margin:0 0 5px;font-size:13px;color:#536d25}.matrix-meta-card>p{margin:0 0 12px;font-size:10px;color:#6d756f;line-height:1.5}.matrix-meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.matrix-meta-grid .full{grid-column:1/-1}.matrix-meta-card textarea{width:100%;min-height:76px;resize:vertical;border:1px solid #dfe5db;border-radius:9px;padding:10px;font:12px Inter,Segoe UI,Arial;background:#fff}.matrix-logo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;padding-top:12px;border-top:1px dashed #dfe5db}.matrix-logo-field{border:1px solid #e1e6df;border-radius:10px;padding:10px;background:#fff}.matrix-logo-field label{font-weight:800;color:#3e4942}.matrix-logo-field input[type=file]{padding:8px;font-size:11px}.matrix-logo-help{font-size:9px;color:#7a837d;line-height:1.4;margin-top:5px}.matrix-logo-preview{margin-top:8px;min-height:54px;display:flex;align-items:center}.matrix-logo-preview img{max-width:180px;max-height:64px;object-fit:contain;border:1px solid #edf0ec;border-radius:7px;background:#fff;padding:4px}@media(max-width:700px){.matrix-meta-grid,.matrix-logo-grid{grid-template-columns:1fr}.matrix-meta-grid .full{grid-column:auto}}
+</style>
+<script>
+(function(){
+  const body=document.querySelector('.panel .body');
+  if(!body||document.getElementById('matrixClientData'))return;
+  const firstFactor=body.querySelector('.factor');
+  const firstSection=body.querySelector('.section');
+  const anchor=firstSection||firstFactor;
+  const card=document.createElement('div');
+  card.className='matrix-meta-card'; card.id='matrixClientData';
+  card.innerHTML=`<h3>Datos para la matriz de entrega</h3><p>Esta información se conserva con la evaluación y se vacía automáticamente en el Excel descargable. Los logotipos se colocan en la fila de título de la matriz.</p>
+    <div class="matrix-meta-grid">
+      <div><label for="empresa">Empresa</label><input id="empresa" name="empresa" placeholder="Nombre o razón social del cliente"></div>
+      <div><label for="area">Área</label><input id="area" name="area" placeholder="Área evaluada"></div>
+      <div><label for="subarea">Subárea</label><input id="subarea" name="subarea" placeholder="Subárea / ubicación específica"></div>
+      <div><label for="actividad">Actividad/tarea</label><input id="actividad" name="actividad" placeholder="Actividad o tarea evaluada"></div>
+      <div class="full"><label for="descripcion">Descripción</label><textarea id="descripcion" name="descripcion" placeholder="Describe brevemente la actividad, secuencia o condición evaluada."></textarea></div>
+    </div>
+    <div class="matrix-logo-grid">
+      <div class="matrix-logo-field"><label for="logo_cliente">Logo del cliente · esquina superior izquierda</label><input id="logo_cliente" name="logo_cliente" type="file" accept="image/png,image/jpeg,image/webp"><div class="matrix-logo-help">Preferentemente PNG o JPG horizontal, con buena resolución.</div><div class="matrix-logo-preview" id="preview_logo_cliente"></div></div>
+      <div class="matrix-logo-field"><label for="logo_rfranyutti">Logo de RFranyutti · esquina superior derecha</label><input id="logo_rfranyutti" name="logo_rfranyutti" type="file" accept="image/png,image/jpeg,image/webp"><div class="matrix-logo-help">El archivo se guardará con la evaluación para utilizarlo en la matriz Excel.</div><div class="matrix-logo-preview" id="preview_logo_rfranyutti"></div></div>
+    </div>`;
+  if(anchor)body.insertBefore(card,anchor);else body.prepend(card);
+  ['logo_cliente','logo_rfranyutti'].forEach(id=>{
+    const input=document.getElementById(id),preview=document.getElementById('preview_'+id);
+    input.addEventListener('change',()=>{preview.innerHTML='';const f=(input.files||[])[0];if(!f)return;const img=document.createElement('img');img.alt=f.name;img.src=URL.createObjectURL(f);preview.appendChild(img)});
+  });
+})();
+</script>

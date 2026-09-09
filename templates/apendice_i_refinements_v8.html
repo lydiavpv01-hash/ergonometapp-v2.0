@@ -19,53 +19,37 @@ label:has(+ #tipo){display:none!important}
 (function(){
  const qsa=(s,r=document)=>Array.from(r.querySelectorAll(s));
  const safeKey=t=>(t||'factor').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'').slice(0,70);
- const tipo=document.getElementById('tipo');
- if(tipo){const field=tipo.parentElement;if(field)field.remove();}
- /* AI.2 a): la captura de frecuencia ya existe en el bloque de cálculo automático.
-    Se elimina únicamente la segunda captura repetida de "Interpolación automática de la gráfica". */
+ const tipo=document.getElementById('tipo');if(tipo){const field=tipo.parentElement;if(field)field.remove();}
+
+ /* AI.2 a): conservar UNA sola captura de frecuencia. La tarjeta antigua .interp-card
+    es la segunda captura repetida que se añadía por refinements_v3. */
+ const duplicate=document.querySelector('#ai2 .interp-card');
+ if(duplicate) duplicate.remove();
+
+ /* Normaliza los nombres de la captura visible "Frecuencia de levantamiento · cálculo automático"
+    para que el snapshot guardado y la matriz puedan recuperar los tres valores. */
  const ai2=document.getElementById('ai2');
  if(ai2){
-   qsa('.factor',ai2).forEach(f=>{
-     const h=f.querySelector('h3');
-     if(h && /peso de la carga y frecuencia/i.test(h.textContent||'')){
-       qsa('div',f).forEach(d=>{
-         const txt=(d.textContent||'').trim();
-         if(/^Interpolación automática de la gráfica/i.test(txt) && d.querySelector('input,select')) d.remove();
-       });
+   const factor=qsa('.factor',ai2).find(f=>/peso de la carga y frecuencia/i.test((f.querySelector('h3')||{}).textContent||''));
+   if(factor){
+     const blocks=qsa('div',factor);
+     const freqBlock=blocks.find(d=>/Frecuencia de levantamiento\s*·?\s*cálculo automático/i.test((d.textContent||'').trim()));
+     if(freqBlock){
+       const inputs=qsa('input',freqBlock), select=freqBlock.querySelector('select');
+       if(inputs[0]){inputs[0].name='numero_levantamientos';inputs[0].id='liftCountSaved'}
+       if(inputs[1]){inputs[1].name='cada_cuanto_tiempo';inputs[1].id='liftIntervalSaved'}
+       if(select){select.name='unidad_tiempo';select.id='liftUnitSaved';
+         Array.from(select.options).forEach(o=>{if(/^min/i.test(o.textContent||o.value))o.value='min';if(/^seg/i.test(o.textContent||o.value))o.value='seg'});
+       }
      }
-   });
- }
- function limitTwo(input,preview){
-   input.addEventListener('change',()=>{
-     let files=Array.from(input.files||[]).filter(f=>f.type.startsWith('image/'));
-     if(files.length>2){
-       try{const dt=new DataTransfer();files.slice(0,2).forEach(f=>dt.items.add(f));input.files=dt.files;files=files.slice(0,2)}catch(_){files=files.slice(0,2)}
-       alert('Puedes conservar un máximo de 2 fotografías de evidencia por factor.');
-     }
-     if(preview){preview.innerHTML='';files.slice(0,2).forEach(file=>{const img=document.createElement('img');img.alt=file.name;img.src=URL.createObjectURL(file);preview.appendChild(img)})}
-   });
- }
- function enhanceFactor(factor,sectionId,index){
-   const choice=factor.querySelector('.choices[data-factor]');
-   const factorKey=(choice&&choice.dataset.factor)||`${sectionId}_factor_${index+1}`;
-   const key=safeKey(factorKey);
-   const h=factor.querySelector('h3'); const title=h?h.textContent.trim():`Factor ${index+1}`;
-   let wrap=factor.querySelector('.factor-evidence');
-   if(!wrap){
-     wrap=document.createElement('div');wrap.className='factor-evidence';
-     wrap.innerHTML=`<div class="factor-evidence-title">Evidencia, justificación y conclusión del criterio seleccionado</div><div class="factor-evidence-grid"><div><label>Justificación de la selección</label><textarea name="justificacion_${key}" aria-label="Justificación · ${title}" placeholder="Describe por qué la condición observada corresponde a la opción seleccionada."></textarea><div class="factor-evidence-note">Explica el criterio técnico observado que sustenta la puntuación.</div></div><div><label>Conclusión del inciso</label><textarea name="conclusion_${key}" aria-label="Conclusión · ${title}" placeholder="Redacta la conclusión específica de este factor y, cuando aplique, la necesidad de control o seguimiento."></textarea><div class="factor-evidence-note">Esta conclusión se conservará para la matriz imprimible.</div></div><div style="grid-column:1/-1"><label>Fotografías de evidencia (máximo 2)</label><input name="evidencia_${key}" type="file" accept="image/*" multiple aria-label="Fotografías · ${title}"><div class="factor-evidence-note">Adjunta hasta dos fotografías asociadas específicamente a este factor.</div><div class="factor-photo-preview"></div></div></div>`;
-     factor.appendChild(wrap);
-   }else{
-     const grid=wrap.querySelector('.factor-evidence-grid')||wrap;
-     if(!wrap.querySelector(`[name="conclusion_${key}"]`)){
-       const block=document.createElement('div');block.className='factor-conclusion';block.innerHTML=`<label>Conclusión del inciso</label><textarea name="conclusion_${key}" aria-label="Conclusión · ${title}" placeholder="Redacta la conclusión específica de este factor y, cuando aplique, la necesidad de control o seguimiento."></textarea><div class="factor-evidence-note">Esta conclusión se conservará para la matriz imprimible.</div>`;
-       const photoBlock=grid.querySelector('input[type=file]')?.parentElement;
-       if(photoBlock)grid.insertBefore(block,photoBlock);else grid.appendChild(block);
-     }
-     const ttl=wrap.querySelector('.factor-evidence-title');if(ttl)ttl.textContent='Evidencia, justificación y conclusión del criterio seleccionado';
-     const inp=wrap.querySelector('input[type=file]');if(inp){const lab=inp.parentElement?.querySelector('label');if(lab)lab.textContent='Fotografías de evidencia (máximo 2)';const note=inp.parentElement?.querySelector('.factor-evidence-note');if(note)note.textContent='Adjunta hasta dos fotografías asociadas específicamente a este factor.'}
    }
-   const input=wrap.querySelector('input[type=file]');const preview=wrap.querySelector('.factor-photo-preview');if(input&&!input.dataset.max2){input.dataset.max2='1';limitTwo(input,preview)}
+ }
+
+ function limitTwo(input,preview){input.addEventListener('change',()=>{let files=Array.from(input.files||[]).filter(f=>f.type.startsWith('image/'));if(files.length>2){try{const dt=new DataTransfer();files.slice(0,2).forEach(f=>dt.items.add(f));input.files=dt.files;files=files.slice(0,2)}catch(_){files=files.slice(0,2)}alert('Puedes conservar un máximo de 2 fotografías de evidencia por factor.')}if(preview){preview.innerHTML='';files.slice(0,2).forEach(file=>{const img=document.createElement('img');img.alt=file.name;img.src=URL.createObjectURL(file);preview.appendChild(img)})}})}
+ function enhanceFactor(factor,sectionId,index){
+   const choice=factor.querySelector('.choices[data-factor]');const factorKey=(choice&&choice.dataset.factor)||`${sectionId}_factor_${index+1}`;const key=safeKey(factorKey);const h=factor.querySelector('h3');const title=h?h.textContent.trim():`Factor ${index+1}`;let wrap=factor.querySelector('.factor-evidence');
+   if(!wrap){wrap=document.createElement('div');wrap.className='factor-evidence';wrap.innerHTML=`<div class="factor-evidence-title">Evidencia, justificación y conclusión del criterio seleccionado</div><div class="factor-evidence-grid"><div><label>Justificación de la selección</label><textarea name="justificacion_${key}" aria-label="Justificación · ${title}" placeholder="Describe por qué la condición observada corresponde a la opción seleccionada."></textarea><div class="factor-evidence-note">Explica el criterio técnico observado que sustenta la puntuación.</div></div><div><label>Conclusión del inciso</label><textarea name="conclusion_${key}" aria-label="Conclusión · ${title}" placeholder="Redacta la conclusión específica de este factor y, cuando aplique, la necesidad de control o seguimiento."></textarea><div class="factor-evidence-note">Esta conclusión se conservará para la matriz imprimible.</div></div><div style="grid-column:1/-1"><label>Fotografías de evidencia (máximo 2)</label><input name="evidencia_${key}" type="file" accept="image/*" multiple aria-label="Fotografías · ${title}"><div class="factor-evidence-note">Adjunta hasta dos fotografías asociadas específicamente a este factor.</div><div class="factor-photo-preview"></div></div></div>`;factor.appendChild(wrap)}else{const grid=wrap.querySelector('.factor-evidence-grid')||wrap;if(!wrap.querySelector(`[name="conclusion_${key}"]`)){const block=document.createElement('div');block.className='factor-conclusion';block.innerHTML=`<label>Conclusión del inciso</label><textarea name="conclusion_${key}" aria-label="Conclusión · ${title}" placeholder="Redacta la conclusión específica de este factor y, cuando aplique, la necesidad de control o seguimiento."></textarea><div class="factor-evidence-note">Esta conclusión se conservará para la matriz imprimible.</div>`;const photoBlock=grid.querySelector('input[type=file]')?.parentElement;if(photoBlock)grid.insertBefore(block,photoBlock);else grid.appendChild(block)}const ttl=wrap.querySelector('.factor-evidence-title');if(ttl)ttl.textContent='Evidencia, justificación y conclusión del criterio seleccionado';const inp=wrap.querySelector('input[type=file]');if(inp){const lab=inp.parentElement?.querySelector('label');if(lab)lab.textContent='Fotografías de evidencia (máximo 2)'}}
+   const input=wrap.querySelector('input[type=file]'),preview=wrap.querySelector('.factor-photo-preview');if(input&&!input.dataset.max2){input.dataset.max2='1';limitTwo(input,preview)}
  }
  ['ai2','ai3','ai4'].forEach(id=>{const sec=document.getElementById(id);if(sec)qsa('.factor',sec).forEach((f,i)=>enhanceFactor(f,id,i))});
 })();

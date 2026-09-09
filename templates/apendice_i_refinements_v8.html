@@ -1,7 +1,6 @@
 <style>
 /* V8 · Captura técnica por factor y eliminación de elementos repetitivos */
 .grid > section.panel > .head{display:none!important}
-/* Cada pestaña AI.2, AI.3 y AI.4 ya identifica el tipo de actividad. */
 #tipo{display:none!important}
 label:has(+ #tipo){display:none!important}
 #tipo:has(option){display:none!important}
@@ -20,9 +19,22 @@ label:has(+ #tipo){display:none!important}
 (function(){
  const qsa=(s,r=document)=>Array.from(r.querySelectorAll(s));
  const safeKey=t=>(t||'factor').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'').slice(0,70);
- /* Elimina del DOM el selector redundante de tipo de actividad y su contenedor. */
  const tipo=document.getElementById('tipo');
  if(tipo){const field=tipo.parentElement;if(field)field.remove();}
+ /* AI.2 a): la captura de frecuencia ya existe en el bloque de cálculo automático.
+    Se elimina únicamente la segunda captura repetida de "Interpolación automática de la gráfica". */
+ const ai2=document.getElementById('ai2');
+ if(ai2){
+   qsa('.factor',ai2).forEach(f=>{
+     const h=f.querySelector('h3');
+     if(h && /peso de la carga y frecuencia/i.test(h.textContent||'')){
+       qsa('div',f).forEach(d=>{
+         const txt=(d.textContent||'').trim();
+         if(/^Interpolación automática de la gráfica/i.test(txt) && d.querySelector('input,select')) d.remove();
+       });
+     }
+   });
+ }
  function limitTwo(input,preview){
    input.addEventListener('change',()=>{
      let files=Array.from(input.files||[]).filter(f=>f.type.startsWith('image/'));

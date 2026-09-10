@@ -116,8 +116,6 @@ def install_matrix_enrichment(main_module):
                         else: color,color_class=main_module._color_for(key,value,'APENDICE_I')
                         cell['color']=color; cell['color_class']=color_class
 
-            # La fila de información general toma exactamente los datos de la captura AI.2.
-            # No se reconstruyen a partir de texto si el snapshot ya los conserva.
             ai2_cell = ((matrix.get('factor_rows') or [{}])[0].get('cells') or [{}])[0]
             count = _value_from(by_name, by_label, 'numero_levantamientos', 'liftCount', 'Número de levantamientos')
             interval = _value_from(by_name, by_label, 'cada_cuanto_tiempo', 'liftInterval', 'Cada cuánto tiempo', 'Cada')
@@ -150,11 +148,44 @@ def install_matrix_enrichment(main_module):
                 if key:
                     sk=_safe_key(key); item['conclusion']=_value_from(by_name,by_label,'conclusion_'+sk,'Conclusión · '+label,'Conclusión del inciso')
         else:
+            # Apéndice II: normalizar valores vacíos y recuperar la conclusión real de cada factor.
+            for item in matrix.get('factors') or []:
+                if item.get('value') is None or str(item.get('value')).strip().lower() in ('none','null',''):
+                    item['value'] = '—'
+
             for item in matrix.get('justification_rows') or []:
-                value=_numeric(item.get('value')); color=item.get('color') or ''; color_class=item.get('color_class') or 'c-empty'
-                if not color and value is not None: color,color_class=main_module._color_for('',value,matrix.get('kind','APENDICE_II'))
+                title=item.get('title') or ''
+                raw_key = item.get('factor') or item.get('key') or ''
+                if not raw_key:
+                    # Intenta inferir la clave desde el título y las selecciones guardadas.
+                    title_key = _safe_key(title)
+                    for factor_key, sel in sel_by.items():
+                        if title_key and (title_key in _safe_key(sel.get('title','')) or _safe_key(sel.get('title','')) in title_key):
+                            raw_key = factor_key
+                            break
+                value=_numeric(item.get('value'))
+                if value is None and raw_key:
+                    value=_numeric((sel_by.get(raw_key) or {}).get('value'))
+                if value is None:
+                    item['value']='—'
+                    color=''; color_class='c-empty'
+                else:
+                    item['value']=value
+                    color=item.get('color') or ''
+                    color_class=item.get('color_class') or 'c-empty'
+                    if not color:
+                        color,color_class=main_module._color_for(raw_key or '',value,matrix.get('kind','APENDICE_II'))
                 item['color']=color or '—'; item['color_class']=color_class; item['risk_level']=_band_from_color(color)
                 raw=item.get('condition') or '—'; item['condition_detail']=raw; item['condition']=f"{raw} · Nivel: {item['risk_level']} · Color: {color or '—'}"
+
+                conclusion=''
+                if raw_key:
+                    sk=_safe_key(raw_key)
+                    conclusion=_value_from(by_name,by_label,'conclusion_'+sk,'Conclusión · '+title,'Conclusión del inciso')
+                if not conclusion:
+                    conclusion=_value_from(by_name,by_label,'Conclusión · '+title)
+                item['conclusion']=conclusion or '—'
+
         return matrix
 
     main_module._generic_matrix = enriched

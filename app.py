@@ -91,12 +91,10 @@ def after_request(response):
                 html = html.replace('</body>', matrix_meta + '</body>')
 
         if request.path in ('/apendice-i/nueva','/apendice-ii/nueva','/cuestionario-nordico/nueva'):
-            script = '<script src="/static/js/nom_persistence.js?v=5"></script>'
+            script = '<script src="/static/js/nom_persistence.js?v=6"></script>'
             if script not in html:
                 html = html.replace('</body>', script + '</body>')
 
-        # Las matrices se imprimen en doble carta (17 x 11 in) horizontal,
-        # conservando la misma composición, colores y proporciones de la vista.
         if request.path.endswith('/matriz'):
             print_css = '<link rel="stylesheet" href="/static/css/matrix_print_tabloid.css?v=1">'
             if 'matrix_print_tabloid.css' not in html:

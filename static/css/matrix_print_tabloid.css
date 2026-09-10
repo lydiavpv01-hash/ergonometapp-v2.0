@@ -33,26 +33,29 @@
   }
   .toolbar{display:none!important}
 
-  /* HOJA 1: documento cerrado. Nada anterior a Justificación puede saltar a hoja 2. */
-  .paper:first-of-type{
+  /* Cada hoja se comporta como una hoja física: el pie siempre conserva su posición. */
+  .paper{
     box-sizing:border-box!important;
     width:16.60in!important;
     min-width:16.60in!important;
     max-width:16.60in!important;
-    height:10.68in!important;
     min-height:10.68in!important;
-    max-height:10.68in!important;
     margin:0 auto!important;
-    padding:.08in .16in .18in!important;
     box-shadow:none!important;
-    overflow:hidden!important;
     position:relative!important;
+  }
+
+  /* HOJA 1: documento cerrado. Nada anterior a Justificación puede saltar a hoja 2. */
+  .paper:first-of-type{
+    height:10.68in!important;
+    max-height:10.68in!important;
+    padding:.08in .16in .22in!important;
+    overflow:hidden!important;
     break-inside:avoid-page!important;
     page-break-inside:avoid!important;
     break-after:auto!important;
     page-break-after:auto!important;
   }
-  /* Se reduce sólo un poco el bloque útil para reservar físicamente el pie dentro de hoja 1. */
   .paper:first-of-type .paper-content{
     zoom:.585!important;
     padding-bottom:.18in!important;
@@ -71,36 +74,31 @@
   .paper:first-of-type .risk-grid{gap:1.5px!important;margin-top:.4px!important}
   .paper:first-of-type .risk-table{font-size:5.15pt!important}
   .paper:first-of-type .risk-table th,.paper:first-of-type .risk-table td{padding:.6px 1.1px!important;line-height:.98!important}
-  /* Pie anclado DENTRO de la primera hoja; no participa en el flujo ni genera segunda página. */
-  .paper:first-of-type .page-footer{
+
+  /* Pie de página real: misma posición física en TODAS las hojas. */
+  .page-footer{
     position:absolute!important;
     left:.16in!important;
     right:.16in!important;
-    bottom:.025in!important;
+    bottom:.035in!important;
     margin:0!important;
-    padding:0!important;
-    height:.12in!important;
+    padding-top:2px!important;
+    min-height:.14in!important;
     line-height:.12in!important;
+    background:#fff!important;
+    z-index:10!important;
     break-before:auto!important;
     page-break-before:auto!important;
     break-after:auto!important;
     page-break-after:auto!important;
   }
 
-  /* HOJAS 2 EN ADELANTE: Justificación/evidencias pueden continuar naturalmente. */
+  /* HOJAS 2 EN ADELANTE: reservan siempre la franja inferior para el pie. */
   .paper:not(:first-of-type){
-    box-sizing:border-box!important;
-    width:16.60in!important;
-    min-width:16.60in!important;
-    max-width:16.60in!important;
     height:auto!important;
-    min-height:10.72in!important;
     max-height:none!important;
-    margin:0 auto!important;
-    padding:.16in .20in .30in!important;
-    box-shadow:none!important;
+    padding:.16in .20in .34in!important;
     overflow:visible!important;
-    position:relative!important;
     break-inside:auto!important;
     page-break-inside:auto!important;
     break-after:auto!important;
@@ -108,8 +106,7 @@
   }
   .paper + .paper{break-before:page!important;page-break-before:always!important}
   .paper:last-child{break-after:auto!important;page-break-after:auto!important}
-  .paper:not(:first-of-type) .paper-content{padding-bottom:.22in!important}
-  .paper:not(:first-of-type) .page-footer{position:static!important;margin-top:8px!important;left:auto!important;right:auto!important;bottom:auto!important}
+  .paper:not(:first-of-type) .paper-content{padding-bottom:.30in!important}
 
   .justify{table-layout:fixed!important;break-inside:auto!important;page-break-inside:auto!important}
   .justify thead{display:table-header-group!important}

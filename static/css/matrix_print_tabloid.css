@@ -39,11 +39,11 @@
     width:16.60in!important;
     min-width:16.60in!important;
     max-width:16.60in!important;
-    height:10.72in!important;
-    min-height:10.72in!important;
-    max-height:10.72in!important;
+    height:10.68in!important;
+    min-height:10.68in!important;
+    max-height:10.68in!important;
     margin:0 auto!important;
-    padding:.10in .16in .25in!important;
+    padding:.08in .16in .18in!important;
     box-shadow:none!important;
     overflow:hidden!important;
     position:relative!important;
@@ -52,28 +52,42 @@
     break-after:auto!important;
     page-break-after:auto!important;
   }
+  /* Se reduce sólo un poco el bloque útil para reservar físicamente el pie dentro de hoja 1. */
   .paper:first-of-type .paper-content{
-    zoom:.60!important;
-    padding-bottom:.04in!important;
+    zoom:.585!important;
+    padding-bottom:.18in!important;
   }
-  .paper:first-of-type .doc-head{min-height:38px!important}
+  .paper:first-of-type .doc-head{min-height:37px!important}
   .paper:first-of-type .logo-box{padding:1px!important}
-  .paper:first-of-type .logo-box img{max-height:31px!important}
-  .paper:first-of-type .doc-title{font-size:8.5pt!important;padding:1.5px!important}
-  .paper:first-of-type .section-title{font-size:7.2pt!important;padding:1px!important}
-  .paper:first-of-type .info{font-size:6.4pt!important}
-  .paper:first-of-type .info td{padding:.8px 1.7px!important;line-height:1!important}
-  .paper:first-of-type .photos{gap:2px!important;padding:2px!important}
-  .paper:first-of-type .photo{height:58px!important}
-  .paper:first-of-type .matrix{font-size:5.8pt!important;margin-top:.5px!important}
-  .paper:first-of-type .matrix th,.paper:first-of-type .matrix td{padding:.7px 1.2px!important;line-height:1!important}
-  .paper:first-of-type .risk-grid{gap:2px!important;margin-top:.5px!important}
-  .paper:first-of-type .risk-table{font-size:5.25pt!important}
-  .paper:first-of-type .risk-table th,.paper:first-of-type .risk-table td{padding:.7px 1.2px!important;line-height:1!important}
-  .paper:first-of-type .page-footer{left:.16in!important;right:.16in!important;bottom:.05in!important}
+  .paper:first-of-type .logo-box img{max-height:30px!important}
+  .paper:first-of-type .doc-title{font-size:8.4pt!important;padding:1.3px!important}
+  .paper:first-of-type .section-title{font-size:7.1pt!important;padding:.8px!important}
+  .paper:first-of-type .info{font-size:6.3pt!important}
+  .paper:first-of-type .info td{padding:.7px 1.6px!important;line-height:.98!important}
+  .paper:first-of-type .photos{gap:2px!important;padding:1.5px!important}
+  .paper:first-of-type .photo{height:56px!important}
+  .paper:first-of-type .matrix{font-size:5.7pt!important;margin-top:.4px!important}
+  .paper:first-of-type .matrix th,.paper:first-of-type .matrix td{padding:.6px 1.1px!important;line-height:.98!important}
+  .paper:first-of-type .risk-grid{gap:1.5px!important;margin-top:.4px!important}
+  .paper:first-of-type .risk-table{font-size:5.15pt!important}
+  .paper:first-of-type .risk-table th,.paper:first-of-type .risk-table td{padding:.6px 1.1px!important;line-height:.98!important}
+  /* Pie anclado DENTRO de la primera hoja; no participa en el flujo ni genera segunda página. */
+  .paper:first-of-type .page-footer{
+    position:absolute!important;
+    left:.16in!important;
+    right:.16in!important;
+    bottom:.025in!important;
+    margin:0!important;
+    padding:0!important;
+    height:.12in!important;
+    line-height:.12in!important;
+    break-before:auto!important;
+    page-break-before:auto!important;
+    break-after:auto!important;
+    page-break-after:auto!important;
+  }
 
-  /* HOJAS 2 EN ADELANTE: Justificación/evidencias pueden continuar naturalmente.
-     No se recortan por una altura fija ni por overflow. */
+  /* HOJAS 2 EN ADELANTE: Justificación/evidencias pueden continuar naturalmente. */
   .paper:not(:first-of-type){
     box-sizing:border-box!important;
     width:16.60in!important;
@@ -97,8 +111,6 @@
   .paper:not(:first-of-type) .paper-content{padding-bottom:.22in!important}
   .paper:not(:first-of-type) .page-footer{position:static!important;margin-top:8px!important;left:auto!important;right:auto!important;bottom:auto!important}
 
-  /* La tabla de justificación puede ocupar tantas hojas como necesite,
-     pero cada factor se intenta mantener completo dentro de una hoja. */
   .justify{table-layout:fixed!important;break-inside:auto!important;page-break-inside:auto!important}
   .justify thead{display:table-header-group!important}
   .justify tbody{break-inside:auto!important;page-break-inside:auto!important}
@@ -107,7 +119,6 @@
   .thumbs{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;gap:2mm!important}
   .thumbs img{width:45mm!important;height:30mm!important;flex:0 0 45mm!important}
 
-  /* Bloques que sí deben conservarse completos. */
   .paper:first-of-type .doc-head,
   .paper:first-of-type .info,
   .paper:first-of-type .photos,

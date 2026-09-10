@@ -9,6 +9,8 @@ def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if 'usuario' not in session: return redirect('/login')
+        session.permanent = True
+        session.modified = True
         return f(*args, **kwargs)
     return decorated_function
 
@@ -20,7 +22,11 @@ def login():
     if request.method == 'POST':
         usuario=request.form.get('usuario'); password=request.form.get('password')
         if usuario in DEMO_USERS and DEMO_USERS[usuario] == password:
-            session['usuario']=usuario; return redirect('/dashboard')
+            session.clear()
+            session.permanent = True
+            session['usuario']=usuario
+            session.modified = True
+            return redirect('/dashboard')
         return render_template('login.html', error='Usuario o contraseña incorrectos')
     return render_template('login.html')
 
@@ -230,7 +236,4 @@ def evaluacion_pdf(evaluation_id): return redirect(f'/evaluaciones/{evaluation_i
 
 @bp_main.route('/metodos')
 @login_required
-def metodos(): return jsonify({'métodos':[{'nombre':'REBA','url':'/reba/nueva'},{'nombre':'Ley SILLA','url':'/ley-silla/nueva'},{'nombre':'LEST','url':'/lest/nueva'},{'nombre':'Apéndice I','url':'/apendice-i/nueva'},{'nombre':'Apéndice II','url':'/apendice-ii/nueva'},{'nombre':'Kuorinka','url':'/cuestionario-nordico/nueva'}]})
-
-@bp_main.route('/health')
-def health(): return jsonify({'status':'ok','app':'ErgonometApp v2.0'})
+def metodos(): return jsonify({'métodos':[{'nombre':'REBA','url':'/reba/nueva'},{'nombre':'Ley SILLA','url':'/ley-silla/nueva'},{'nombre':'LEST','url':'/lest/nueva'},{'nombre':'Apéndice I','url':'/apendice-i/nueva'},{'nombre':'Apéndice II','url':'/apendice-ii/nueva'},{'nombre':'Cuestionario Nórdico / Kuorinka','url':'/cuestionario-nordico/nueva'}]})

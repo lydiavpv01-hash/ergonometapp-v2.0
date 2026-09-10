@@ -1,8 +1,4 @@
-/* Impresión de matrices ErgonometApp en doble carta / Tabloid (17 x 11 in), horizontal.
-   El objetivo es conservar la misma composición visual de la vista en pantalla. */
-
-/* Tipografía de la matriz: incremento real de aproximadamente 2 pt respecto
-   a los tamaños previos definidos en px dentro de matriz_imprimible.html. */
+/* Impresión de matrices ErgonometApp en doble carta / Tabloid (17 x 11 in), horizontal. */
 .doc-title{font-size:12pt!important}
 .section-title{font-size:9.5pt!important}
 .info{font-size:9pt!important}
@@ -15,6 +11,16 @@
 .reba-card b{font-size:9.5pt!important}
 .page-footer{font-size:7.85pt!important}
 
+/* Evidencias por factor: dos fotografías, una junto a la otra. */
+.justify{table-layout:fixed}
+.justify th:nth-child(1),.justify td:nth-child(1){width:15%}
+.justify th:nth-child(2),.justify td:nth-child(2){width:20%}
+.justify th:nth-child(3),.justify td:nth-child(3){width:21%}
+.justify th:nth-child(4),.justify td:nth-child(4){width:20%}
+.justify th:nth-child(5),.justify td:nth-child(5){width:24%}
+.thumbs{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;gap:2mm!important;align-items:flex-start!important;justify-content:flex-start!important}
+.thumbs img{width:45mm!important;height:30mm!important;flex:0 0 45mm!important;object-fit:contain!important}
+
 @media print {
   html, body {
     width: 17in !important;
@@ -26,83 +32,76 @@
     print-color-adjust: exact !important;
   }
 
-  .toolbar {
-    display: none !important;
-  }
+  .toolbar {display:none!important}
 
   .paper {
-    width: 16.45in !important;
-    min-width: 16.45in !important;
-    max-width: 16.45in !important;
-    min-height: 10.45in !important;
-    height: auto !important;
-    margin: 0 auto !important;
-    padding: .28in .32in .42in !important;
-    box-shadow: none !important;
-    overflow: visible !important;
-    break-inside: avoid-page !important;
-    page-break-inside: avoid !important;
-    break-after: page !important;
-    page-break-after: always !important;
+    box-sizing:border-box!important;
+    width:16.45in!important;
+    min-width:16.45in!important;
+    max-width:16.45in!important;
+    height:10.50in!important;
+    min-height:10.50in!important;
+    max-height:10.50in!important;
+    margin:0 auto!important;
+    padding:.16in .22in .30in!important;
+    box-shadow:none!important;
+    overflow:hidden!important;
+    break-inside:avoid-page!important;
+    page-break-inside:avoid!important;
+    break-after:auto!important;
+    page-break-after:auto!important;
+    position:relative!important;
+  }
+
+  /* Sólo las hojas posteriores comienzan en una página nueva. Así la hoja 1 no se fragmenta. */
+  .paper + .paper {
+    break-before:page!important;
+    page-break-before:always!important;
   }
 
   .paper:last-child {
-    break-after: auto !important;
-    page-break-after: auto !important;
+    break-after:auto!important;
+    page-break-after:auto!important;
   }
 
-  .paper-content {
-    padding-bottom: .32in !important;
+  /* La primera hoja debe contener TODO hasta las tablas normativas inferiores.
+     Se escala exclusivamente su contenido, no los cálculos ni los datos. */
+  .paper:first-of-type .paper-content {
+    zoom:.68!important;
+    padding-bottom:.08in!important;
+  }
+  .paper:first-of-type .doc-head{min-height:42px!important}
+  .paper:first-of-type .logo-box{padding:1px!important}
+  .paper:first-of-type .logo-box img{max-height:34px!important}
+  .paper:first-of-type .doc-title{font-size:9pt!important;padding:2px!important}
+  .paper:first-of-type .section-title{font-size:7.6pt!important;padding:1.5px!important}
+  .paper:first-of-type .info{font-size:6.8pt!important}
+  .paper:first-of-type .info td{padding:1px 2px!important;line-height:1.02!important}
+  .paper:first-of-type .photos{gap:2px!important;padding:2px!important}
+  .paper:first-of-type .photo{height:68px!important}
+  .paper:first-of-type .matrix{font-size:6.2pt!important;margin-top:1px!important}
+  .paper:first-of-type .matrix th,.paper:first-of-type .matrix td{padding:1px 1.5px!important;line-height:1.02!important}
+  .paper:first-of-type .risk-grid{gap:2px!important;margin-top:1px!important}
+  .paper:first-of-type .risk-table{font-size:5.7pt!important}
+  .paper:first-of-type .risk-table th,.paper:first-of-type .risk-table td{padding:1px 1.5px!important;line-height:1.02!important}
+
+  .paper-content{padding-bottom:.20in!important}
+  .break{margin-top:0!important}
+  .page-footer{left:.22in!important;right:.22in!important;bottom:.08in!important}
+
+  .doc-head,.info,.photos,.matrix,.risk-grid,.risk-table,.justify,.reba-grid,.finalbox {
+    break-inside:avoid-page!important;
+    page-break-inside:avoid!important;
   }
 
-  .break {
-    margin-top: 0 !important;
-    break-before: page !important;
-    page-break-before: always !important;
+  .justify{table-layout:fixed!important}
+  .thumbs{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;gap:2mm!important}
+  .thumbs img{width:45mm!important;height:30mm!important;flex:0 0 45mm!important}
+
+  .doc-title,.section-title,.matrix th,.matrix td,.risk-table th,.risk-table td,.justify th,.justify td,.c-verde,.c-amarillo,.c-naranja,.c-rojo,.c-morado,.c-magenta,.risk-result {
+    -webkit-print-color-adjust:exact!important;
+    print-color-adjust:exact!important;
   }
 
-  .page-footer {
-    left: .32in !important;
-    right: .32in !important;
-    bottom: .12in !important;
-  }
-
-  /* Evita que los bloques principales se fragmenten entre hojas. */
-  .doc-head,
-  .info,
-  .photos,
-  .matrix,
-  .risk-grid,
-  .risk-table,
-  .justify,
-  .reba-grid,
-  .finalbox {
-    break-inside: avoid-page !important;
-    page-break-inside: avoid !important;
-  }
-
-  /* Mantener exactamente los colores SGC y los colores normativos. */
-  .doc-title,
-  .section-title,
-  .matrix th,
-  .matrix td,
-  .risk-table th,
-  .risk-table td,
-  .justify th,
-  .justify td,
-  .c-verde,
-  .c-amarillo,
-  .c-naranja,
-  .c-rojo,
-  .c-morado,
-  .c-magenta,
-  .risk-result {
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
-  @page {
-    size: 17in 11in;
-    margin: .18in;
-  }
+  @page {size:17in 11in;margin:.18in}
 }

@@ -21,7 +21,8 @@ def _snapshot_fields(payload):
     fields = snap.get('fields') or []
     by_name = {f.get('name', ''): f for f in fields if f.get('name')}
     by_label = {_safe_key(f.get('label', '')): f for f in fields if f.get('label')}
-    return fields, by_name, by_label
+    by_id = {f.get('id', ''): f for f in fields if f.get('id')}
+    return fields, by_name, by_label, by_id
 
 
 def _snapshot_selections(payload):
@@ -38,6 +39,15 @@ def _value_from(by_name, by_label, *names):
         item = by_label.get(_safe_key(name)) or {}
         value = str(item.get('value', '') or '').strip()
         if value: return value
+    return ''
+
+
+def _id_value(by_id, *ids):
+    for ident in ids:
+        item = by_id.get(ident) or {}
+        value = str(item.get('value', '') or '').strip()
+        if value:
+            return value
     return ''
 
 
@@ -64,6 +74,29 @@ AI1_KEYS = [
     ('Comunicación, coordinación y control', None, None, 'ai4_coordinacion'),
 ]
 
+AII_LABELS_SIN = [
+    ('Peso de la carga', 'weight'),
+    ('Postura', 'postura'),
+    ('Agarre de la mano', 'agarre'),
+    ('Patrón de trabajo', 'patron'),
+    ('Distancia por viaje', 'distancia'),
+    ('Superficie de trabajo', 'superficie'),
+    ('Obstáculos a lo largo de la ruta', 'obstaculos'),
+    ('Otros factores', 'otros'),
+]
+
+AII_LABELS_CON = [
+    ('Peso de la carga', 'weight'),
+    ('Postura', 'postura'),
+    ('Acoplamiento mano-carga', 'agarre'),
+    ('Patrón de trabajo', 'patron'),
+    ('Distancia por viaje', 'distancia'),
+    ('Condición del equipo auxiliar', 'equipoCond'),
+    ('Superficie de trabajo', 'superficie'),
+    ('Obstáculos a lo largo de la ruta', 'obstaculos'),
+    ('Otros factores', 'otros'),
+]
+
 
 def install_matrix_enrichment(main_module):
     original = main_module._generic_matrix
@@ -79,7 +112,7 @@ def install_matrix_enrichment(main_module):
             pass
 
         matrix = original(e, payload, result)
-        _, by_name, by_label = _snapshot_fields(payload)
+        _, by_name, by_label, by_id = _snapshot_fields(payload)
         sel_by = _snapshot_selections(payload)
         meta = payload.get('meta') or {}
 
@@ -148,16 +181,64 @@ def install_matrix_enrichment(main_module):
                 if key:
                     sk=_safe_key(key); item['conclusion']=_value_from(by_name,by_label,'conclusion_'+sk,'Conclusión · '+label,'Conclusión del inciso')
         else:
-            # Apéndice II: normalizar valores vacíos y recuperar la conclusión real de cada factor.
+            # Apéndice II: recuperar modalidad/subtipo para construir AII.4 o AII.6 como en la NOM.
+            ev = payload.get('evaluation') or {}
+            mode = str(ev.get('modo') or _id_value(by_id, 'modo') or 'sin').strip().lower()
+            subtype = str(ev.get('equipo') if mode == 'con' else ev.get('mov') or '').strip().lower()
+            if not subtype:
+                subtype = _id_value(by_id, 'equipo' if mode == 'con' else 'mov').strip().lower()
+            if mode == 'con':
+                headers = ['Equipo Pequeño', 'Equipo mediano', 'Equipo grande']
+                subtype_index = {'peq':0, 'med':1, 'grande':2}.get(subtype, 0)
+                row_defs = AII_LABELS_CON
+                matrix['aii_section'] = 'AII.6'
+                matrix['aii_heading'] = 'Estimación del nivel de riesgo de actividades que impliquen empuje o arrastre de cargas con el uso de equipo auxiliar'
+            else:
+                headers = ['Rodando', 'Girando sobre su base', 'Arrastrando/jalando o deslizando']
+                subtype_index = {'rodar':0, 'girar':1, 'arrastrar':2}.get(subtype, 0)
+                row_defs = AII_LABELS_SIN
+                matrix['aii_section'] = 'AII.4'
+                matrix['aii_heading'] = 'Estimación del nivel de riesgo de actividades que impliquen empuje o arrastre de cargas sin equipo auxiliar'
+            matrix['aii_mode'] = mode
+            matrix['aii_subtype'] = subtype
+            matrix['aii_headers'] = headers
+            matrix['aii_selected_index'] = subtype_index
+
+            factors_by_title = {f.get('title',''):f for f in matrix.get('factors') or []}
+            title_by_key = {
+                'weight':'Peso / tipo de desplazamiento','postura':'Postura','agarre':'Acoplamiento mano-carga',
+                'patron':'Patrón de trabajo','distancia':'Distancia por viaje','equipoCond':'Condición del equipo auxiliar',
+                'superficie':'Superficie de trabajo','obstaculos':'Obstáculos','otros':'Otros factores'
+            }
+            factor_rows=[]
+            for label,key in row_defs:
+                f=factors_by_title.get(title_by_key[key]) or {}
+                value=_numeric(f.get('value'))
+                if value is None:
+                    value=_numeric((sel_by.get(key) or {}).get('value'))
+                color=f.get('color') or ''
+                cls=f.get('color_class') or 'c-empty'
+                if value is not None and not color:
+                    color,cls=main_module._color_for(key,value,'APENDICE_II')
+                cells=[{'color':'','color_class':'c-empty','value':None} for _ in range(3)]
+                cells[subtype_index]={'color':color or '—','color_class':cls,'value':value}
+                factor_rows.append({'label':label,'cells':cells,'key':key})
+            matrix['aii_factor_rows']=factor_rows
+            matrix['aii_score']=_numeric((result or {}).get('final_score'))
+            if matrix['aii_score'] is None:
+                matrix['aii_score']=_numeric(getattr(e,'final_score',None)) or 0
+            matrix['aii_level']=(result or {}).get('risk_level') or getattr(e,'risk_level','') or _band_from_color('')
+
+            # Normalizar valores y recuperar conclusión de cada factor.
             for item in matrix.get('factors') or []:
                 if item.get('value') is None or str(item.get('value')).strip().lower() in ('none','null',''):
                     item['value'] = '—'
 
+            title_to_key = {v:k for k,v in title_by_key.items()}
             for item in matrix.get('justification_rows') or []:
                 title=item.get('title') or ''
-                raw_key = item.get('factor') or item.get('key') or ''
+                raw_key = item.get('factor') or item.get('key') or title_to_key.get(title,'')
                 if not raw_key:
-                    # Intenta inferir la clave desde el título y las selecciones guardadas.
                     title_key = _safe_key(title)
                     for factor_key, sel in sel_by.items():
                         if title_key and (title_key in _safe_key(sel.get('title','')) or _safe_key(sel.get('title','')) in title_key):
@@ -167,23 +248,18 @@ def install_matrix_enrichment(main_module):
                 if value is None and raw_key:
                     value=_numeric((sel_by.get(raw_key) or {}).get('value'))
                 if value is None:
-                    item['value']='—'
-                    color=''; color_class='c-empty'
+                    item['value']='—'; color=''; color_class='c-empty'
                 else:
                     item['value']=value
-                    color=item.get('color') or ''
-                    color_class=item.get('color_class') or 'c-empty'
-                    if not color:
-                        color,color_class=main_module._color_for(raw_key or '',value,matrix.get('kind','APENDICE_II'))
+                    color=item.get('color') or ''; color_class=item.get('color_class') or 'c-empty'
+                    if not color: color,color_class=main_module._color_for(raw_key or '',value,matrix.get('kind','APENDICE_II'))
                 item['color']=color or '—'; item['color_class']=color_class; item['risk_level']=_band_from_color(color)
                 raw=item.get('condition') or '—'; item['condition_detail']=raw; item['condition']=f"{raw} · Nivel: {item['risk_level']} · Color: {color or '—'}"
-
                 conclusion=''
                 if raw_key:
                     sk=_safe_key(raw_key)
                     conclusion=_value_from(by_name,by_label,'conclusion_'+sk,'Conclusión · '+title,'Conclusión del inciso')
-                if not conclusion:
-                    conclusion=_value_from(by_name,by_label,'Conclusión · '+title)
+                if not conclusion: conclusion=_value_from(by_name,by_label,'Conclusión · '+title)
                 item['conclusion']=conclusion or '—'
 
         return matrix

@@ -91,7 +91,7 @@ def after_request(response):
                 html = html.replace('</body>', matrix_meta + '</body>')
 
         if request.path in ('/apendice-i/nueva','/apendice-ii/nueva','/cuestionario-nordico/nueva'):
-            script = '<script src="/static/js/nom_persistence.js?v=4"></script>'
+            script = '<script src="/static/js/nom_persistence.js?v=5"></script>'
             if script not in html:
                 html = html.replace('</body>', script + '</body>')
 

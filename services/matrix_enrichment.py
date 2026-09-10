@@ -115,6 +115,26 @@ def install_matrix_enrichment(main_module):
                             color_class='c-verde' if value==0 else 'c-naranja' if value==4 else 'c-rojo' if value==6 else 'c-morado'
                         else: color,color_class=main_module._color_for(key,value,'APENDICE_I')
                         cell['color']=color; cell['color_class']=color_class
+
+            # La fila de información general toma exactamente los datos de la captura AI.2.
+            # No se reconstruyen a partir de texto si el snapshot ya los conserva.
+            ai2_cell = ((matrix.get('factor_rows') or [{}])[0].get('cells') or [{}])[0]
+            count = _value_from(by_name, by_label, 'numero_levantamientos', 'liftCount', 'Número de levantamientos')
+            interval = _value_from(by_name, by_label, 'cada_cuanto_tiempo', 'liftInterval', 'Cada cuánto tiempo', 'Cada')
+            unit = _value_from(by_name, by_label, 'unidad_tiempo', 'liftUnit', 'Unidad de tiempo')
+            if unit.lower() in ('minutos','minuto','mins'):
+                unit = 'min'
+            elif unit.lower() in ('segundos','segundo','secs','sec'):
+                unit = 'seg'
+            matrix['interpolation'] = {
+                'color': ai2_cell.get('color') or '',
+                'value': ai2_cell.get('value'),
+                'color_class': ai2_cell.get('color_class') or 'c-empty',
+                'count': count,
+                'interval': interval,
+                'unit': unit,
+            }
+
             for item in matrix.get('justification_rows') or []:
                 title=item.get('title') or ''; label,sec=title.rsplit(' · ',1) if ' · ' in title else (title,'')
                 key=key_by_title.get((label,sec)); sel=sel_by.get(key) if key else {}; value=_numeric(item.get('value'))

@@ -96,7 +96,7 @@ def after_request(response):
                 html = html.replace('</body>', script + '</body>')
 
         if request.path.endswith('/matriz'):
-            print_css = '<link rel="stylesheet" href="/static/css/matrix_print_tabloid.css?v=2">'
+            print_css = '<link rel="stylesheet" href="/static/css/matrix_print_tabloid.css?v=3">'
             if 'matrix_print_tabloid.css' not in html:
                 html = html.replace('</head>', print_css + '</head>')
 

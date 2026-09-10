@@ -1,0 +1,37 @@
+<style>
+.nom-ref-block{margin:10px 0 12px;padding:10px;border:1px solid #dfe5db;border-radius:10px;background:#fff}.nom-ref-title{font-size:10px;font-weight:800;color:#536d25;margin-bottom:8px}.nom-ref-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.nom-ref-grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}.nom-ref-item{border:1px solid #e1e6df;border-radius:8px;padding:8px;text-align:center;background:#fafbf9}.nom-ref-item img{display:block;width:100%;height:180px;object-fit:contain;margin:auto;background:#fff}.nom-ref-item b{display:block;font-size:10px;margin-top:6px;color:#303833}.nom-ref-note{font-size:9px;color:#747d77;line-height:1.45;margin-top:7px}@media(max-width:760px){.nom-ref-grid,.nom-ref-grid.two{grid-template-columns:1fr}.nom-ref-item img{height:210px}}
+</style>
+<script>
+(function(){
+ const BASE='https://dof.gob.mx/normasOficiales/7468/stps11_C/';
+ const factors=()=>Array.from(document.querySelectorAll('.factor'));
+ function byTitle(rx){return factors().find(f=>rx.test((f.querySelector('h3')?.textContent||'')));}
+ function block(items,cols){return `<div class="nom-ref-block" data-nom-ref="1"><div class="nom-ref-title">Imagen de referencia de la NOM-036-1-STPS-2018</div><div class="nom-ref-grid ${cols===2?'two':''}">${items.map(x=>`<div class="nom-ref-item"><img src="${BASE}${x.img}" alt="${x.alt}" loading="lazy"><b>${x.label}</b></div>`).join('')}</div><div class="nom-ref-note">Referencia visual oficial del Apéndice II. La propia NOM señala que estas ilustraciones son una guía para ayudar a comprender mejor la evaluación y no son detalladas ni exhaustivas.</div></div>`}
+ function put(f,html){if(!f||f.querySelector('[data-nom-ref]'))return;const help=f.querySelector('.norm-help');if(help)help.insertAdjacentHTML('afterend',html);else f.querySelector('h3')?.insertAdjacentHTML('afterend',html)}
+ function render(){
+   const con=(document.getElementById('modo')?.value==='con');
+   document.querySelectorAll('[data-nom-ref]').forEach(x=>x.remove());
+   const first=factors()[0];
+   if(con){
+     put(first,block([
+       {img:'img29.png',alt:'Equipo auxiliar pequeño de una o dos ruedas',label:'Pequeño · una o dos ruedas'},
+       {img:'img30.png',alt:'Equipo auxiliar mediano de tres o más ruedas',label:'Mediano · tres o más ruedas'},
+       {img:'img31.png',alt:'Equipo auxiliar grande, dirigible o sobre rieles',label:'Grande / dirigible / sobre rieles'}
+     ],3));
+     put(byTitle(/postura/i),block([{img:'img32.png',alt:'Referencia normativa de postura con equipo auxiliar',label:'Postura · AII.5 b)'}],2));
+     put(byTitle(/acoplamiento/i),block([{img:'img33.png',alt:'Referencia normativa de acoplamiento mano-carga con equipo auxiliar',label:'Acoplamiento mano-carga · AII.5 c)'}],2));
+   }else{
+     put(first,block([
+       {img:'img24.png',alt:'Carga desplazada rodando',label:'Rodando'},
+       {img:'img25.png',alt:'Carga girando sobre su base',label:'Girando sobre su base'},
+       {img:'img26.png',alt:'Carga arrastrada, jalada o deslizada',label:'Arrastrar / jalar / deslizar'}
+     ],3));
+     put(byTitle(/postura/i),block([{img:'img27.png',alt:'Referencia normativa de postura sin equipo auxiliar',label:'Postura · AII.3 b)'}],2));
+     put(byTitle(/acoplamiento/i),block([{img:'img28.png',alt:'Referencia normativa de acoplamiento mano-carga sin equipo auxiliar',label:'Acoplamiento mano-carga · AII.3 c)'}],2));
+   }
+ }
+ document.addEventListener('click',e=>{if(e.target.closest('[data-mode]'))setTimeout(render,30)});
+ const modo=document.getElementById('modo');if(modo)modo.addEventListener('change',()=>setTimeout(render,30));
+ setTimeout(render,80);
+})();
+</script>

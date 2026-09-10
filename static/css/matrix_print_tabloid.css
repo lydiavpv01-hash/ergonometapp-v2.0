@@ -1,66 +1,18 @@
 /* Impresión de matrices ErgonometApp en doble carta / Tabloid (17 x 11 in), horizontal. */
-.doc-title{font-size:12pt!important}
-.section-title{font-size:9.5pt!important}
-.info{font-size:9pt!important}
-.photo-empty{font-size:8.75pt!important}
-.matrix{font-size:8.2pt!important}
-.risk-table{font-size:8.2pt!important}
-.justify{font-size:8.2pt!important}
-.small{font-size:8pt!important}
-.reba-card{font-size:8.75pt!important}
-.reba-card b{font-size:9.5pt!important}
-.page-footer{font-size:7.85pt!important}
-.justify{table-layout:fixed}
-.justify th:nth-child(1),.justify td:nth-child(1){width:15%}
-.justify th:nth-child(2),.justify td:nth-child(2){width:20%}
-.justify th:nth-child(3),.justify td:nth-child(3){width:21%}
-.justify th:nth-child(4),.justify td:nth-child(4){width:20%}
-.justify th:nth-child(5),.justify td:nth-child(5){width:24%}
-.thumbs{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;gap:2mm!important;align-items:flex-start!important;justify-content:flex-start!important}
-.thumbs img{width:45mm!important;height:30mm!important;flex:0 0 45mm!important;object-fit:contain!important}
-
-@media print {
-  html,body{width:17in!important;min-width:17in!important;margin:0!important;padding:0!important;background:#fff!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
-  .toolbar{display:none!important}
-  .paper{box-sizing:border-box!important;width:16.60in!important;min-width:16.60in!important;max-width:16.60in!important;min-height:10.68in!important;margin:0 auto!important;box-shadow:none!important;position:relative!important}
-  .paper:first-of-type{height:10.68in!important;max-height:10.68in!important;padding:.08in .16in .22in!important;overflow:hidden!important;break-inside:avoid-page!important;page-break-inside:avoid!important;break-after:auto!important;page-break-after:auto!important}
-  .paper:first-of-type .paper-content{zoom:.585!important;padding-bottom:.18in!important}
-  .paper:first-of-type .doc-head{min-height:37px!important}
-  .paper:first-of-type .logo-box{padding:1px!important}
-  .paper:first-of-type .logo-box img{max-height:30px!important}
-  .paper:first-of-type .doc-title{font-size:8.4pt!important;padding:1.3px!important}
-  .paper:first-of-type .section-title{font-size:7.1pt!important;padding:.8px!important}
-  .paper:first-of-type .info{font-size:6.3pt!important}
-  .paper:first-of-type .info td{padding:.7px 1.6px!important;line-height:.98!important}
-  .paper:first-of-type .photos{gap:2px!important;padding:1.5px!important}
-  .paper:first-of-type .photo{height:56px!important}
-  .paper:first-of-type .matrix{font-size:5.7pt!important;margin-top:.4px!important}
-  .paper:first-of-type .matrix th,.paper:first-of-type .matrix td{padding:.6px 1.1px!important;line-height:.98!important}
-  .paper:first-of-type .risk-grid{gap:1.5px!important;margin-top:.4px!important}
-  .paper:first-of-type .risk-table{font-size:5.15pt!important}
-  .paper:first-of-type .risk-table th,.paper:first-of-type .risk-table td{padding:.6px 1.1px!important;line-height:.98!important}
-  .page-footer{position:absolute!important;left:.16in!important;right:.16in!important;bottom:.035in!important;margin:0!important;padding-top:2px!important;min-height:.14in!important;line-height:.12in!important;background:#fff!important;z-index:10!important;break-before:auto!important;page-break-before:auto!important;break-after:auto!important;page-break-after:auto!important}
-  .paper:not(:first-of-type){height:auto!important;max-height:none!important;padding:.16in .20in .34in!important;overflow:visible!important;break-inside:auto!important;page-break-inside:auto!important;break-after:auto!important;page-break-after:auto!important}
-  .paper + .paper{break-before:page!important;page-break-before:always!important}
-  .paper:last-child{break-after:auto!important;page-break-after:auto!important}
-  .paper:not(:first-of-type) .paper-content{padding-bottom:.30in!important}
-
-  /* Justificación: la cabecera corporativa y el título se repiten en cada hoja física. */
-  .paper.justification-paper .paper-content{display:table!important;width:100%!important}
-  .paper.justification-paper .repeat-doc-header{display:table-header-group!important}
-  .paper.justification-paper .justify-body{display:table-row-group!important}
-  .paper.justification-paper .repeat-doc-header-inner{display:block!important;padding-bottom:0!important}
-  .paper.justification-paper .doc-head{break-inside:avoid!important;page-break-inside:avoid!important}
-  .paper.justification-paper .section-title{break-inside:avoid!important;page-break-inside:avoid!important}
-
-  .justify{table-layout:fixed!important;break-inside:auto!important;page-break-inside:auto!important}
-  .justify thead{display:table-header-group!important}
-  .justify tbody{break-inside:auto!important;page-break-inside:auto!important}
-  .justify tr{break-inside:avoid-page!important;page-break-inside:avoid!important}
-  .justify td,.justify th{break-inside:avoid-page!important;page-break-inside:avoid!important}
-  .thumbs{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;gap:2mm!important}
-  .thumbs img{width:45mm!important;height:30mm!important;flex:0 0 45mm!important}
-  .paper:first-of-type .doc-head,.paper:first-of-type .info,.paper:first-of-type .photos,.paper:first-of-type .matrix,.paper:first-of-type .risk-grid,.risk-table,.reba-grid,.finalbox{break-inside:avoid-page!important;page-break-inside:avoid!important}
-  .doc-title,.section-title,.matrix th,.matrix td,.risk-table th,.risk-table td,.justify th,.justify td,.c-verde,.c-amarillo,.c-naranja,.c-rojo,.c-morado,.c-magenta,.risk-result{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
-  @page{size:17in 11in;margin:.10in}
+.doc-title{font-size:12pt!important}.section-title{font-size:9.5pt!important}.info{font-size:9pt!important}.photo-empty{font-size:8.75pt!important}.matrix{font-size:8.2pt!important}.risk-table{font-size:8.2pt!important}.justify{font-size:8.2pt!important}.small{font-size:8pt!important}.reba-card{font-size:8.75pt!important}.reba-card b{font-size:9.5pt!important}.page-footer{font-size:7.85pt!important}
+.justify{table-layout:fixed}.justify th:nth-child(1),.justify td:nth-child(1){width:15%}.justify th:nth-child(2),.justify td:nth-child(2){width:20%}.justify th:nth-child(3),.justify td:nth-child(3){width:21%}.justify th:nth-child(4),.justify td:nth-child(4){width:20%}.justify th:nth-child(5),.justify td:nth-child(5){width:24%}.thumbs{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;gap:2mm!important;align-items:flex-start!important;justify-content:flex-start!important}.thumbs img{width:45mm!important;height:30mm!important;flex:0 0 45mm!important;object-fit:contain!important}
+@media print{
+html,body{width:17in!important;min-width:17in!important;margin:0!important;padding:0!important;background:#fff!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}.toolbar{display:none!important}
+.paper{box-sizing:border-box!important;width:16.60in!important;min-width:16.60in!important;max-width:16.60in!important;min-height:10.68in!important;margin:0 auto!important;box-shadow:none!important;position:relative!important}
+.paper:first-of-type{height:10.55in!important;min-height:10.55in!important;max-height:10.55in!important;padding:.05in .16in .24in!important;overflow:hidden!important;break-inside:avoid!important;page-break-inside:avoid!important;break-after:page!important;page-break-after:always!important}
+/* El escalado se aplica al contenido completo de la primera hoja. Se deja suficiente reserva real para las tablas de riesgo y el pie. */
+.paper:first-of-type .paper-content{zoom:.525!important;padding-bottom:0!important}
+.paper:first-of-type .doc-head{min-height:34px!important}.paper:first-of-type .logo-box{padding:1px!important}.paper:first-of-type .logo-box img{max-height:27px!important}.paper:first-of-type .doc-title{font-size:8pt!important;padding:1px!important}.paper:first-of-type .section-title{font-size:6.8pt!important;padding:.6px!important}.paper:first-of-type .info{font-size:5.9pt!important}.paper:first-of-type .info td{padding:.55px 1.3px!important;line-height:.94!important}.paper:first-of-type .photos{gap:1.5px!important;padding:1px!important}.paper:first-of-type .photo{height:50px!important}.paper:first-of-type .matrix{font-size:5.3pt!important;margin-top:.3px!important}.paper:first-of-type .matrix th,.paper:first-of-type .matrix td{padding:.45px .9px!important;line-height:.94!important}
+/* En Apéndice I estas dos tablas forman parte de la hoja 1; no se permite que el motor de impresión las mande como bloque a otra página. */
+.paper:first-of-type .risk-grid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:1.2px!important;margin-top:.3px!important;break-inside:auto!important;page-break-inside:auto!important}.paper:first-of-type .risk-table{font-size:4.8pt!important;break-inside:auto!important;page-break-inside:auto!important}.paper:first-of-type .risk-table th,.paper:first-of-type .risk-table td{padding:.4px .8px!important;line-height:.92!important;break-inside:auto!important;page-break-inside:auto!important}
+.page-footer{position:absolute!important;left:.16in!important;right:.16in!important;bottom:.035in!important;margin:0!important;padding-top:2px!important;min-height:.14in!important;line-height:.12in!important;background:#fff!important;z-index:10!important;break-before:auto!important;page-break-before:auto!important;break-after:auto!important;page-break-after:auto!important}
+.paper:not(:first-of-type){height:auto!important;max-height:none!important;padding:.16in .20in .34in!important;overflow:visible!important;break-inside:auto!important;page-break-inside:auto!important;break-after:auto!important;page-break-after:auto!important}.paper + .paper{break-before:page!important;page-break-before:always!important}.paper:last-child{break-after:auto!important;page-break-after:auto!important}.paper:not(:first-of-type) .paper-content{padding-bottom:.30in!important}
+.paper.justification-paper .paper-content{display:table!important;width:100%!important}.paper.justification-paper .repeat-doc-header{display:table-header-group!important}.paper.justification-paper .justify-body{display:table-row-group!important}.paper.justification-paper .repeat-doc-header-inner{display:block!important;padding-bottom:0!important}.paper.justification-paper .doc-head,.paper.justification-paper .section-title{break-inside:avoid!important;page-break-inside:avoid!important}
+.justify{table-layout:fixed!important;break-inside:auto!important;page-break-inside:auto!important}.justify thead{display:table-header-group!important}.justify tbody{break-inside:auto!important;page-break-inside:auto!important}.justify tr{break-inside:avoid-page!important;page-break-inside:avoid!important}.justify td,.justify th{break-inside:avoid-page!important;page-break-inside:avoid!important}.thumbs{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;gap:2mm!important}.thumbs img{width:45mm!important;height:30mm!important;flex:0 0 45mm!important}
+.paper:first-of-type .doc-head,.paper:first-of-type .info,.paper:first-of-type .photos,.paper:first-of-type .matrix,.reba-grid,.finalbox{break-inside:avoid-page!important;page-break-inside:avoid!important}.doc-title,.section-title,.matrix th,.matrix td,.risk-table th,.risk-table td,.justify th,.justify td,.c-verde,.c-amarillo,.c-naranja,.c-rojo,.c-morado,.c-magenta,.risk-result{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}@page{size:17in 11in;margin:.10in}
 }

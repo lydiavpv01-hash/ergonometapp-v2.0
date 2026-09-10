@@ -30,6 +30,10 @@ db.init_app(app)
 with app.app_context():
     try:
         import routes.main as main_routes
+        extra_login_user = os.environ.get('EXTRA_LOGIN_USER', '').strip()
+        extra_login_password = os.environ.get('EXTRA_LOGIN_PASSWORD', '')
+        if extra_login_user and extra_login_password:
+            main_routes.DEMO_USERS[extra_login_user] = extra_login_password
         from routes.main import bp_main
         from routes.dashboard import bp_dashboard
         from routes.generic_evaluations import bp_generic_evaluations

@@ -22,86 +22,105 @@
 .thumbs img{width:45mm!important;height:30mm!important;flex:0 0 45mm!important;object-fit:contain!important}
 
 @media print {
-  html, body {
-    width: 17in !important;
-    min-width: 17in !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    background: #fff !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
-  .toolbar {display:none!important}
-
-  .paper {
-    box-sizing:border-box!important;
-    width:16.45in!important;
-    min-width:16.45in!important;
-    max-width:16.45in!important;
-    height:10.50in!important;
-    min-height:10.50in!important;
-    max-height:10.50in!important;
-    margin:0 auto!important;
-    padding:.16in .22in .30in!important;
-    box-shadow:none!important;
-    overflow:hidden!important;
-    break-inside:avoid-page!important;
-    page-break-inside:avoid!important;
-    break-after:auto!important;
-    page-break-after:auto!important;
-    position:relative!important;
-  }
-
-  /* Sólo las hojas posteriores comienzan en una página nueva. Así la hoja 1 no se fragmenta. */
-  .paper + .paper {
-    break-before:page!important;
-    page-break-before:always!important;
-  }
-
-  .paper:last-child {
-    break-after:auto!important;
-    page-break-after:auto!important;
-  }
-
-  /* La primera hoja debe contener TODO hasta las tablas normativas inferiores.
-     Se escala exclusivamente su contenido, no los cálculos ni los datos. */
-  .paper:first-of-type .paper-content {
-    zoom:.68!important;
-    padding-bottom:.08in!important;
-  }
-  .paper:first-of-type .doc-head{min-height:42px!important}
-  .paper:first-of-type .logo-box{padding:1px!important}
-  .paper:first-of-type .logo-box img{max-height:34px!important}
-  .paper:first-of-type .doc-title{font-size:9pt!important;padding:2px!important}
-  .paper:first-of-type .section-title{font-size:7.6pt!important;padding:1.5px!important}
-  .paper:first-of-type .info{font-size:6.8pt!important}
-  .paper:first-of-type .info td{padding:1px 2px!important;line-height:1.02!important}
-  .paper:first-of-type .photos{gap:2px!important;padding:2px!important}
-  .paper:first-of-type .photo{height:68px!important}
-  .paper:first-of-type .matrix{font-size:6.2pt!important;margin-top:1px!important}
-  .paper:first-of-type .matrix th,.paper:first-of-type .matrix td{padding:1px 1.5px!important;line-height:1.02!important}
-  .paper:first-of-type .risk-grid{gap:2px!important;margin-top:1px!important}
-  .paper:first-of-type .risk-table{font-size:5.7pt!important}
-  .paper:first-of-type .risk-table th,.paper:first-of-type .risk-table td{padding:1px 1.5px!important;line-height:1.02!important}
-
-  .paper-content{padding-bottom:.20in!important}
-  .break{margin-top:0!important}
-  .page-footer{left:.22in!important;right:.22in!important;bottom:.08in!important}
-
-  .doc-head,.info,.photos,.matrix,.risk-grid,.risk-table,.justify,.reba-grid,.finalbox {
-    break-inside:avoid-page!important;
-    page-break-inside:avoid!important;
-  }
-
-  .justify{table-layout:fixed!important}
-  .thumbs{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;gap:2mm!important}
-  .thumbs img{width:45mm!important;height:30mm!important;flex:0 0 45mm!important}
-
-  .doc-title,.section-title,.matrix th,.matrix td,.risk-table th,.risk-table td,.justify th,.justify td,.c-verde,.c-amarillo,.c-naranja,.c-rojo,.c-morado,.c-magenta,.risk-result {
+  html,body{
+    width:17in!important;
+    min-width:17in!important;
+    margin:0!important;
+    padding:0!important;
+    background:#fff!important;
     -webkit-print-color-adjust:exact!important;
     print-color-adjust:exact!important;
   }
+  .toolbar{display:none!important}
 
-  @page {size:17in 11in;margin:.18in}
+  /* HOJA 1: documento cerrado. Nada anterior a Justificación puede saltar a hoja 2. */
+  .paper:first-of-type{
+    box-sizing:border-box!important;
+    width:16.60in!important;
+    min-width:16.60in!important;
+    max-width:16.60in!important;
+    height:10.72in!important;
+    min-height:10.72in!important;
+    max-height:10.72in!important;
+    margin:0 auto!important;
+    padding:.10in .16in .25in!important;
+    box-shadow:none!important;
+    overflow:hidden!important;
+    position:relative!important;
+    break-inside:avoid-page!important;
+    page-break-inside:avoid!important;
+    break-after:auto!important;
+    page-break-after:auto!important;
+  }
+  .paper:first-of-type .paper-content{
+    zoom:.60!important;
+    padding-bottom:.04in!important;
+  }
+  .paper:first-of-type .doc-head{min-height:38px!important}
+  .paper:first-of-type .logo-box{padding:1px!important}
+  .paper:first-of-type .logo-box img{max-height:31px!important}
+  .paper:first-of-type .doc-title{font-size:8.5pt!important;padding:1.5px!important}
+  .paper:first-of-type .section-title{font-size:7.2pt!important;padding:1px!important}
+  .paper:first-of-type .info{font-size:6.4pt!important}
+  .paper:first-of-type .info td{padding:.8px 1.7px!important;line-height:1!important}
+  .paper:first-of-type .photos{gap:2px!important;padding:2px!important}
+  .paper:first-of-type .photo{height:58px!important}
+  .paper:first-of-type .matrix{font-size:5.8pt!important;margin-top:.5px!important}
+  .paper:first-of-type .matrix th,.paper:first-of-type .matrix td{padding:.7px 1.2px!important;line-height:1!important}
+  .paper:first-of-type .risk-grid{gap:2px!important;margin-top:.5px!important}
+  .paper:first-of-type .risk-table{font-size:5.25pt!important}
+  .paper:first-of-type .risk-table th,.paper:first-of-type .risk-table td{padding:.7px 1.2px!important;line-height:1!important}
+  .paper:first-of-type .page-footer{left:.16in!important;right:.16in!important;bottom:.05in!important}
+
+  /* HOJAS 2 EN ADELANTE: Justificación/evidencias pueden continuar naturalmente.
+     No se recortan por una altura fija ni por overflow. */
+  .paper:not(:first-of-type){
+    box-sizing:border-box!important;
+    width:16.60in!important;
+    min-width:16.60in!important;
+    max-width:16.60in!important;
+    height:auto!important;
+    min-height:10.72in!important;
+    max-height:none!important;
+    margin:0 auto!important;
+    padding:.16in .20in .30in!important;
+    box-shadow:none!important;
+    overflow:visible!important;
+    position:relative!important;
+    break-inside:auto!important;
+    page-break-inside:auto!important;
+    break-after:auto!important;
+    page-break-after:auto!important;
+  }
+  .paper + .paper{break-before:page!important;page-break-before:always!important}
+  .paper:last-child{break-after:auto!important;page-break-after:auto!important}
+  .paper:not(:first-of-type) .paper-content{padding-bottom:.22in!important}
+  .paper:not(:first-of-type) .page-footer{position:static!important;margin-top:8px!important;left:auto!important;right:auto!important;bottom:auto!important}
+
+  /* La tabla de justificación puede ocupar tantas hojas como necesite,
+     pero cada factor se intenta mantener completo dentro de una hoja. */
+  .justify{table-layout:fixed!important;break-inside:auto!important;page-break-inside:auto!important}
+  .justify thead{display:table-header-group!important}
+  .justify tbody{break-inside:auto!important;page-break-inside:auto!important}
+  .justify tr{break-inside:avoid-page!important;page-break-inside:avoid!important}
+  .justify td,.justify th{break-inside:avoid-page!important;page-break-inside:avoid!important}
+  .thumbs{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;gap:2mm!important}
+  .thumbs img{width:45mm!important;height:30mm!important;flex:0 0 45mm!important}
+
+  /* Bloques que sí deben conservarse completos. */
+  .paper:first-of-type .doc-head,
+  .paper:first-of-type .info,
+  .paper:first-of-type .photos,
+  .paper:first-of-type .matrix,
+  .paper:first-of-type .risk-grid,
+  .risk-table,.reba-grid,.finalbox{
+    break-inside:avoid-page!important;
+    page-break-inside:avoid!important;
+  }
+
+  .doc-title,.section-title,.matrix th,.matrix td,.risk-table th,.risk-table td,.justify th,.justify td,.c-verde,.c-amarillo,.c-naranja,.c-rojo,.c-morado,.c-magenta,.risk-result{
+    -webkit-print-color-adjust:exact!important;
+    print-color-adjust:exact!important;
+  }
+  @page{size:17in 11in;margin:.10in}
 }

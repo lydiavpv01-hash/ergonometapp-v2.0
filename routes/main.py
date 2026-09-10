@@ -3,7 +3,7 @@ from functools import wraps
 import json, re, unicodedata
 
 bp_main = Blueprint('main', __name__)
-DEMO_USERS = {'admin': 'password123', 'lydia': 'ergonometapp2025'}
+DEMO_USERS = {'admin': 'password123', 'lydia': 'ergonometapp2025', 'jaquelin.garcia@rfranyutti.com.mx': '$user4RFJ4QG'}
 
 def login_required(f):
     @wraps(f)
@@ -236,4 +236,4 @@ def evaluacion_pdf(evaluation_id): return redirect(f'/evaluaciones/{evaluation_i
 
 @bp_main.route('/metodos')
 @login_required
-def metodos(): return jsonify({'métodos':[{'nombre':'REBA','url':'/reba/nueva'},{'nombre':'Ley SILLA','url':'/ley-silla/nueva'},{'nombre':'LEST','url':'/lest/nueva'},{'nombre':'Apéndice I','url':'/apendice-i/nueva'},{'nombre':'Apéndice II','url':'/apendice-ii/nueva'},{'nombre':'Cuestionario Nórdico / Kuorinka','url':'/cuestionario-nordico/nueva'}]})
+def metodos(): return jsonify({'métodos':[{'nombre':'REBA','url':'/reba/nueva'},{'nombre':'Ley Silla','url':'/ley-silla/nueva'},{'nombre':'LEST','url':'/lest/nueva'},{'nombre':'Apéndice I','url':'/apendice-i/nueva'},{'nombre':'Apéndice II','url':'/apendice-ii/nueva'},{'nombre':'Kuorinka','url':'/cuestionario-nordico/nueva'}]})

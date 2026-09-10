@@ -1,9 +1,9 @@
 (function(){
-  const SAVE_TIMEOUT_MS=45000;
-  const MAX_IMAGE_SIDE=1600;
-  const JPEG_QUALITY=0.82;
+  const SAVE_TIMEOUT_MS=90000;
+  const MAX_IMAGE_SIDE=1000;
+  const JPEG_QUALITY=0.68;
   const MAX_SINGLE_UPLOAD_BYTES=12*1024*1024;
-  const MAX_ENCODED_PAYLOAD_CHARS=18*1024*1024;
+  const MAX_ENCODED_PAYLOAD_CHARS=32*1024*1024;
 
   function textOf(el){return el ? (el.value || el.textContent || '').trim() : ''}
   function firstInputs(){return Array.from(document.querySelectorAll('input')).filter(x=>x.type!=='checkbox'&&x.type!=='radio'&&x.type!=='file')}
@@ -62,7 +62,6 @@
     const raw=await readAsDataURL(file);
     if(!String(file.type||'').startsWith('image/'))return {field,name:file.name,type:file.type,size:file.size,data:raw};
 
-    /* Los logos pequeños se conservan sin recomprimir para no degradar texto o transparencias. */
     const isLogo=/logo_/i.test(field||'');
     if(isLogo && file.size<=1500000)return {field,name:file.name,type:file.type,size:file.size,data:raw};
 
@@ -74,7 +73,6 @@
       const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;
       const ctx=canvas.getContext('2d');
       if(!ctx)return {field,name:file.name,type:file.type,size:file.size,data:raw};
-      /* Fondo blanco evita fondo negro al pasar imágenes transparentes a JPEG. */
       ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h);ctx.drawImage(img,0,0,w,h);
       const data=canvas.toDataURL('image/jpeg',JPEG_QUALITY);
       return {field,name:file.name.replace(/\.[^.]+$/,'')+'.jpg',type:'image/jpeg',size:Math.round(data.length*0.75),data,original_name:file.name,original_size:file.size};
@@ -109,7 +107,7 @@
       button.textContent='Guardando…';
       const body=JSON.stringify(payload);
       if(body.length>MAX_ENCODED_PAYLOAD_CHARS){
-        throw new Error('La evaluación contiene demasiadas imágenes para enviarse en una sola operación. Reduce la cantidad o tamaño de fotografías y vuelve a guardar.');
+        throw new Error('La evaluación supera el tamaño técnico máximo de envío aun después de optimizar las fotografías.');
       }
       const controller=new AbortController();
       timer=setTimeout(()=>controller.abort(),SAVE_TIMEOUT_MS);
@@ -124,7 +122,7 @@
       if(timer)clearTimeout(timer);
       button.disabled=false;button.dataset.saving='0';button.textContent=old;
       const msg=e&&e.name==='AbortError'
-        ?'El guardado superó 45 segundos y se canceló para evitar que la pantalla quede bloqueada. Revisa Evaluaciones guardadas antes de intentarlo otra vez. Si no aparece, reduce las fotografías o vuelve a guardar.'
+        ?'El guardado superó 90 segundos y se canceló. Revisa Evaluaciones guardadas antes de intentarlo otra vez.'
         :(e.message||'No se pudo guardar la evaluación.');
       alert('Error al guardar: '+msg);
     }

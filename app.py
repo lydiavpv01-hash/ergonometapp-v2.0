@@ -85,6 +85,11 @@ def after_request(response):
             if 'factor-evidence-title' not in html:
                 html = html.replace('</body>', refinement + '</body>')
 
+        if request.path == '/apendice-ii/nueva':
+            norm_images = render_template('apendice_ii_norm_images_v2.html')
+            if 'data-nom-ref' not in html:
+                html = html.replace('</body>', norm_images + '</body>')
+
         if request.path in ('/apendice-i/nueva','/apendice-ii/nueva'):
             matrix_meta = render_template('nom_matrix_metadata.html')
             if 'matrixClientData' not in html:

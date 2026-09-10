@@ -10,8 +10,6 @@
 .reba-card{font-size:8.75pt!important}
 .reba-card b{font-size:9.5pt!important}
 .page-footer{font-size:7.85pt!important}
-
-/* Evidencias por factor: dos fotografías, una junto a la otra. */
 .justify{table-layout:fixed}
 .justify th:nth-child(1),.justify td:nth-child(1){width:15%}
 .justify th:nth-child(2),.justify td:nth-child(2){width:20%}
@@ -22,44 +20,11 @@
 .thumbs img{width:45mm!important;height:30mm!important;flex:0 0 45mm!important;object-fit:contain!important}
 
 @media print {
-  html,body{
-    width:17in!important;
-    min-width:17in!important;
-    margin:0!important;
-    padding:0!important;
-    background:#fff!important;
-    -webkit-print-color-adjust:exact!important;
-    print-color-adjust:exact!important;
-  }
+  html,body{width:17in!important;min-width:17in!important;margin:0!important;padding:0!important;background:#fff!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
   .toolbar{display:none!important}
-
-  /* Cada hoja se comporta como una hoja física: el pie siempre conserva su posición. */
-  .paper{
-    box-sizing:border-box!important;
-    width:16.60in!important;
-    min-width:16.60in!important;
-    max-width:16.60in!important;
-    min-height:10.68in!important;
-    margin:0 auto!important;
-    box-shadow:none!important;
-    position:relative!important;
-  }
-
-  /* HOJA 1: documento cerrado. Nada anterior a Justificación puede saltar a hoja 2. */
-  .paper:first-of-type{
-    height:10.68in!important;
-    max-height:10.68in!important;
-    padding:.08in .16in .22in!important;
-    overflow:hidden!important;
-    break-inside:avoid-page!important;
-    page-break-inside:avoid!important;
-    break-after:auto!important;
-    page-break-after:auto!important;
-  }
-  .paper:first-of-type .paper-content{
-    zoom:.585!important;
-    padding-bottom:.18in!important;
-  }
+  .paper{box-sizing:border-box!important;width:16.60in!important;min-width:16.60in!important;max-width:16.60in!important;min-height:10.68in!important;margin:0 auto!important;box-shadow:none!important;position:relative!important}
+  .paper:first-of-type{height:10.68in!important;max-height:10.68in!important;padding:.08in .16in .22in!important;overflow:hidden!important;break-inside:avoid-page!important;page-break-inside:avoid!important;break-after:auto!important;page-break-after:auto!important}
+  .paper:first-of-type .paper-content{zoom:.585!important;padding-bottom:.18in!important}
   .paper:first-of-type .doc-head{min-height:37px!important}
   .paper:first-of-type .logo-box{padding:1px!important}
   .paper:first-of-type .logo-box img{max-height:30px!important}
@@ -74,39 +39,19 @@
   .paper:first-of-type .risk-grid{gap:1.5px!important;margin-top:.4px!important}
   .paper:first-of-type .risk-table{font-size:5.15pt!important}
   .paper:first-of-type .risk-table th,.paper:first-of-type .risk-table td{padding:.6px 1.1px!important;line-height:.98!important}
-
-  /* Pie de página real: misma posición física en TODAS las hojas. */
-  .page-footer{
-    position:absolute!important;
-    left:.16in!important;
-    right:.16in!important;
-    bottom:.035in!important;
-    margin:0!important;
-    padding-top:2px!important;
-    min-height:.14in!important;
-    line-height:.12in!important;
-    background:#fff!important;
-    z-index:10!important;
-    break-before:auto!important;
-    page-break-before:auto!important;
-    break-after:auto!important;
-    page-break-after:auto!important;
-  }
-
-  /* HOJAS 2 EN ADELANTE: reservan siempre la franja inferior para el pie. */
-  .paper:not(:first-of-type){
-    height:auto!important;
-    max-height:none!important;
-    padding:.16in .20in .34in!important;
-    overflow:visible!important;
-    break-inside:auto!important;
-    page-break-inside:auto!important;
-    break-after:auto!important;
-    page-break-after:auto!important;
-  }
+  .page-footer{position:absolute!important;left:.16in!important;right:.16in!important;bottom:.035in!important;margin:0!important;padding-top:2px!important;min-height:.14in!important;line-height:.12in!important;background:#fff!important;z-index:10!important;break-before:auto!important;page-break-before:auto!important;break-after:auto!important;page-break-after:auto!important}
+  .paper:not(:first-of-type){height:auto!important;max-height:none!important;padding:.16in .20in .34in!important;overflow:visible!important;break-inside:auto!important;page-break-inside:auto!important;break-after:auto!important;page-break-after:auto!important}
   .paper + .paper{break-before:page!important;page-break-before:always!important}
   .paper:last-child{break-after:auto!important;page-break-after:auto!important}
   .paper:not(:first-of-type) .paper-content{padding-bottom:.30in!important}
+
+  /* Justificación: la cabecera corporativa y el título se repiten en cada hoja física. */
+  .paper.justification-paper .paper-content{display:table!important;width:100%!important}
+  .paper.justification-paper .repeat-doc-header{display:table-header-group!important}
+  .paper.justification-paper .justify-body{display:table-row-group!important}
+  .paper.justification-paper .repeat-doc-header-inner{display:block!important;padding-bottom:0!important}
+  .paper.justification-paper .doc-head{break-inside:avoid!important;page-break-inside:avoid!important}
+  .paper.justification-paper .section-title{break-inside:avoid!important;page-break-inside:avoid!important}
 
   .justify{table-layout:fixed!important;break-inside:auto!important;page-break-inside:auto!important}
   .justify thead{display:table-header-group!important}
@@ -115,20 +60,7 @@
   .justify td,.justify th{break-inside:avoid-page!important;page-break-inside:avoid!important}
   .thumbs{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;gap:2mm!important}
   .thumbs img{width:45mm!important;height:30mm!important;flex:0 0 45mm!important}
-
-  .paper:first-of-type .doc-head,
-  .paper:first-of-type .info,
-  .paper:first-of-type .photos,
-  .paper:first-of-type .matrix,
-  .paper:first-of-type .risk-grid,
-  .risk-table,.reba-grid,.finalbox{
-    break-inside:avoid-page!important;
-    page-break-inside:avoid!important;
-  }
-
-  .doc-title,.section-title,.matrix th,.matrix td,.risk-table th,.risk-table td,.justify th,.justify td,.c-verde,.c-amarillo,.c-naranja,.c-rojo,.c-morado,.c-magenta,.risk-result{
-    -webkit-print-color-adjust:exact!important;
-    print-color-adjust:exact!important;
-  }
+  .paper:first-of-type .doc-head,.paper:first-of-type .info,.paper:first-of-type .photos,.paper:first-of-type .matrix,.paper:first-of-type .risk-grid,.risk-table,.reba-grid,.finalbox{break-inside:avoid-page!important;page-break-inside:avoid!important}
+  .doc-title,.section-title,.matrix th,.matrix td,.risk-table th,.risk-table td,.justify th,.justify td,.c-verde,.c-amarillo,.c-naranja,.c-rojo,.c-morado,.c-magenta,.risk-result{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
   @page{size:17in 11in;margin:.10in}
 }

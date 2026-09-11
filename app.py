@@ -35,6 +35,7 @@ with app.app_context():
         if extra_login_user and extra_login_password:
             main_routes.DEMO_USERS[extra_login_user] = extra_login_password
         from routes.main import bp_main
+        from routes.admin import bp_admin
         from routes.dashboard import bp_dashboard
         from routes.generic_evaluations import bp_generic_evaluations
         from routes.metodos.reba import bp_reba
@@ -48,6 +49,7 @@ with app.app_context():
         install_matrix_enrichment(main_routes)
 
         app.register_blueprint(bp_main)
+        app.register_blueprint(bp_admin)
         app.register_blueprint(bp_dashboard)
         app.register_blueprint(bp_generic_evaluations)
         app.register_blueprint(bp_reba)

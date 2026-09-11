@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
 from flask_sqlalchemy import SQLAlchemy
 from config import DevelopmentConfig, ProductionConfig
 import os
@@ -79,6 +79,10 @@ def after_request(response):
         response.headers['Pragma'] = 'no-cache'
         response.headers['Expires'] = '0'
         html = response.get_data(as_text=True)
+
+        if request.path == '/dashboard' and session.get('usuario') == 'admin' and 'href="/admin/"' not in html:
+            admin_link = '<a class="nav" href="/admin/">Administración</a>'
+            html = html.replace('<a class="nav" href="#">Configuración</a>', admin_link + '<a class="nav" href="#">Configuración</a>')
 
         if request.path == '/reba/nueva':
             old_style = "background-image:url('${SPRITE}');background-size:400% 600%;background-position:${col*100/3}% ${row*100/5}%"

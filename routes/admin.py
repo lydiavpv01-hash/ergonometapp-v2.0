@@ -1,9 +1,12 @@
 from flask import Blueprint, render_template, session, redirect, jsonify, request, flash
 from functools import wraps
+from datetime import timezone
+from zoneinfo import ZoneInfo
 import json
 import os
 
 bp_admin = Blueprint('admin', __name__, url_prefix='/admin')
+MX_TZ = ZoneInfo('America/Mexico_City')
 
 
 def admin_required(f):
@@ -16,6 +19,17 @@ def admin_required(f):
             return jsonify({'status': 'error', 'message': 'Acceso restringido a administradores'}), 403
         return f(*args, **kwargs)
     return decorated_function
+
+
+def _format_dt(value):
+    if not value:
+        return '—'
+    try:
+        if value.tzinfo is None:
+            value = value.replace(tzinfo=timezone.utc)
+        return value.astimezone(MX_TZ).strftime('%d/%m/%Y %H:%M')
+    except Exception:
+        return '—'
 
 
 def _extract_empresa(payload_json):
@@ -41,31 +55,21 @@ def crear_usuario():
     from app import db
     from models.app_user import AppUser
     from routes.main import DEMO_USERS
-
     usuario = (request.form.get('usuario') or '').strip().lower()
     password = request.form.get('password') or ''
     admin_user = os.environ.get('ADMIN_LOGIN_USER', '').strip().lower()
-
     if not usuario or not password:
-        flash('Debes capturar usuario y contraseña.', 'error')
-        return redirect('/admin/#usuarios')
+        flash('Debes capturar usuario y contraseña.', 'error'); return redirect('/admin/#usuarios')
     if len(usuario) > 180:
-        flash('El usuario es demasiado largo.', 'error')
-        return redirect('/admin/#usuarios')
+        flash('El usuario es demasiado largo.', 'error'); return redirect('/admin/#usuarios')
     if len(password) < 8:
-        flash('La contraseña debe tener al menos 8 caracteres.', 'error')
-        return redirect('/admin/#usuarios')
+        flash('La contraseña debe tener al menos 8 caracteres.', 'error'); return redirect('/admin/#usuarios')
     if usuario == admin_user or usuario in {u.lower() for u in DEMO_USERS.keys()}:
-        flash('Ese usuario ya tiene acceso a ErgonometApp.', 'error')
-        return redirect('/admin/#usuarios')
+        flash('Ese usuario ya tiene acceso a ErgonometApp.', 'error'); return redirect('/admin/#usuarios')
     if AppUser.query.filter(db.func.lower(AppUser.usuario) == usuario).first():
-        flash('Ese usuario ya está registrado.', 'error')
-        return redirect('/admin/#usuarios')
-
-    account = AppUser(usuario=usuario, rol='usuario', activo=True)
-    account.set_password(password)
-    db.session.add(account)
-    db.session.commit()
+        flash('Ese usuario ya está registrado.', 'error'); return redirect('/admin/#usuarios')
+    account = AppUser(usuario=usuario, rol='usuario', activo=True); account.set_password(password)
+    db.session.add(account); db.session.commit()
     flash(f'Usuario {usuario} creado correctamente.', 'success')
     return redirect('/admin/#usuarios')
 
@@ -75,16 +79,12 @@ def crear_usuario():
 def eliminar_usuario(user_id):
     from app import db
     from models.app_user import AppUser
-
     account = AppUser.query.get_or_404(user_id)
     if account.rol == 'admin':
-        flash('La cuenta de administrador no se puede eliminar.', 'error')
-        return redirect('/admin/#usuarios')
-
+        flash('La cuenta de administrador no se puede eliminar.', 'error'); return redirect('/admin/#usuarios')
     usuario = account.usuario
-    db.session.delete(account)
-    db.session.commit()
-    flash(f'Usuario {usuario} eliminado. Sus evaluaciones se conservaron en el historial.', 'success')
+    db.session.delete(account); db.session.commit()
+    flash(f'Usuario {usuario} eliminado. Sus evaluaciones y su historial de accesos se conservaron.', 'success')
     return redirect('/admin/#usuarios')
 
 
@@ -95,18 +95,14 @@ def eliminar_evaluacion(tipo, evaluation_id):
     from models.reba_evaluation import RebaEvaluation
     from models.generic_evaluation import GenericEvaluation
     from models.evaluation_upload import EvaluationUpload
-
     tipo = (tipo or '').upper()
     if tipo == 'REBA':
-        row = RebaEvaluation.query.get_or_404(evaluation_id)
-        db.session.delete(row)
+        row = RebaEvaluation.query.get_or_404(evaluation_id); db.session.delete(row)
     else:
         row = GenericEvaluation.query.get_or_404(evaluation_id)
         EvaluationUpload.query.filter_by(evaluation_id=evaluation_id).delete(synchronize_session=False)
         db.session.delete(row)
-
-    db.session.commit()
-    flash('Evaluación eliminada correctamente.', 'success')
+    db.session.commit(); flash('Evaluación eliminada correctamente.', 'success')
     return redirect('/admin/#trabajos')
 
 
@@ -115,53 +111,57 @@ def eliminar_evaluacion(tipo, evaluation_id):
 def panel():
     from routes.main import DEMO_USERS
     from models.app_user import AppUser
+    from models.access_log import AccessLog
     from models.reba_evaluation import RebaEvaluation
     from models.generic_evaluation import GenericEvaluation
 
     reba_rows = RebaEvaluation.query.order_by(RebaEvaluation.created_at.desc()).all()
     generic_rows = GenericEvaluation.query.order_by(GenericEvaluation.created_at.desc()).all()
     db_users = AppUser.query.order_by(AppUser.usuario.asc()).all()
+    access_rows = AccessLog.query.order_by(AccessLog.logged_at.desc()).limit(500).all()
 
     admin_user = os.environ.get('ADMIN_LOGIN_USER', '').strip()
     visible_users = []
     if admin_user:
         visible_users.append({'usuario': admin_user, 'rol': 'Administrador', 'estado': 'Activo', 'db_id': None, 'eliminable': False})
-
     for username in DEMO_USERS.keys():
         if username == 'admin':
             continue
         if username.lower() != admin_user.lower():
             visible_users.append({'usuario': username, 'rol': 'Usuario', 'estado': 'Activo', 'db_id': None, 'eliminable': False})
-
     existing = {u['usuario'].lower() for u in visible_users}
     for account in db_users:
         if account.usuario.lower() not in existing:
-            visible_users.append({
-                'usuario': account.usuario,
-                'rol': 'Administrador' if account.rol == 'admin' else 'Usuario',
-                'estado': 'Activo' if account.activo else 'Inactivo',
-                'db_id': account.id,
-                'eliminable': account.rol != 'admin',
-            })
+            visible_users.append({'usuario': account.usuario,'rol': 'Administrador' if account.rol == 'admin' else 'Usuario','estado': 'Activo' if account.activo else 'Inactivo','db_id': account.id,'eliminable': account.rol != 'admin'})
             existing.add(account.usuario.lower())
 
     counts = {u['usuario']: 0 for u in visible_users}
     trabajos = []
-
+    latest_eval = {}
     for e in reba_rows:
         counts[e.usuario] = counts.get(e.usuario, 0) + 1
-        trabajos.append({'tipo': 'REBA','id': e.id,'usuario': e.usuario,'empresa': _extract_empresa(e.payload_json),'area': e.area or '','puesto': e.puesto or '','trabajador': e.trabajador or '','fecha': e.fecha or '','resultado': e.risk_level or (str(e.final_score) if e.final_score is not None else ''),'created_at': e.created_at})
-
+        trabajos.append({'tipo':'REBA','id':e.id,'usuario':e.usuario,'empresa':_extract_empresa(e.payload_json),'area':e.area or '','puesto':e.puesto or '','trabajador':e.trabajador or '','fecha':e.fecha or '','resultado':e.risk_level or (str(e.final_score) if e.final_score is not None else ''),'created_at':e.created_at})
+        if e.usuario not in latest_eval or (e.created_at and e.created_at > latest_eval[e.usuario]): latest_eval[e.usuario] = e.created_at
     for e in generic_rows:
         counts[e.usuario] = counts.get(e.usuario, 0) + 1
-        trabajos.append({'tipo': e.metodo or 'Evaluación','id': e.id,'usuario': e.usuario,'empresa': _extract_empresa(e.payload_json),'area': '','puesto': e.puesto or '','trabajador': e.trabajador or '','fecha': e.fecha or '','resultado': e.risk_level or (str(e.final_score) if e.final_score is not None else ''),'created_at': e.created_at})
-
+        trabajos.append({'tipo':e.metodo or 'Evaluación','id':e.id,'usuario':e.usuario,'empresa':_extract_empresa(e.payload_json),'area':'','puesto':e.puesto or '','trabajador':e.trabajador or '','fecha':e.fecha or '','resultado':e.risk_level or (str(e.final_score) if e.final_score is not None else ''),'created_at':e.created_at})
+        if e.usuario not in latest_eval or (e.created_at and e.created_at > latest_eval[e.usuario]): latest_eval[e.usuario] = e.created_at
     trabajos.sort(key=lambda x: x['created_at'] or 0, reverse=True)
+
+    last_access = {}
+    historial_accesos = []
+    for row in access_rows:
+        if row.usuario not in last_access:
+            last_access[row.usuario] = row.logged_at
+        historial_accesos.append({'usuario': row.usuario, 'fecha_hora': _format_dt(row.logged_at)})
+
     usuarios = []
     for u in sorted(visible_users, key=lambda x: (x['rol'] != 'Administrador', x['usuario'].lower())):
         item = dict(u)
         item['evaluaciones'] = counts.get(u['usuario'], 0)
+        item['ultimo_acceso'] = _format_dt(last_access.get(u['usuario']))
+        item['ultima_evaluacion'] = _format_dt(latest_eval.get(u['usuario']))
         usuarios.append(item)
 
-    resumen = {'usuarios': len(usuarios),'evaluaciones': len(trabajos),'reba': sum(1 for t in trabajos if t['tipo'] == 'REBA'),'apendice_i': sum(1 for t in trabajos if t['tipo'] == 'APENDICE_I'),'apendice_ii': sum(1 for t in trabajos if t['tipo'] == 'APENDICE_II'),'kuorinka': sum(1 for t in trabajos if t['tipo'] == 'KUORINKA')}
-    return render_template('admin_panel.html', usuario=session.get('usuario'), usuarios=usuarios, trabajos=trabajos, resumen=resumen)
+    resumen = {'usuarios':len(usuarios),'evaluaciones':len(trabajos),'reba':sum(1 for t in trabajos if t['tipo']=='REBA'),'apendice_i':sum(1 for t in trabajos if t['tipo']=='APENDICE_I'),'apendice_ii':sum(1 for t in trabajos if t['tipo']=='APENDICE_II'),'kuorinka':sum(1 for t in trabajos if t['tipo']=='KUORINKA')}
+    return render_template('admin_panel.html', usuario=session.get('usuario'), usuarios=usuarios, trabajos=trabajos, historial_accesos=historial_accesos, resumen=resumen)

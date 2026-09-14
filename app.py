@@ -19,6 +19,7 @@ with app.app_context():
         if extra_login_user and extra_login_password: main_routes.DEMO_USERS[extra_login_user]=extra_login_password
         from models.app_user import AppUser
         from models.access_log import AccessLog
+        from models.revoked_user import RevokedUser
         from routes.main import bp_main
         from routes.admin import bp_admin
         from routes.dashboard import bp_dashboard
@@ -48,8 +49,12 @@ def database_and_admin_login():
         return render_template('login.html',error='Usuario o contraseña incorrectos')
     if usuario=='admin': return render_template('login.html',error='Usuario o contraseña incorrectos')
     try:
+        from models.revoked_user import RevokedUser
+        revoked = RevokedUser.query.filter(db.func.lower(RevokedUser.usuario) == usuario.lower()).first()
+        if revoked:
+            return render_template('login.html',error='Usuario o contraseña incorrectos')
         from models.app_user import AppUser
-        account=AppUser.query.filter_by(usuario=usuario).first()
+        account=AppUser.query.filter(db.func.lower(AppUser.usuario) == usuario.lower()).first()
         if account:
             if account.activo and account.check_password(password):
                 session.clear(); session.permanent=True; session['usuario']=account.usuario; session['rol']=account.rol or 'usuario'; session.modified=True; return redirect('/dashboard')

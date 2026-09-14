@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, redirect
 from flask_sqlalchemy import SQLAlchemy
 from config import DevelopmentConfig, ProductionConfig
 import os
@@ -34,6 +34,7 @@ with app.app_context():
         extra_login_password = os.environ.get('EXTRA_LOGIN_PASSWORD', '')
         if extra_login_user and extra_login_password:
             main_routes.DEMO_USERS[extra_login_user] = extra_login_password
+        from models.app_user import AppUser
         from routes.main import bp_main
         from routes.admin import bp_admin
         from routes.dashboard import bp_dashboard
@@ -69,6 +70,49 @@ with app.app_context():
         print(f'⚠️ Error creando tablas: {exc}')
 
 
+@app.before_request
+def database_and_admin_login():
+    if request.path != '/login' or request.method != 'POST':
+        return None
+
+    usuario = (request.form.get('usuario') or '').strip()
+    password = request.form.get('password') or ''
+    admin_user = os.environ.get('ADMIN_LOGIN_USER', '').strip()
+    admin_password = os.environ.get('ADMIN_LOGIN_PASSWORD', '')
+
+    if admin_user and usuario == admin_user:
+        if password == admin_password:
+            session.clear()
+            session.permanent = True
+            session['usuario'] = usuario
+            session['rol'] = 'admin'
+            session.modified = True
+            return redirect('/dashboard')
+        return render_template('login.html', error='Usuario o contraseña incorrectos')
+
+    # La antigua cuenta genérica "admin" deja de tener acceso administrativo.
+    if usuario == 'admin':
+        return render_template('login.html', error='Usuario o contraseña incorrectos')
+
+    try:
+        from models.app_user import AppUser
+        account = AppUser.query.filter_by(usuario=usuario).first()
+        if account:
+            if account.activo and account.check_password(password):
+                session.clear()
+                session.permanent = True
+                session['usuario'] = account.usuario
+                session['rol'] = account.rol or 'usuario'
+                session.modified = True
+                return redirect('/dashboard')
+            return render_template('login.html', error='Usuario o contraseña incorrectos')
+    except Exception as exc:
+        print(f'⚠️ No se pudo consultar usuarios administrables: {exc}')
+
+    # Las cuentas heredadas continúan funcionando por la ruta de login existente.
+    return None
+
+
 @app.after_request
 def after_request(response):
     if response.mimetype.startswith('text/'):
@@ -80,7 +124,7 @@ def after_request(response):
         response.headers['Expires'] = '0'
         html = response.get_data(as_text=True)
 
-        if request.path == '/dashboard' and session.get('usuario') == 'admin' and 'href="/admin/"' not in html:
+        if request.path == '/dashboard' and session.get('rol') == 'admin' and 'href="/admin/"' not in html:
             admin_link = '<a class="nav" href="/admin/">Administración</a>'
             html = html.replace('<a class="nav" href="#">Configuración</a>', admin_link + '<a class="nav" href="#">Configuración</a>')
 

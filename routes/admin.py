@@ -7,6 +7,7 @@ import os
 
 bp_admin = Blueprint('admin', __name__, url_prefix='/admin')
 MX_TZ = ZoneInfo('America/Mexico_City')
+LEGACY_ID_BASE = 900000
 
 
 def admin_required(f):
@@ -43,6 +44,12 @@ def _extract_empresa(payload_json):
     return ''
 
 
+def _legacy_map():
+    from routes.main import DEMO_USERS
+    users = [u for u in DEMO_USERS.keys() if u != 'admin']
+    return {LEGACY_ID_BASE + i + 1: username for i, username in enumerate(users)}
+
+
 @bp_admin.route('/usuarios', methods=['POST'])
 @admin_required
 def crear_usuario():
@@ -67,8 +74,7 @@ def crear_usuario():
         flash('Ese usuario ya tiene acceso a ErgonometApp.', 'error'); return redirect('/admin/#usuarios')
     if AppUser.query.filter(db.func.lower(AppUser.usuario) == usuario).first():
         flash('Ese usuario ya está registrado.', 'error'); return redirect('/admin/#usuarios')
-    if revoked:
-        db.session.delete(revoked)
+    if revoked: db.session.delete(revoked)
     account = AppUser(usuario=usuario, rol='usuario', activo=True); account.set_password(password)
     db.session.add(account); db.session.commit()
     flash(f'Usuario {usuario} creado correctamente.', 'success')
@@ -80,33 +86,23 @@ def crear_usuario():
 def eliminar_usuario(user_id):
     from app import db
     from models.app_user import AppUser
+    from models.revoked_user import RevokedUser
+
+    legacy = _legacy_map()
+    if user_id in legacy:
+        usuario = legacy[user_id]
+        existing = RevokedUser.query.filter(db.func.lower(RevokedUser.usuario) == usuario.lower()).first()
+        if not existing:
+            db.session.add(RevokedUser(usuario=usuario)); db.session.commit()
+        flash(f'Usuario {usuario} eliminado. Ya no podrá iniciar sesión; sus evaluaciones y su historial se conservaron.', 'success')
+        return redirect('/admin/#usuarios')
+
     account = AppUser.query.get_or_404(user_id)
     if account.rol == 'admin':
         flash('La cuenta de administrador no se puede eliminar.', 'error'); return redirect('/admin/#usuarios')
     usuario = account.usuario
     db.session.delete(account); db.session.commit()
     flash(f'Usuario {usuario} eliminado. Sus evaluaciones y su historial de accesos se conservaron.', 'success')
-    return redirect('/admin/#usuarios')
-
-
-@bp_admin.route('/usuarios/heredado/eliminar', methods=['POST'])
-@admin_required
-def eliminar_usuario_heredado():
-    from app import db
-    from models.revoked_user import RevokedUser
-    from routes.main import DEMO_USERS
-    usuario = (request.form.get('usuario') or '').strip()
-    admin_user = os.environ.get('ADMIN_LOGIN_USER', '').strip()
-    if not usuario or usuario == admin_user:
-        flash('La cuenta de administrador no se puede eliminar.', 'error'); return redirect('/admin/#usuarios')
-    legacy = {u.lower(): u for u in DEMO_USERS.keys() if u != 'admin'}
-    if usuario.lower() not in legacy:
-        flash('La cuenta indicada no es una cuenta heredada válida.', 'error'); return redirect('/admin/#usuarios')
-    existing = RevokedUser.query.filter(db.func.lower(RevokedUser.usuario) == usuario.lower()).first()
-    if not existing:
-        db.session.add(RevokedUser(usuario=legacy[usuario.lower()]))
-        db.session.commit()
-    flash(f'Usuario {legacy[usuario.lower()]} eliminado. Ya no podrá iniciar sesión; sus evaluaciones e historial se conservaron.', 'success')
     return redirect('/admin/#usuarios')
 
 
@@ -131,7 +127,6 @@ def eliminar_evaluacion(tipo, evaluation_id):
 @bp_admin.route('/')
 @admin_required
 def panel():
-    from app import db
     from routes.main import DEMO_USERS
     from models.app_user import AppUser
     from models.access_log import AccessLog
@@ -144,6 +139,7 @@ def panel():
     db_users = AppUser.query.order_by(AppUser.usuario.asc()).all()
     access_rows = AccessLog.query.order_by(AccessLog.logged_at.desc()).limit(500).all()
     revoked = {r.usuario.lower() for r in RevokedUser.query.all()}
+    legacy_ids = {username: lid for lid, username in _legacy_map().items()}
 
     admin_user = os.environ.get('ADMIN_LOGIN_USER', '').strip()
     visible_users = []
@@ -152,7 +148,7 @@ def panel():
     for username in DEMO_USERS.keys():
         if username == 'admin' or username.lower() == admin_user.lower() or username.lower() in revoked:
             continue
-        visible_users.append({'usuario': username, 'rol': 'Usuario', 'estado': 'Activo', 'db_id': None, 'eliminable': True, 'legacy': True})
+        visible_users.append({'usuario': username, 'rol': 'Usuario', 'estado': 'Activo', 'db_id': legacy_ids.get(username), 'eliminable': True, 'legacy': True})
     existing = {u['usuario'].lower() for u in visible_users}
     for account in db_users:
         if account.usuario.lower() not in existing:

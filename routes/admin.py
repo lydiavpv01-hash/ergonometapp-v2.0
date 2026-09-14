@@ -70,6 +70,24 @@ def crear_usuario():
     return redirect('/admin/#usuarios')
 
 
+@bp_admin.route('/usuarios/<int:user_id>/eliminar', methods=['POST'])
+@admin_required
+def eliminar_usuario(user_id):
+    from app import db
+    from models.app_user import AppUser
+
+    account = AppUser.query.get_or_404(user_id)
+    if account.rol == 'admin':
+        flash('La cuenta de administrador no se puede eliminar.', 'error')
+        return redirect('/admin/#usuarios')
+
+    usuario = account.usuario
+    db.session.delete(account)
+    db.session.commit()
+    flash(f'Usuario {usuario} eliminado. Sus evaluaciones se conservaron en el historial.', 'success')
+    return redirect('/admin/#usuarios')
+
+
 @bp_admin.route('/evaluaciones/<string:tipo>/<int:evaluation_id>/eliminar', methods=['POST'])
 @admin_required
 def eliminar_evaluacion(tipo, evaluation_id):
@@ -107,82 +125,43 @@ def panel():
     admin_user = os.environ.get('ADMIN_LOGIN_USER', '').strip()
     visible_users = []
     if admin_user:
-        visible_users.append((admin_user, 'Administrador', 'Activo'))
+        visible_users.append({'usuario': admin_user, 'rol': 'Administrador', 'estado': 'Activo', 'db_id': None, 'eliminable': False})
 
-    # Conserva las cuentas existentes mientras se completa su migración al panel.
     for username in DEMO_USERS.keys():
         if username == 'admin':
             continue
         if username.lower() != admin_user.lower():
-            visible_users.append((username, 'Usuario', 'Activo'))
+            visible_users.append({'usuario': username, 'rol': 'Usuario', 'estado': 'Activo', 'db_id': None, 'eliminable': False})
 
-    existing = {u[0].lower() for u in visible_users}
+    existing = {u['usuario'].lower() for u in visible_users}
     for account in db_users:
         if account.usuario.lower() not in existing:
-            visible_users.append((
-                account.usuario,
-                'Administrador' if account.rol == 'admin' else 'Usuario',
-                'Activo' if account.activo else 'Inactivo',
-            ))
+            visible_users.append({
+                'usuario': account.usuario,
+                'rol': 'Administrador' if account.rol == 'admin' else 'Usuario',
+                'estado': 'Activo' if account.activo else 'Inactivo',
+                'db_id': account.id,
+                'eliminable': account.rol != 'admin',
+            })
             existing.add(account.usuario.lower())
 
-    counts = {u[0]: 0 for u in visible_users}
+    counts = {u['usuario']: 0 for u in visible_users}
     trabajos = []
 
     for e in reba_rows:
         counts[e.usuario] = counts.get(e.usuario, 0) + 1
-        trabajos.append({
-            'tipo': 'REBA',
-            'id': e.id,
-            'usuario': e.usuario,
-            'empresa': _extract_empresa(e.payload_json),
-            'area': e.area or '',
-            'puesto': e.puesto or '',
-            'trabajador': e.trabajador or '',
-            'fecha': e.fecha or '',
-            'resultado': e.risk_level or (str(e.final_score) if e.final_score is not None else ''),
-            'created_at': e.created_at,
-        })
+        trabajos.append({'tipo': 'REBA','id': e.id,'usuario': e.usuario,'empresa': _extract_empresa(e.payload_json),'area': e.area or '','puesto': e.puesto or '','trabajador': e.trabajador or '','fecha': e.fecha or '','resultado': e.risk_level or (str(e.final_score) if e.final_score is not None else ''),'created_at': e.created_at})
 
     for e in generic_rows:
         counts[e.usuario] = counts.get(e.usuario, 0) + 1
-        trabajos.append({
-            'tipo': e.metodo or 'Evaluación',
-            'id': e.id,
-            'usuario': e.usuario,
-            'empresa': _extract_empresa(e.payload_json),
-            'area': '',
-            'puesto': e.puesto or '',
-            'trabajador': e.trabajador or '',
-            'fecha': e.fecha or '',
-            'resultado': e.risk_level or (str(e.final_score) if e.final_score is not None else ''),
-            'created_at': e.created_at,
-        })
+        trabajos.append({'tipo': e.metodo or 'Evaluación','id': e.id,'usuario': e.usuario,'empresa': _extract_empresa(e.payload_json),'area': '','puesto': e.puesto or '','trabajador': e.trabajador or '','fecha': e.fecha or '','resultado': e.risk_level or (str(e.final_score) if e.final_score is not None else ''),'created_at': e.created_at})
 
     trabajos.sort(key=lambda x: x['created_at'] or 0, reverse=True)
-
     usuarios = []
-    for username, role, estado in sorted(visible_users, key=lambda x: (x[1] != 'Administrador', x[0].lower())):
-        usuarios.append({
-            'usuario': username,
-            'rol': role,
-            'estado': estado,
-            'evaluaciones': counts.get(username, 0),
-        })
+    for u in sorted(visible_users, key=lambda x: (x['rol'] != 'Administrador', x['usuario'].lower())):
+        item = dict(u)
+        item['evaluaciones'] = counts.get(u['usuario'], 0)
+        usuarios.append(item)
 
-    resumen = {
-        'usuarios': len(usuarios),
-        'evaluaciones': len(trabajos),
-        'reba': sum(1 for t in trabajos if t['tipo'] == 'REBA'),
-        'apendice_i': sum(1 for t in trabajos if t['tipo'] == 'APENDICE_I'),
-        'apendice_ii': sum(1 for t in trabajos if t['tipo'] == 'APENDICE_II'),
-        'kuorinka': sum(1 for t in trabajos if t['tipo'] == 'KUORINKA'),
-    }
-
-    return render_template(
-        'admin_panel.html',
-        usuario=session.get('usuario'),
-        usuarios=usuarios,
-        trabajos=trabajos,
-        resumen=resumen,
-    )
+    resumen = {'usuarios': len(usuarios),'evaluaciones': len(trabajos),'reba': sum(1 for t in trabajos if t['tipo'] == 'REBA'),'apendice_i': sum(1 for t in trabajos if t['tipo'] == 'APENDICE_I'),'apendice_ii': sum(1 for t in trabajos if t['tipo'] == 'APENDICE_II'),'kuorinka': sum(1 for t in trabajos if t['tipo'] == 'KUORINKA')}
+    return render_template('admin_panel.html', usuario=session.get('usuario'), usuarios=usuarios, trabajos=trabajos, resumen=resumen)

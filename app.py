@@ -18,6 +18,7 @@ with app.app_context():
         extra_login_user=os.environ.get('EXTRA_LOGIN_USER','').strip(); extra_login_password=os.environ.get('EXTRA_LOGIN_PASSWORD','')
         if extra_login_user and extra_login_password: main_routes.DEMO_USERS[extra_login_user]=extra_login_password
         from models.app_user import AppUser
+        from models.access_log import AccessLog
         from routes.main import bp_main
         from routes.admin import bp_admin
         from routes.dashboard import bp_dashboard
@@ -58,6 +59,14 @@ def database_and_admin_login():
 
 @app.after_request
 def after_request(response):
+    if request.path=='/login' and request.method=='POST' and 300 <= response.status_code < 400 and session.get('usuario'):
+        try:
+            from models.access_log import AccessLog
+            db.session.add(AccessLog(usuario=session.get('usuario','')))
+            db.session.commit()
+        except Exception as exc:
+            db.session.rollback()
+            print(f'⚠️ No se pudo registrar el acceso: {exc}')
     if response.mimetype.startswith('text/'): response.headers['Content-Type']=f'{response.mimetype}; charset=utf-8'
     if response.mimetype=='text/html':
         response.headers['Cache-Control']='no-store, no-cache, must-revalidate, max-age=0'; response.headers['Pragma']='no-cache'; response.headers['Expires']='0'; html=response.get_data(as_text=True)

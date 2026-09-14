@@ -1,6 +1,7 @@
-from flask import Blueprint, render_template, session, redirect, jsonify
+from flask import Blueprint, render_template, session, redirect, jsonify, request, flash
 from functools import wraps
 import json
+import os
 
 bp_admin = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -10,7 +11,8 @@ def admin_required(f):
     def decorated_function(*args, **kwargs):
         if 'usuario' not in session:
             return redirect('/login')
-        if session.get('usuario') != 'admin':
+        admin_user = os.environ.get('ADMIN_LOGIN_USER', '').strip()
+        if session.get('rol') != 'admin' or session.get('usuario') != admin_user:
             return jsonify({'status': 'error', 'message': 'Acceso restringido a administradores'}), 403
         return f(*args, **kwargs)
     return decorated_function
@@ -33,17 +35,98 @@ def _extract_empresa(payload_json):
     return ''
 
 
+@bp_admin.route('/usuarios', methods=['POST'])
+@admin_required
+def crear_usuario():
+    from app import db
+    from models.app_user import AppUser
+    from routes.main import DEMO_USERS
+
+    usuario = (request.form.get('usuario') or '').strip().lower()
+    password = request.form.get('password') or ''
+    admin_user = os.environ.get('ADMIN_LOGIN_USER', '').strip().lower()
+
+    if not usuario or not password:
+        flash('Debes capturar usuario y contraseña.', 'error')
+        return redirect('/admin/#usuarios')
+    if len(usuario) > 180:
+        flash('El usuario es demasiado largo.', 'error')
+        return redirect('/admin/#usuarios')
+    if len(password) < 8:
+        flash('La contraseña debe tener al menos 8 caracteres.', 'error')
+        return redirect('/admin/#usuarios')
+    if usuario == admin_user or usuario in {u.lower() for u in DEMO_USERS.keys()}:
+        flash('Ese usuario ya tiene acceso a ErgonometApp.', 'error')
+        return redirect('/admin/#usuarios')
+    if AppUser.query.filter(db.func.lower(AppUser.usuario) == usuario).first():
+        flash('Ese usuario ya está registrado.', 'error')
+        return redirect('/admin/#usuarios')
+
+    account = AppUser(usuario=usuario, rol='usuario', activo=True)
+    account.set_password(password)
+    db.session.add(account)
+    db.session.commit()
+    flash(f'Usuario {usuario} creado correctamente.', 'success')
+    return redirect('/admin/#usuarios')
+
+
+@bp_admin.route('/evaluaciones/<string:tipo>/<int:evaluation_id>/eliminar', methods=['POST'])
+@admin_required
+def eliminar_evaluacion(tipo, evaluation_id):
+    from app import db
+    from models.reba_evaluation import RebaEvaluation
+    from models.generic_evaluation import GenericEvaluation
+    from models.evaluation_upload import EvaluationUpload
+
+    tipo = (tipo or '').upper()
+    if tipo == 'REBA':
+        row = RebaEvaluation.query.get_or_404(evaluation_id)
+        db.session.delete(row)
+    else:
+        row = GenericEvaluation.query.get_or_404(evaluation_id)
+        EvaluationUpload.query.filter_by(evaluation_id=evaluation_id).delete(synchronize_session=False)
+        db.session.delete(row)
+
+    db.session.commit()
+    flash('Evaluación eliminada correctamente.', 'success')
+    return redirect('/admin/#trabajos')
+
+
 @bp_admin.route('/')
 @admin_required
 def panel():
     from routes.main import DEMO_USERS
+    from models.app_user import AppUser
     from models.reba_evaluation import RebaEvaluation
     from models.generic_evaluation import GenericEvaluation
 
     reba_rows = RebaEvaluation.query.order_by(RebaEvaluation.created_at.desc()).all()
     generic_rows = GenericEvaluation.query.order_by(GenericEvaluation.created_at.desc()).all()
+    db_users = AppUser.query.order_by(AppUser.usuario.asc()).all()
 
-    counts = {u: 0 for u in DEMO_USERS.keys()}
+    admin_user = os.environ.get('ADMIN_LOGIN_USER', '').strip()
+    visible_users = []
+    if admin_user:
+        visible_users.append((admin_user, 'Administrador', 'Activo'))
+
+    # Conserva las cuentas existentes mientras se completa su migración al panel.
+    for username in DEMO_USERS.keys():
+        if username == 'admin':
+            continue
+        if username.lower() != admin_user.lower():
+            visible_users.append((username, 'Usuario', 'Activo'))
+
+    existing = {u[0].lower() for u in visible_users}
+    for account in db_users:
+        if account.usuario.lower() not in existing:
+            visible_users.append((
+                account.usuario,
+                'Administrador' if account.rol == 'admin' else 'Usuario',
+                'Activo' if account.activo else 'Inactivo',
+            ))
+            existing.add(account.usuario.lower())
+
+    counts = {u[0]: 0 for u in visible_users}
     trabajos = []
 
     for e in reba_rows:
@@ -79,11 +162,11 @@ def panel():
     trabajos.sort(key=lambda x: x['created_at'] or 0, reverse=True)
 
     usuarios = []
-    for username in sorted(DEMO_USERS.keys(), key=lambda x: (x != 'admin', x.lower())):
+    for username, role, estado in sorted(visible_users, key=lambda x: (x[1] != 'Administrador', x[0].lower())):
         usuarios.append({
             'usuario': username,
-            'rol': 'Administrador' if username == 'admin' else 'Usuario',
-            'estado': 'Activo',
+            'rol': role,
+            'estado': estado,
             'evaluaciones': counts.get(username, 0),
         })
 

@@ -93,7 +93,7 @@ def after_request(response):
             script='<script src="/static/js/nom_persistence.js?v=6"></script>'
             if script not in html: html=html.replace('</body>',script+'</body>')
         if request.path.endswith('/matriz'):
-            print_css='<link rel="stylesheet" href="/static/css/matrix_print_tabloid.css?v=5">'
+            print_css='<link rel="stylesheet" href="/static/css/matrix_print_tabloid.css?v=6">'
             if 'matrix_print_tabloid.css' not in html: html=html.replace('</head>',print_css+'</head>')
         response.set_data(html)
     return response

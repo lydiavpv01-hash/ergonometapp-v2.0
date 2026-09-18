@@ -166,6 +166,26 @@ def install_matrix_enrichment(main_module):
                 'unit': unit,
             }
 
+            # Recuperar valores calculados/seleccionados que pueden quedar sólo en el snapshot
+            # (p. ej. AI3 peso/frecuencia) sin alterar la lógica de puntuación.
+            values = (payload.get('evaluation') or {}).get('values') or {}
+            for row in matrix.get('factor_rows') or []:
+                label = row.get('label') or ''
+                keys = next(((k2,k3,k4) for lbl,k2,k3,k4 in AI1_KEYS if lbl==label),(None,None,None))
+                for cell,(sec,key) in zip(row.get('cells') or [], zip(('ai2','ai3','ai4'),keys)):
+                    if not key: continue
+                    val=_numeric(cell.get('value'))
+                    sel=sel_by.get(key) or {}
+                    if val is None: val=_numeric((values.get(sec) or {}).get(key))
+                    if val is None: val=_numeric(sel.get('value'))
+                    if val is not None:
+                        cell['value']=val
+                        if key.endswith('_peso'):
+                            color='Verde' if val==0 else 'Naranja' if val==4 else 'Rojo' if val==6 else 'Morado'; cls='c-verde' if val==0 else 'c-naranja' if val==4 else 'c-rojo' if val==6 else 'c-morado'
+                        else: color,cls=main_module._color_for(key,val,'APENDICE_I')
+                        cell['color']=color; cell['color_class']=cls
+                    if not cell.get('condition') and sel.get('selection'): cell['condition']=sel.get('selection','')
+
             for item in matrix.get('justification_rows') or []:
                 title=item.get('title') or ''; label,sec=title.rsplit(' · ',1) if ' · ' in title else (title,'')
                 key=key_by_title.get((label,sec)); sel=sel_by.get(key) if key else {}; value=_numeric(item.get('value'))

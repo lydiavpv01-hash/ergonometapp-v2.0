@@ -51,6 +51,37 @@ def guardar():
         return jsonify({'status':'error','message':str(exc)}), 500
 
 
+@bp_generic_evaluations.route('/<int:evaluation_id>', methods=['GET','PUT'])
+@login_required
+def evaluacion_guardada(evaluation_id):
+    row = GenericEvaluation.query.get_or_404(evaluation_id)
+    if row.usuario != session.get('usuario',''):
+        return jsonify({'status':'error','message':'No autorizado'}), 403
+    if request.method == 'GET':
+        try: payload=json.loads(row.payload_json or '{}')
+        except Exception: payload={}
+        try: result=json.loads(row.result_json or '{}')
+        except Exception: result={}
+        return jsonify({'status':'success','id':row.id,'metodo':row.metodo,'payload':payload,'result':result})
+    try:
+        data=request.get_json(silent=True) or {}
+        if (data.get('metodo') or row.metodo) != row.metodo:
+            return jsonify({'status':'error','message':'El método de la evaluación no coincide'}),400
+        meta=data.get('meta') or {}; result=data.get('result') or {}
+        data.pop('uploads',None)
+        row.trabajador=(meta.get('trabajador') or row.trabajador or '').strip()
+        row.puesto=(meta.get('puesto') or row.puesto or '').strip()
+        row.fecha=meta.get('fecha') or row.fecha or ''
+        row.final_score=result.get('final_score')
+        row.risk_level=result.get('risk_level') or result.get('summary') or ''
+        row.payload_json=json.dumps(data,ensure_ascii=False)
+        row.result_json=json.dumps(result,ensure_ascii=False)
+        db.session.commit()
+        return jsonify({'status':'success','id':row.id,'mensaje':'Evaluación actualizada correctamente'})
+    except Exception as exc:
+        db.session.rollback(); return jsonify({'status':'error','message':str(exc)}),500
+
+
 @bp_generic_evaluations.route('/<int:evaluation_id>/uploads', methods=['POST'])
 @login_required
 def guardar_upload(evaluation_id):

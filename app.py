@@ -90,7 +90,7 @@ def after_request(response):
             matrix_meta=render_template('nom_matrix_metadata.html')
             if 'matrixClientData' not in html: html=html.replace('</body>',matrix_meta+'</body>')
         if request.path in ('/apendice-i/nueva','/apendice-ii/nueva','/cuestionario-nordico/nueva'):
-            script='<script src="/static/js/nom_persistence.js?v=7"></script>'
+            script='<script src="/static/js/nom_persistence.js?v=8"></script>'
             if script not in html: html=html.replace('</body>',script+'</body>')
         if request.path.endswith('/matriz'):
             print_css='<link rel="stylesheet" href="/static/css/matrix_print_tabloid.css?v=7">'

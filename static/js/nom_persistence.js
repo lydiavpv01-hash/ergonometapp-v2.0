@@ -16,6 +16,7 @@
     const selections=[];
     document.querySelectorAll('.choices').forEach(g=>{const active=g.querySelector('.choice.active');if(!active)return;const factor=g.dataset.factor||'';const box=g.closest('.factor,.q');const title=box&&box.querySelector('h3,b');selections.push({factor,title:title?title.textContent.trim():factor,selection:active.textContent.trim(),value:active.dataset.v!==undefined?active.dataset.v:''})});
     document.querySelectorAll('.opts').forEach(g=>{const active=g.querySelector('.opt.active');if(!active)return;const box=g.closest('.q');const title=box&&box.querySelector('b');selections.push({factor:g.dataset.name||'',title:title?title.textContent.trim():(g.dataset.name||''),selection:active.textContent.trim(),value:active.dataset.v||active.textContent.trim()})});
+    document.querySelectorAll('[data-factor][data-interp-value]').forEach(x=>{const factor=x.dataset.factor||'';if(!factor||selections.some(s=>s.factor===factor))return;const box=x.closest('.factor');const title=box&&box.querySelector('h3');selections.push({factor,title:title?title.textContent.trim():factor,selection:x.dataset.selection||((x.dataset.interpColor||'')+' · '+(x.dataset.interpValue||'')),value:x.dataset.interpValue||''})});
     return {fields,selections};
   }
   function uploadTasks(){const tasks=[];let position=0;document.querySelectorAll('input[type=file]').forEach(inp=>{const field=inp.name||inp.id||'archivo';Array.from(inp.files||[]).forEach(file=>tasks.push({field,file,position:position++}))});return tasks}

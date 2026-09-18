@@ -90,10 +90,10 @@ def after_request(response):
             matrix_meta=render_template('nom_matrix_metadata.html')
             if 'matrixClientData' not in html: html=html.replace('</body>',matrix_meta+'</body>')
         if request.path in ('/apendice-i/nueva','/apendice-ii/nueva','/cuestionario-nordico/nueva'):
-            script='<script src="/static/js/nom_persistence.js?v=6"></script>'
+            script='<script src="/static/js/nom_persistence.js?v=7"></script>'
             if script not in html: html=html.replace('</body>',script+'</body>')
         if request.path.endswith('/matriz'):
-            print_css='<link rel="stylesheet" href="/static/css/matrix_print_tabloid.css?v=6">'
+            print_css='<link rel="stylesheet" href="/static/css/matrix_print_tabloid.css?v=7">'
             pagination='<script src="/static/js/matrix_print_pagination.js?v=1"></script>'
             if 'matrix_print_tabloid.css' not in html: html=html.replace('</head>',print_css+'</head>')
             if 'matrix_print_pagination.js' not in html: html=html.replace('</body>',pagination+'</body>')
